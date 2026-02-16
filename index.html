@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NORDESTIZZA - DELIVERY </title>
+    <title>NORDESTIZZA - Oficial</title>
     <style>
         :root { --primary: #222; --accent: #c0392b; --paper: #f2e6d9; --success: #27ae60; --whatsapp: #25d366; }
         
@@ -36,7 +36,7 @@
 <body>
 
 <div class="container">
-    <h1 class="nordestizza-header">NORDESTIZZA </h1>
+    <h1 class="nordestizza-header">🌵 NORDESTIZZA</h1>
 
     <div style="text-align: right; margin-bottom: 10px;">
         <button onclick="acessarGestor()" style="font-size: 0.7rem; opacity: 0.4; cursor:pointer; background:none; border:1px solid #000; padding:5px; font-weight: bold;">⚙️ GESTOR</button>
@@ -200,7 +200,19 @@
     let db = {
         categorias: { "Tradicionais": { m: 34.9, g: 46.9, gg: 57.9 }, "Marpedidas": { m: 36.9, g: 47.9, gg: 60.9 }, "Marmiores": { m: 37.9, g: 54.9, gg: 68.9 }, "Mardoces": { m: 39.9, g: 47.9, gg: 66.9 }, "Bebidas": { "COCA-COLA LATA": 6, "COCA-COLA 1L": 10, "COCA-COLA ZERO 1L": 10, "COCA-COLA 2L": 15, "COCA-COLA 2L ZERO": 15 } },
         sabores: { "Tradicionais": ["Americana", "Baiana", "Calabresa", "Frango", "Marguerita", "Mista", "Mussarela", "Napolitano"], "Marpedidas": ["Balacubano", "Bolonhesa", "Calabresa Catupiry", "Doritos", "Frango Catupiry", "Nordestizza", "Mexicana", "4 Queijos", "Portuguesa", "Mussarela Cremosa"], "Marmiores": ["Carne de Sol", "Frango Crocante", "Lombo Canadense", "Lombo com Abacaxi", "Camarão"], "Mardoces": ["Banana", "Kit Kat", "MM's", "Romeu e Julieta"], "Bebidas": ["COCA-COLA LATA", "COCA-COLA 1L", "COCA-COLA ZERO 1L", "COCA-COLA 2L", "COCA-COLA 2L ZERO"] },
-        bairros: [{n: "Centro", p: 5}],
+        bairros: [
+            {n: "Sabiazal", p: 7}, {n: "Dirceu Arcoverde", p: 8}, {n: "Planalto", p: 9},
+            {n: "João XXIII", p: 12}, {n: "Ceará", p: 12}, {n: "Reis Velloso", p: 10},
+            {n: "Piauí", p: 10}, {n: "Pindorama", p: 10}, {n: "Santa Luzia", p: 8},
+            {n: "São Vicente de Paula", p: 8}, {n: "Rodoviária", p: 8}, {n: "Frei Higino", p: 9},
+            {n: "Boa Esperança", p: 9}, {n: "Centro", p: 12}, {n: "Catanduvas", p: 14},
+            {n: "Nova Parnaíba", p: 10}, {n: "São Francisco da Guarita", p: 10},
+            {n: "Mendonça Clark", p: 11}, {n: "Bairro de Fátima", p: 11}, {n: "Campos", p: 10},
+            {n: "São José", p: 12}, {n: "Alto Santa Maria", p: 9}, {n: "Igaraçu", p: 12},
+            {n: "Baixa do Aragão", p: 10}, {n: "Bairro do Carmo", p: 10},
+            {n: "Sabiazal (Extremo)", p: 12}, {n: "São Judas Tadeu", p: 12},
+            {n: "Tabuleiro", p: 15}, {n: "Bebedouro", p: 10}
+        ],
         carrinho: []
     };
 
@@ -224,10 +236,18 @@
     function salvarSabor() { const c = document.getElementById('adm-sel-cat').value; const s = document.getElementById('adm-sab-nome').value; if(s) { db.sabores[c].push(s); renderAdmin(); } }
     function salvarBairro() { const n = document.getElementById('adm-bai-nome').value; const p = parseFloat(document.getElementById('adm-bai-taxa').value) || 0; if(n) { db.bairros.push({n, p}); renderAdmin(); } }
 
+    function editarBairro(i) {
+        const novoPreco = prompt(`Novo valor da taxa para ${db.bairros[i].n}:`, db.bairros[i].p);
+        if (novoPreco !== null && !isNaN(parseFloat(novoPreco))) {
+            db.bairros[i].p = parseFloat(novoPreco);
+            renderAdmin();
+        }
+    }
+
     function renderAdmin() {
         document.getElementById('list-adm-cats').innerHTML = Object.keys(db.categorias).map(c => `<div class="item-row">${c} <button onclick="delete db.categorias['${c}'];renderAdmin()" style="color:red;">X</button></div>`).join('');
         document.getElementById('adm-sel-cat').innerHTML = Object.keys(db.categorias).map(c => `<option value="${c}">${c}</option>`).join('');
-        document.getElementById('list-adm-bais').innerHTML = db.bairros.map((b,i) => `<div class="item-row">${b.n} (R$${b.p}) <button onclick="db.bairros.splice(${i},1);renderAdmin()" style="color:red;">X</button></div>`).join('');
+        document.getElementById('list-adm-bais').innerHTML = db.bairros.map((b,i) => `<div class="item-row"><span>${b.n} (R$${b.p.toFixed(2)})</span> <div><button onclick="editarBairro(${i})" style="color:blue; margin-right:10px;">Editar</button><button onclick="db.bairros.splice(${i},1);renderAdmin()" style="color:red;">X</button></div></div>`).join('');
         let sHtml = ""; for(let c in db.sabores) { db.sabores[c].forEach((s,i) => sHtml += `<div class="item-row">[${c}] ${s} <button onclick="db.sabores['${c}'].splice(${i},1);renderAdmin()" style="color:red;">X</button></div>`); }
         document.getElementById('list-adm-sabs').innerHTML = sHtml;
     }
@@ -328,7 +348,4 @@
     window.onload = initCli;
 </script>
 </body>
-
 </html>
-
-
