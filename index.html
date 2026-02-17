@@ -106,7 +106,7 @@
                     <option value="inteira">Inteira (1 Sabor)</option>
                     <option value="meio">Meio a Meio (2 Sabores)</option>
                 </select>
-                <label>📂 Categoria:</label>
+                <label>📂 Categoria 1 metade/toda:</label>
                 <select id="sel-cat1" onchange="carregarSabores(1)"></select>
                 <div id="precos-cat1" class="precos-info"></div>
                 <label>😋 Escolha o Sabor:</label>
@@ -128,7 +128,8 @@
                 <select id="sel-borda" onchange="calcPrevia()">
                     <option value="Sem Borda">Sem Borda</option>
                     <option value="Cheddar">Cheddar (+R$ 8,00)</option>
-                    <option value="Catupiry">Catupiry (+R$ 8,00)</option>
+                    <option value="Catupiry">Catupiry (+R$ 10,00)</option>
+                    <option value="Catupiry">Chocolate (+R$ 12,00)</option>
                 </select>
                 <label>📝 Observação:</label>
                 <textarea id="cli-obs" placeholder="Ex: Sem cebola, etc..."></textarea>
@@ -378,7 +379,7 @@
         try {
             const response = await fetch(url);
             if(response.ok) {
-                alert("Pedido Arretado! Já chegou no nosso Telegram! ✅");
+                alert("Pedido Arretado! Já chegou no nosso Sistema! ✅");
                 location.reload();
             } else {
                 alert("Erro ao enviar! Tente novamente.");
@@ -397,5 +398,6 @@
 </body>
 
 </html>
+
 
 
