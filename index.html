@@ -3,79 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NORDESTIZZA DELIVERY</title>
+    <title>NORDESTIZZA - Oficial</title>
     <style>
-        :root { --primary: #222; --accent: #c0392b; --paper: #f2e6d9; --success: #27ae60; --whatsapp: #25d366; }
+        :root { 
+            --primary: #222; 
+            --accent: #d35400; /* Laranja Terracota */
+            --paper: #f2e6d9; 
+            --success: #27ae60; 
+            --whatsapp: #25d366; 
+            --radius: 20px; 
+        }
         
-        /* FONTE PADRÃO E SEGURA PARA TODOS OS APARELHOS */
-        body { font-family: Arial, Helvetica, sans-serif; background-color: var(--paper); margin: 0; padding: 10px; color: #000; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            padding: 10px; 
+            color: #000;
+            /* Fundo Nordestino com Blur */
+            background: url('https://images.unsplash.com/photo-1590053415132-70b777a8370b?q=80&w=1000&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(242, 230, 217, 0.7); /* Película tom papel */
+            backdrop-filter: blur(8px);
+            z-index: -1;
+        }
         
-        .container { width: 100%; max-width: 650px; margin: auto; border: 3px solid #000; padding: 15px; background: rgba(255,255,255,0.4); box-shadow: 8px 8px 0px #000; box-sizing: border-box; }
-        .nordestizza-header { text-align: center; font-size: clamp(2rem, 8vw, 3.5rem); text-transform: uppercase; border-bottom: 6px double #000; margin: 10px 0; letter-spacing: 3px; font-weight: bold; }
-        .card { border: 2px solid #000; padding: 15px; background: #fff; margin-bottom: 20px; position: relative; }
+        .container { width: 100%; max-width: 650px; margin: auto; padding: 5px; box-sizing: border-box; }
         
-        /* TITULOS MAIORES E EM NEGRITO */
-        h2 { font-size: 1.4rem; font-weight: bold; text-transform: uppercase; margin-top: 0; }
-        label { display: block; font-weight: bold; margin: 15px 0 5px; text-transform: uppercase; font-size: 1rem; }
+        .nordestizza-header { 
+            text-align: center; 
+            font-size: clamp(2rem, 8vw, 3.5rem); 
+            text-transform: uppercase; 
+            margin: 15px 0; 
+            letter-spacing: 2px; 
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .card { 
+            border: 2px solid #000; 
+            padding: 20px; 
+            background: #fff; 
+            margin-bottom: 25px; 
+            border-radius: var(--radius);
+            box-shadow: 6px 6px 0px #000;
+            position: relative;
+        }
         
-        select, input, textarea { width: 100%; padding: 12px; border: 2px solid #000; font-family: Arial, sans-serif; font-size: 1.1rem; box-sizing: border-box; font-weight: bold; }
-        .btn-cordel { background: #000; color: #fff; border: none; padding: 15px; width: 100%; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 10px; font-size: 1.1rem; }
+        /* Divisores de Metades */
+        .half-box {
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            border: 2px dashed #bbb;
+        }
+        .half-1 { background: #fffcf5; border-color: var(--accent); }
+        .half-2 { background: #f5faff; border-color: #2980b9; }
         
-        .support-area { border: 2px solid #000; padding: 15px; text-align: center; background: #fff; margin-top: 30px; }
-        .support-area img { width: 120px; border: 1px solid #000; margin-bottom: 10px; transition: transform 0.2s; }
-        .support-area img:active { transform: scale(0.95); }
+        .tag-metade {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        h2 { font-size: 1.3rem; font-weight: 900; text-transform: uppercase; margin-top: 0; color: #000; }
+        label { display: block; font-weight: bold; margin: 15px 0 5px; text-transform: uppercase; font-size: 0.85rem; }
         
-        #admin-panel { display: none; background: #fff; border: 4px solid #000; padding: 20px; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; overflow-y: auto; box-sizing: border-box; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; background: #eee; padding: 8px; margin-bottom: 5px; border: 1px solid #000; font-size: 0.9rem; font-weight: bold; }
+        select, input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #000; 
+            border-radius: 12px;
+            font-size: 1rem; 
+            box-sizing: border-box; 
+            font-weight: bold;
+            background: #fff;
+        }
+
+        .btn-cordel { 
+            background: #000; 
+            color: #fff; 
+            border: none; 
+            padding: 18px; 
+            width: 100%; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            font-weight: 900; 
+            margin-top: 10px; 
+            font-size: 1.1rem; 
+            border-radius: 50px;
+            transition: 0.2s;
+        }
+        .btn-cordel:active { transform: scale(0.97); }
+        
+        .precos-info { font-size: 0.9rem; font-weight: bold; color: var(--accent); margin: 5px 0; }
+        .ingredientes-info { font-size: 0.85rem; font-style: italic; color: #555; background: #f9f9f9; padding: 10px; border-radius: 10px; border: 1px dashed #ccc; margin-top: 5px; }
+
+        #admin-panel { display: none; background: #fff; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; background: #eee; padding: 10px; margin-bottom: 5px; border: 1px solid #000; border-radius: 10px; font-weight: bold; }
         .hidden { display: none; }
-        .precos-info { font-size: 1rem; font-weight: bold; color: var(--accent); margin: 5px 0 10px 0; border-left: 3px solid var(--accent); padding-left: 8px; }
-        .ingredientes-info { font-size: 0.9rem; font-style: italic; color: #555; margin-bottom: 10px; background: #f9f9f9; padding: 8px; border: 1px dashed #ccc; }
         .admin-section { border-bottom: 2px solid #000; padding-bottom:15px; margin-bottom:15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 class="nordestizza-header">NORDESTIZZA</h1>
+    <h1 class="nordestizza-header">🌵 NORDESTIZZA</h1>
 
     <div style="text-align: right; margin-bottom: 10px;">
-        <button onclick="acessarGestor()" style="font-size: 0.7rem; opacity: 0.4; cursor:pointer; background:none; border:1px solid #000; padding:5px; font-weight: bold;">⚙️ GESTOR</button>
+        <button onclick="acessarGestor()" style="font-size: 0.7rem; opacity: 0.5; cursor:pointer; background:#fff; border:1px solid #000; padding:6px 15px; border-radius: 20px; font-weight: bold;">⚙️ GESTOR</button>
     </div>
 
     <div id="admin-panel">
         <h1>⚙️ PAINEL DO GESTOR</h1>
-        <div class="admin-section" style="background: #eee; padding: 10px;">
+        <div class="admin-section">
             <h3>💾 Backup do Cardápio</h3>
             <div style="display: flex; gap: 10px;">
-                <button class="btn-cordel" style="margin-top:0; font-size:0.7rem;" onclick="exportarCardapio()">Exportar Arquivo</button>
-                <button class="btn-cordel" style="margin-top:0; font-size:0.7rem; background: var(--accent);" onclick="document.getElementById('importFile').click()">Importar Arquivo</button>
+                <button class="btn-cordel" style="margin-top:0; font-size:0.7rem;" onclick="exportarCardapio()">Exportar</button>
+                <button class="btn-cordel" style="margin-top:0; font-size:0.7rem; background: var(--accent);" onclick="document.getElementById('importFile').click()">Importar</button>
             </div>
             <input type="file" id="importFile" class="hidden" accept=".json" onchange="importarCardapio(event)">
         </div>
         <div class="admin-section">
-            <h3>Gerenciar Categorias e Preços</h3>
+            <h3>Categorias e Preços</h3>
             <input type="text" id="adm-cat-nome" placeholder="Nome Categoria">
             <div style="display: flex; gap: 5px; margin-top:5px;">
-                <input type="number" id="adm-p-m" placeholder="Preço M">
-                <input type="number" id="adm-p-g" placeholder="Preço G">
-                <input type="number" id="adm-p-gg" placeholder="Preço GG">
+                <input type="number" id="adm-p-m" placeholder="M">
+                <input type="number" id="adm-p-g" placeholder="G">
+                <input type="number" id="adm-p-gg" placeholder="GG">
             </div>
             <button class="btn-cordel" onclick="salvarCategoria()">Salvar Categoria</button>
             <div id="list-adm-cats" style="margin-top: 10px;"></div>
         </div>
         <div class="admin-section">
-            <h3>Gerenciar Sabores</h3>
+            <h3>Sabores</h3>
             <select id="adm-sel-cat"></select>
-            <input type="text" id="adm-sab-nome" placeholder="Nome do Sabor" style="margin-top:5px;">
+            <input type="text" id="adm-sab-nome" placeholder="Nome Sabor" style="margin-top:5px;">
             <button class="btn-cordel" onclick="salvarSabor()">Adicionar Sabor</button>
-            <div id="list-adm-sabs" style="margin-top: 10px;"></div>
+            <div id="list-adm-sabs"></div>
         </div>
         <div class="admin-section">
-            <h3>Gerenciar Bairros</h3>
+            <h3>Bairros</h3>
             <input type="text" id="adm-bai-nome" placeholder="Bairro">
             <input type="number" id="adm-bai-taxa" placeholder="Taxa R$">
             <button class="btn-cordel" onclick="salvarBairro()">Adicionar Bairro</button>
-            <div id="list-adm-bais" style="margin-top: 10px;"></div>
+            <div id="list-adm-bais"></div>
         </div>
         <button class="btn-cordel" style="background: var(--success);" onclick="fecharGestor()">✅ CONCLUIR E SALVAR</button>
     </div>
@@ -84,44 +167,52 @@
         <div class="card" id="step1">
             <h2>📍 DADOS DO CABRA</h2>
             <label>👤 Nome:</label>
-            <input type="text" name="Nome_Cliente" id="cli-nome" required>
+            <input type="text" id="cli-nome" required>
             <label>📱 WhatsApp:</label>
-            <input type="tel" name="WhatsApp" id="cli-tel" required>
+            <input type="tel" id="cli-tel" required>
             <label>🏘️ Bairro:</label>
             <select id="sel-bairro-cli" onchange="calcPrevia()"></select>
-            <input type="hidden" name="Bairro_Nome" id="hidden-bairro-nome">
+            <input type="hidden" id="hidden-bairro-nome">
             <label>🏠 Endereço Completo:</label>
-            <textarea name="Endereco" id="cli-end" required></textarea>
+            <textarea id="cli-end" required></textarea>
             <button type="button" class="btn-cordel" onclick="liberarPedido()">📋 VER CARDÁPIO</button>
         </div>
 
         <div id="step2" class="hidden">
             <div class="card">
-                <button type="button" class="btn-cordel" style="width:auto; font-size:0.6rem; position:absolute; top:5px; right:5px; padding:5px;" onclick="editarDados()">✏️ EDITAR DADOS</button>
-                <div style="font-size:0.9rem; font-weight: bold; line-height: 1.4;" id="info-cabra"></div>
+                <button type="button" style="float:right; font-size:0.6rem; border:none; background:#eee; padding:5px; border-radius:5px;" onclick="editarDados()">✏️ EDITAR DADOS</button>
+                <div id="info-cabra" style="font-size:0.85rem; font-weight: bold;"></div>
                 <hr>
                 <h2>🍕 MONTE SUA PIZZA</h2>
+                
                 <label>🛠️ Como quer a pizza?</label>
-                <select id="sel-formato" onchange="mudarFormato()">
+                <select id="sel-formato" onchange="mudarFormato()" style="background: #fff8f0; border-color: var(--accent);">
                     <option value="inteira">Inteira (1 Sabor)</option>
                     <option value="meio">Meio a Meio (2 Sabores)</option>
                 </select>
-                <label>📂 Categoria 1 metade/toda:</label>
-                <select id="sel-cat1" onchange="carregarSabores(1)"></select>
-                <div id="precos-cat1" class="precos-info"></div>
-                <label>😋 Escolha o Sabor:</label>
-                <select id="sel-sab1" onchange="exibirIngredientes(1)"></select>
-                <div id="ing-sabor1" class="ingredientes-info hidden"></div>
-                <div id="div-meio" class="hidden">
-                    <hr>
-                    <label>📂 Categoria da 2ª Metade:</label>
-                    <select id="sel-cat2" onchange="carregarSabores(2)"></select>
-                    <div id="precos-cat2" class="precos-info"></div>
-                    <label>😋 Sabor da 2ª Metade:</label>
-                    <select id="sel-sab2" onchange="exibirIngredientes(2)"></select>
-                    <div id="ing-sabor2" class="ingredientes-info hidden"></div>
-                    <hr>
+
+                <div class="half-box half-1">
+                    <span class="tag-metade" id="label-metade-1" style="background: var(--accent);">SABOR ÚNICO</span>
+                    <label>📂 Categoria:</label>
+                    <select id="sel-cat1" onchange="carregarSabores(1)"></select>
+                    <div id="precos-cat1" class="precos-info"></div>
+                    <label>😋 Escolha o Sabor:</label>
+                    <select id="sel-sab1" onchange="exibirIngredientes(1)"></select>
+                    <div id="ing-sabor1" class="ingredientes-info hidden"></div>
                 </div>
+
+                <div id="div-meio" class="hidden">
+                    <div class="half-box half-2">
+                        <span class="tag-metade" style="background: #2980b9;">SEGUNDA METADE</span>
+                        <label>📂 Categoria da 2ª Metade:</label>
+                        <select id="sel-cat2" onchange="carregarSabores(2)"></select>
+                        <div id="precos-cat2" class="precos-info"></div>
+                        <label>😋 Sabor da 2ª Metade:</label>
+                        <select id="sel-sab2" onchange="exibirIngredientes(2)"></select>
+                        <div id="ing-sabor2" class="ingredientes-info hidden"></div>
+                    </div>
+                </div>
+
                 <label>📏 Tamanho:</label>
                 <select id="sel-tam" onchange="calcPrevia()"></select>
                 <label>🥯 Borda:</label>
@@ -129,49 +220,43 @@
                     <option value="Sem Borda">Sem Borda</option>
                     <option value="Cheddar">Cheddar (+R$ 8,00)</option>
                     <option value="Catupiry">Catupiry (+R$ 8,00)</option>
-                    <option value="Catupiry">Chocolate (+R$ 8)</option>
                 </select>
                 <label>📝 Observação:</label>
                 <textarea id="cli-obs" placeholder="Ex: Sem cebola, etc..."></textarea>
-                <div style="background:#000; color:#fff; text-align:center; padding:10px; margin-top:10px; font-weight: bold; font-size: 1.2rem;">
-                    VALOR DESTA PIZZA: R$ <span id="previa-val">0,00</span>
+                
+                <div style="background:#000; color:#fff; text-align:center; padding:15px; margin-top:15px; font-weight: 900; font-size: 1.5rem; border-radius: 15px;">
+                    R$ <span id="previa-val">0,00</span>
                 </div>
                 <button type="button" class="btn-cordel" style="background:var(--accent);" onclick="addCarrinho()">➕ ADICIONAR AO PEDIDO</button>
             </div>
+
             <div class="card">
                 <h2>🛒 SEU PEDIDO</h2>
                 <div id="carrinho-lista"></div>
                 <label>💳 Forma de Pagamento:</label>
-                <select id="sel-pagamento" name="Pagamento">
+                <select id="sel-pagamento">
                     <option value="Dinheiro">Dinheiro</option><option value="PIX">PIX</option>
                     <option value="Cartão de Débito">Cartão de Débito</option><option value="Cartão de Crédito">Cartão de Crédito</option>
                 </select>
-                <div style="font-size:1.8rem; text-align:center; border:3px solid #000; margin:15px 0; padding:10px; font-weight: 900;">
+                <div style="font-size:2rem; text-align:center; border:3px solid #000; margin:15px 0; padding:15px; font-weight: 900; border-radius:15px; background:#fff;">
                     TOTAL: R$ <span id="total-geral">0,00</span>
                 </div>
-                <input type="hidden" name="Resumo_Detalhado_Pedido" id="hidden-resumo">
                 <button type="button" class="btn-cordel" style="background:var(--success);" onclick="enviarPedidoTelegram()">🚀 ENVIAR PEDIDO AGORA</button>
             </div>
         </div>
     </form>
     
-    <div class="support-area">
-        <a href="https://wa.me/5586994222884" target="_blank" style="text-decoration: none; color: inherit;">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/5586994222884" alt="QR WhatsApp">
-            <p style="font-size: 0.7rem; margin-top: -5px; color: #666; font-weight: bold;">(Toque no QR Code para chamar)</p>
-        </a>
-        <button type="button" class="btn-cordel" style="background: var(--whatsapp); border: 2px solid #000;" onclick="window.open('https://wa.me/5586994222884', '_blank')">
-            💬 ABRIR NO WHATSAPP
+    <div class="support-area" style="text-align: center; background: rgba(255,255,255,0.8); border-radius: 20px; padding: 15px; border: 2px solid #000;">
+        <button type="button" class="btn-cordel" style="background: var(--whatsapp); border: none;" onclick="window.open('https://wa.me/5586994222884', '_blank')">
+            💬 CHAMAR NO WHATSAPP
         </button>
-        <p style="margin-top: 15px;"><strong>SUPORTE ARRETADO: (86) 99422-2884</strong></p>
+        <p style="margin-top: 15px; font-weight: bold;">SUPORTE: (86) 99422-2884</p>
     </div>
 </div>
 
 <script>
-    const configTelegram = {
-        token: "8059009485:AAHcx6yIk-tBh7YAKhCxxi12LyjtVXv6SjQ",
-        chatId: "7080548404"
-    };
+    // --- SUA LÓGICA ORIGINAL ---
+    const configTelegram = { token: "8059009485:AAHcx6yIk-tBh7YAKhCxxi12LyjtVXv6SjQ", chatId: "7080548404" };
 
     const ingredientes = {
         "Americana": "Molho Nordestizza, mussarela, presunto, ovo, cebola, milho e orégano.",
@@ -225,12 +310,8 @@
     function exibirIngredientes(n) {
         const sabor = document.getElementById('sel-sab' + n).value;
         const infoBox = document.getElementById('ing-sabor' + n);
-        if (ingredientes[sabor]) {
-            infoBox.innerText = "Ingredientes: " + ingredientes[sabor];
-            infoBox.classList.remove('hidden');
-        } else {
-            infoBox.classList.add('hidden');
-        }
+        if (ingredientes[sabor]) { infoBox.innerText = "Ingredientes: " + ingredientes[sabor]; infoBox.classList.remove('hidden'); } 
+        else { infoBox.classList.add('hidden'); }
         calcPrevia();
     }
 
@@ -241,14 +322,7 @@
     function salvarCategoria() { const n = document.getElementById('adm-cat-nome').value; const m = parseFloat(document.getElementById('adm-p-m').value); if(n && m) { db.categorias[n] = {m, g: parseFloat(document.getElementById('adm-p-g').value), gg: parseFloat(document.getElementById('adm-p-gg').value)}; if(!db.sabores[n]) db.sabores[n] = []; renderAdmin(); } }
     function salvarSabor() { const c = document.getElementById('adm-sel-cat').value; const s = document.getElementById('adm-sab-nome').value; if(s) { db.sabores[c].push(s); renderAdmin(); } }
     function salvarBairro() { const n = document.getElementById('adm-bai-nome').value; const p = parseFloat(document.getElementById('adm-bai-taxa').value) || 0; if(n) { db.bairros.push({n, p}); renderAdmin(); } }
-
-    function editarBairro(i) {
-        const novoPreco = prompt(`Novo valor da taxa para ${db.bairros[i].n}:`, db.bairros[i].p);
-        if (novoPreco !== null && !isNaN(parseFloat(novoPreco))) {
-            db.bairros[i].p = parseFloat(novoPreco);
-            renderAdmin();
-        }
-    }
+    function editarBairro(i) { const novoPreco = prompt(`Novo valor da taxa para ${db.bairros[i].n}:`, db.bairros[i].p); if (novoPreco !== null && !isNaN(parseFloat(novoPreco))) { db.bairros[i].p = parseFloat(novoPreco); renderAdmin(); } }
 
     function renderAdmin() {
         document.getElementById('list-adm-cats').innerHTML = Object.keys(db.categorias).map(c => `<div class="item-row">${c} <button onclick="delete db.categorias['${c}'];renderAdmin()" style="color:red;">X</button></div>`).join('');
@@ -269,15 +343,17 @@
         const c = document.getElementById('sel-cat'+n).value; 
         document.getElementById('sel-sab'+n).innerHTML = db.sabores[c] ? db.sabores[c].map(s => `<option value="${s}">${s}</option>`).join('') : ""; 
         const p = db.categorias[c];
-        if(c === "Bebidas") {
-            document.getElementById('precos-cat' + n).innerText = "Preço conforme produto selecionado";
-        } else {
-            document.getElementById('precos-cat' + n).innerText = p ? `M: R$${p.m.toFixed(2)} | G: R$${p.g.toFixed(2)} | GG: R$${p.gg.toFixed(2)}` : "";
-        }
+        if(c === "Bebidas") { document.getElementById('precos-cat' + n).innerText = "Preço por unidade"; } 
+        else { document.getElementById('precos-cat' + n).innerText = p ? `M: R$${p.m.toFixed(2)} | G: R$${p.g.toFixed(2)} | GG: R$${p.gg.toFixed(2)}` : ""; }
         exibirIngredientes(n);
     }
 
-    function mudarFormato() { document.getElementById('div-meio').classList.toggle('hidden', document.getElementById('sel-formato').value==='inteira'); calcPrevia(); }
+    function mudarFormato() { 
+        const formato = document.getElementById('sel-formato').value;
+        document.getElementById('div-meio').classList.toggle('hidden', formato==='inteira'); 
+        document.getElementById('label-metade-1').innerText = formato === 'meio' ? "PRIMEIRA METADE" : "SABOR ÚNICO";
+        calcPrevia(); 
+    }
 
     function calcPrevia() {
         const tam = document.getElementById('sel-tam').value || 'm';
@@ -287,9 +363,8 @@
         const bordaVal = document.getElementById('sel-borda').value !== "Sem Borda" ? 8 : 0;
         if(!db.categorias[c1]) return 0;
         let p = 0;
-        if(c1 === "Bebidas") {
-            p = db.categorias[c1][s1] || 0;
-        } else {
+        if(c1 === "Bebidas") { p = db.categorias[c1][s1] || 0; } 
+        else {
             p = db.categorias[c1][tam];
             if(formato === 'meio') {
                 const c2 = document.getElementById('sel-cat2').value;
@@ -307,7 +382,7 @@
         const bSel = document.getElementById('sel-bairro-cli');
         const bairroNome = bSel.options[bSel.selectedIndex].text.split(' -')[0];
         document.getElementById('hidden-bairro-nome').value = bairroNome;
-        document.getElementById('info-cabra').innerHTML = `👤 <b>Cabra:</b> ${document.getElementById('cli-nome').value}<br>🏘️ <b>Bairro:</b> ${bairroNome}<br>🏠 <b>Endereço:</b> ${document.getElementById('cli-end').value}`;
+        document.getElementById('info-cabra').innerHTML = `👤 <b>Cabra:</b> ${document.getElementById('cli-nome').value} | 🏘️ <b>Bairro:</b> ${bairroNome}`;
         const tams = ["m", "g", "gg"]; document.getElementById('sel-tam').innerHTML = tams.map(t => `<option value="${t}">Tamanho ${t.toUpperCase()}</option>`).join('');
         calcPrevia();
     }
@@ -319,14 +394,7 @@
         const formato = document.getElementById('sel-formato').value;
         const sab2 = formato === 'meio' ? " / " + document.getElementById('sel-sab2').value : "";
         const bordaNome = document.getElementById('sel-borda').value;
-        
-        let descricao = "";
-        if(c1 === "Bebidas") {
-            descricao = `🥤 Bebida: ${sab1}`;
-        } else {
-            descricao = `🍕 Pizza ${tam} ${sab1}${sab2} (Borda: ${bordaNome})`;
-        }
-        
+        let descricao = (c1 === "Bebidas") ? `🥤 Bebida: ${sab1}` : `🍕 Pizza ${tam} ${sab1}${sab2} (Borda: ${bordaNome})`;
         db.carrinho.push({ desc: descricao, val: calcPrevia(), obs: document.getElementById('cli-obs').value });
         document.getElementById('cli-obs').value = ""; renderCarrinho();
     }
@@ -342,63 +410,33 @@
 
     async function enviarPedidoTelegram() {
         if(db.carrinho.length === 0) return alert("Carrinho vazio!");
-        const btn = event.target; 
-        btn.innerText = "⏳ Enviando..."; 
-        btn.disabled = true;
-
+        const btn = event.target; btn.innerText = "⏳ Enviando..."; btn.disabled = true;
         const nome = document.getElementById('cli-nome').value;
         const telRaw = document.getElementById('cli-tel').value;
         const telLimpo = telRaw.replace(/\D/g, ''); 
         const linkWhats = `https://wa.me/55${telLimpo}`;
-        
         const bairro = document.getElementById('sel-bairro-cli').options[document.getElementById('sel-bairro-cli').selectedIndex].text.split(' -')[0];
         const endereco = document.getElementById('cli-end').value;
         const pagamento = document.getElementById('sel-pagamento').value;
         const taxa = parseFloat(document.getElementById('sel-bairro-cli').value) || 0;
         const total = db.carrinho.reduce((a, b) => a + b.val, 0) + taxa;
 
-        let msg = `🌵 *NOVO PEDIDO - NORDESTIZZA*\n\n`;
-        msg += `👤 *Cabra:* ${nome}\n`;
-        msg += `📱 *Telefone:* ${telRaw}\n`;
-        msg += `🔗 *WhatsApp:* [Clique aqui para falar com o cliente](${linkWhats})\n`;
-        msg += `🏘️ *Bairro:* ${bairro}\n`;
-        msg += `🏠 *Endereço:* ${endereco}\n\n`;
-        msg += `🛒 *DETALHES DO PEDIDO:*\n`;
-        
-        db.carrinho.forEach((c, i) => {
-            msg += `${i+1}. ${c.desc} | R$ ${c.val.toFixed(2)}\n`;
-            if(c.obs) msg += `   └ Obs: ${c.obs}\n`;
-        });
-
-        msg += `\n💳 *Pagamento:* ${pagamento}\n`;
-        msg += `🛵 *Taxa de Entrega:* R$ ${taxa.toFixed(2)}\n`;
-        msg += `💰 *VALOR TOTAL: R$ ${total.toFixed(2)}*`;
+        let msg = `🌵 *NOVO PEDIDO - NORDESTIZZA*\n\n👤 *Cabra:* ${nome}\n📱 *Tel:* ${telRaw}\n🔗 *WhatsApp:* [Falar com cliente](${linkWhats})\n🏘️ *Bairro:* ${bairro}\n🏠 *End:* ${endereco}\n\n🛒 *PEDIDO:*\n`;
+        db.carrinho.forEach((c, i) => { msg += `${i+1}. ${c.desc} | R$ ${c.val.toFixed(2)}\n`; if(c.obs) msg += `   └ Obs: ${c.obs}\n`; });
+        msg += `\n💳 *Pag:* ${pagamento}\n🛵 *Taxa:* R$ ${taxa.toFixed(2)}\n💰 *TOTAL: R$ ${total.toFixed(2)}*`;
 
         const url = `https://api.telegram.org/bot${configTelegram.token}/sendMessage?chat_id=${configTelegram.chatId}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
 
         try {
             const response = await fetch(url);
-            if(response.ok) {
-                alert("Pedido Arretado! Já chegou no nosso Sistema! ✅");
-                location.reload();
-            } else {
-                alert("Erro ao enviar! Tente novamente.");
-            }
-        } catch(e) {
-            alert("Erro de conexão! Verifique sua internet.");
-        } finally {
-            btn.innerText = "🚀 ENVIAR PEDIDO AGORA";
-            btn.disabled = false;
-        }
+            if(response.ok) { alert("Pedido Arretado! Já chegou no Telegram! ✅"); location.reload(); } 
+            else { alert("Erro ao enviar!"); }
+        } catch(e) { alert("Erro de conexão!"); } 
+        finally { btn.innerText = "🚀 ENVIAR PEDIDO AGORA"; btn.disabled = false; }
     }
 
     function editarDados() { document.getElementById('step1').classList.remove('hidden'); document.getElementById('step2').classList.add('hidden'); }
     window.onload = initCli;
 </script>
 </body>
-
 </html>
-
-
-
-
