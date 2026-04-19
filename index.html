@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Logística Rocha DS - Pro Final V7</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; background: #fff; }
+        #map { height: 100vh; width: 100vw; z-index: 1; }
+        
+        #menu-btn {
+            position: fixed; top: 15px; left: 15px; z-index: 2000;
+            background: #000; color: white; border: none; padding: 12px 15px; border-radius: 8px; font-size: 20px;
+        }
+
+        .gps-controles {
+            position: fixed; top: 15px; right: 15px; z-index: 2000;
+        }
+        .btn-gps { padding: 10px 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3); font-size: 11px; }
+
+        #sidebar { 
+            position: fixed; top: 0; left: -100%; width: 85%; max-width: 320px; height: 100vh; 
+            background: #1c1c1c; color: white; padding: 70px 10px 15px; 
+            transition: 0.3s; z-index: 1500; display: flex; flex-direction: column;
+        }
+        #sidebar.aberto { left: 0; }
+        .fechar-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; color: white; font-size: 30px; }
+
+        .resumo-distancia { background: #27ae60; padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-weight: bold; }
+        .entrega-item { background: #2d2d2d; padding: 12px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid #3498db; }
+        .btn-acao { padding: 6px; border-radius: 4px; border: none; color: white; font-size: 10px; cursor: pointer; margin: 2px; font-weight: bold; }
+        
+        .obs-input { width: 93%; padding: 5px; margin-top: 5px; border-radius: 4px; border: none; font-size: 12px; background: #444; color: white; }
+
+        .popup-menu { display: flex; flex-direction: column; gap: 5px; min-width: 150px; }
+        .btn-pop { border: none; color: white; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 11px; }
+
+        .leaflet-tooltip-own { background: #000; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: bold; border: 1px solid #fff; }
+        .leaflet-routing-container { display: none !important; }
+        .user-icon { background: #2ecc71; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .leaflet-bottom.leaflet-right { margin-bottom: 25px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+    <button id="menu-btn" onclick="toggleMenu()">☰</button>
+
+    <div class="gps-controles">
+        <button class="btn-gps" style="background: #f1c40f; color: black;" onclick="usarGPSComoInicio()">🏠 GPS Início</button>
+    </div>
+
+    <div id="sidebar">
+        <button class="fechar-btn" onclick="toggleMenu()">×</button>
+        <h2 id="titulo-sidebar" style="margin: 0">Roteiro Atual</h2>
+        <div id="resumo" class="resumo-distancia">Total: 0 km</div>
+        <div id="lista-entregas" style="flex-grow: 1; overflow-y: auto; padding-right: 5px;"></div>
+        <div id="btn-finalizar-lote-container"></div>
+        <button onclick="limparTudo()" style="padding: 15px; background: #c0392b; color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px;">🗑️ Limpar Mapa</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+        const TELEGRAM_TOKEN = '8748118827:AAFZDCkUDYZlrboi_PvrCvqnmV5u68Jgrmc';
+        const TELEGRAM_CHAT_ID = '7080548404';
+
+        function enviarTelegram(mensagem) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(mensagem)}`;
+            fetch(url).catch(err => console.error("Erro Telegram:", err));
+        }
+
+        var googleRoads = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
+        var googleSatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', { subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
+
+        var map = L.map('map', { zoomControl: false, layers: [googleRoads] }).setView([-2.9022, -41.7619], 15);
+        L.control.layers({ "Mapa": googleRoads, "Satélite": googleSatellite }, null, { position: 'bottomright' }).addTo(map);
+
+        var marcadores = [], paradas = [], rotas = [];
+        var indiceConcluido = 0;
+        var userMarker = null;
+        var cores = ['#3498db', '#e74c3c', '#f1c40f', '#9b59b6', '#1abc9c', '#e67e22'];
+        var rotaIniciadaNoTelegram = false;
+
+        map.on('click', function(e) { criarPonto(e.latlng); });
+
+        function criarPonto(latlng) {
+            var m = L.marker(latlng, { draggable: true }).addTo(map);
+            m.nomeOriginal = false;
+            m.observacao = "";
+            m.on('dragend', atualizarTudo);
+            m.bindPopup(() => popupConteudo(m));
+            marcadores.push(m);
+            atualizarTudo();
+        }
+
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('aberto'); }
+
+        function popupConteudo(m) {
+            var div = document.createElement('div');
+            div.className = 'popup-menu';
+            div.innerHTML = `<strong>Opções</strong>`;
+            div.append(
+                criarBtnPop('🚩 Início', '#2980b9', () => { paradas = [m, ...paradas.filter(p=>p!==m)]; atualizarTudo(); m.closePopup(); }),
+                criarBtnPop('➕ Add Rota', '#8e44ad', () => { if(!paradas.includes(m)) paradas.push(m); atualizarTudo(); m.closePopup(); }),
+                criarBtnPop('✏️ Nomear', '#f39c12', () => { 
+                    var n=prompt("Nome do Cliente:"); 
+                    if(n){m.nome=n; m.nomeOriginal=true; atualizarTudo();} 
+                    m.closePopup();
+                }),
+                criarBtnPop('🗑️ Excluir', '#c0392b', () => { excluirPonto(m); })
+            );
+            return div;
+        }
+
+        function criarBtnPop(txt, cor, acao) {
+            var b = document.createElement('button'); b.className='btn-pop'; b.style.background=cor; b.innerText=txt; b.onclick=acao; return b;
+        }
+
+        function atualizarTudo() {
+            rotas.forEach(r => map.removeControl(r)); rotas = [];
+            var lista = document.getElementById('lista-entregas');
+            lista.innerHTML = "";
+            var totalDistancia = 0;
+
+            paradas.forEach((p, i) => {
+                if(!p.nomeOriginal) { p.nome = (i === 0) ? "INÍCIO" : "Cliente " + i; }
+                p.bindTooltip(p.nome, {permanent:true, className:'leaflet-tooltip-own'}).openTooltip();
+
+                var item = document.createElement('div');
+                item.className = 'entrega-item';
+                if(i < indiceConcluido) item.style.opacity = "0.4";
+
+                item.innerHTML = `<strong>${p.nome}</strong>`;
+                
+                if(i !== 0) {
+                    var inputObs = document.createElement('input');
+                    inputObs.className = 'obs-input';
+                    inputObs.placeholder = 'Obs / Código de entrega...';
+                    inputObs.value = p.observacao || "";
+                    inputObs.oninput = (e) => { p.observacao = e.target.value; };
+                    item.appendChild(inputObs);
+                }
+
+                item.innerHTML += `<div style="margin-top:5px">
+                    <button class="btn-acao" style="background:#34495e" onclick="mudarOrdem(${i},-1)">🔼</button>
+                    <button class="btn-acao" style="background:#34495e" onclick="mudarOrdem(${i},1)">🔽</button>
+                    <button class="btn-acao" style="background:#c0392b" onclick="excluirPontoLista(${i})">🗑️</button>
+                </div>`;
+
+                if (i === indiceConcluido) {
+                    var divBotoes = document.createElement('div');
+                    divBotoes.style.display = 'flex';
+                    divBotoes.style.flexWrap = 'wrap';
+                    divBotoes.style.marginTop = '8px';
+
+                    if (i === 0) {
+                        divBotoes.append(criarBtnAcao('🚩 Partir', '#27ae60', () => concluirComStatus(i, "PARTINDO")));
+                    } else {
+                        divBotoes.append(criarBtnAcao('✅ Concluído', '#27ae60', () => concluirComStatus(i, "CONCLUÍDO")));
+                        divBotoes.append(criarBtnAcao('❌ Não Entregue', '#e67e22', () => concluirComStatus(i, "NÃO ENTREGUE")));
+                        divBotoes.append(criarBtnAcao('⚠️ End. Errado', '#c0392b', () => concluirComStatus(i, "ENDEREÇO ERRADO")));
+                    }
+                    item.appendChild(divBotoes);
+                }
+                lista.appendChild(item);
+            });
+
+            var containerFim = document.getElementById('btn-finalizar-lote-container');
+            containerFim.innerHTML = "";
+            
+            if (paradas.length > 1 && !rotaIniciadaNoTelegram) {
+                var btnInicia = criarBtnAcao('🚀 ROTAS DE ENTREGA', '#8e44ad', () => {
+                    let msg = "📍 ROTAS DE ENTREGA\n\nOrdem:";
+                    paradas.forEach((p, idx) => { msg += `\n${idx === 0 ? '🚩' : idx + '.'} ${p.nome}`; });
+                    enviarTelegram(msg);
+                    rotaIniciadaNoTelegram = true;
+                    atualizarTudo();
+                });
+                btnInicia.style.width = '100%'; btnInicia.style.padding = '12px';
+                containerFim.appendChild(btnInicia);
+            }
+
+            if (paradas.length > 0 && indiceConcluido === paradas.length) {
+                var btnFim = criarBtnAcao('🏁 FINALIZAR TODAS AS ENTREGAS', '#2980b9', () => {
+                    enviarTelegram("🏁 TODAS AS ENTREGAS FORAM FINALIZADAS!");
+                    limparMapaBase();
+                });
+                btnFim.style.width = '100%'; btnFim.style.padding = '12px';
+                containerFim.appendChild(btnFim);
+            }
+
+            if (paradas.length >= 2) {
+                paradas.forEach((p, i) => {
+                    if (i < paradas.length - 1) {
+                        var control = L.Routing.control({
+                            waypoints: [ paradas[i].getLatLng(), paradas[i+1].getLatLng() ],
+                            router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' }),
+                            lineOptions: { styles: [{ color: cores[i % cores.length], weight: 6, opacity: 0.8 }] },
+                            addWaypoints: false, draggableWaypoints: false, fitSelectedRoutes: false, show: false
+                        }).on('routesfound', (e) => {
+                            totalDistancia += e.routes[0].summary.totalDistance;
+                            document.getElementById('resumo').innerText = "Total: " + (totalDistancia/1000).toFixed(2) + " km";
+                        }).addTo(map);
+                        rotas.push(control);
+                    }
+                });
+            }
+        }
+
+        function criarBtnAcao(txt, cor, acao) {
+            var b = document.createElement('button'); b.className='btn-acao'; b.style.background=cor; b.innerText=txt; b.onclick=acao; return b;
+        }
+
+        function concluirComStatus(i, status) {
+            let p = paradas[i];
+            let obs = p.observacao ? `\n📝 Obs/Código: ${p.observacao}` : "";
+            let msg = i === 0 ? `🚩 SAÍDA: ${p.nome}` : `${status}: ${p.nome}${obs}`;
+            enviarTelegram(msg);
+            indiceConcluido = i + 1;
+            atualizarTudo();
+        }
+
+        function limparMapaBase() {
+            marcadores.forEach(m => map.removeLayer(m)); rotas.forEach(r => map.removeControl(r));
+            paradas = []; marcadores = []; rotas = []; indiceConcluido = 0; rotaIniciadaNoTelegram = false;
+            document.getElementById('resumo').innerText = "Total: 0 km";
+            document.getElementById('lista-entregas').innerHTML = "";
+            document.getElementById('btn-finalizar-lote-container').innerHTML = "";
+        }
+
+        function mudarOrdem(idx, dir) { var n = idx + dir; if(n >= 0 && n < paradas.length) { var t = paradas[idx]; paradas[idx] = paradas[n]; paradas[n] = t; atualizarTudo(); } }
+        function excluirPontoLista(i) { map.removeLayer(paradas[i]); paradas.splice(i, 1); atualizarTudo(); }
+        function limparTudo() { if(confirm("Limpar tudo?")) limparMapaBase(); }
+        
+        function usarGPSComoInicio() {
+            navigator.geolocation.getCurrentPosition(p => {
+                var m = L.marker([p.coords.latitude, p.coords.longitude], { draggable: true }).addTo(map);
+                m.nome = "INÍCIO (GPS)"; m.nomeOriginal = true;
+                paradas.unshift(m); marcadores.push(m); atualizarTudo();
+            });
+        }
+    </script>
+</body>
+</html>
