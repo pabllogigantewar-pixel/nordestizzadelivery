@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Finance Pro Premium</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0b0e11; --card: #161b22; --text: #ffffff; --subtext: #8b949e;
+            --primary: #007bff; --border: #30363d;
+        }
+
+        /* Temas de Cores */
+        body.theme-neon { --primary: #00ff88; }
+        body.theme-gold { --primary: #ffcc00; }
+        body.theme-purple { --primary: #bf40bf; }
+        body.theme-blue { --primary: #007bff; }
+        body.light-mode { --bg: #f8f9fa; --card: #ffffff; --text: #1c1e21; --subtext: #606770; --border: #dee2e6; }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: background 0.3s, color 0.2s; }
+        
+        body { 
+            background: var(--bg); margin: 0; padding: 0; height: 100vh; 
+            display: flex; justify-content: center; overflow: hidden;
+        }
+
+        /* Layout Adaptável */
+        .app-shell { 
+            width: 100%; max-width: 1200px; /* Limite para monitores ultra-wide */
+            background: var(--bg); color: var(--text); 
+            display: flex; flex-direction: column; position: relative; height: 100%;
+        }
+
+        .app-header { 
+            padding: 15px 20px; display: flex; justify-content: space-between; 
+            align-items: center; background: var(--card); border-bottom: 1px solid var(--border); 
+        }
+
+        .main-container { 
+            flex: 1; overflow-y: auto; padding: 15px; 
+            padding-bottom: 150px; /* Espaço extra para não cobrir conteúdo com a barra */
+        }
+
+        /* Grid de Cartões para Telas Maiores */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .view { display: none; width: 100%; }
+        .view.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { 
+            background: var(--card); border-radius: 24px; padding: 20px; 
+            margin-bottom: 15px; border: 1px solid var(--border); height: fit-content;
+        }
+        
+        /* Formulários e Detalhes */
+        .field-group { margin-bottom: 15px; }
+        .label-main { display: block; color: var(--primary); font-weight: bold; font-size: 14px; margin-bottom: 2px; }
+        .label-desc { display: block; color: var(--subtext); font-size: 11px; margin-bottom: 8px; line-height: 1.3; }
+
+        input, select { 
+            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); 
+            background: var(--bg); color: var(--text); font-size: 16px; outline: none; 
+        }
+
+        .btn { 
+            width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: bold; 
+            cursor: pointer; background: var(--primary); color: #000; 
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        /* --- BARRA DE NAVEGAÇÃO CORRIGIDA (ERGONOMIA) --- */
+        .bottom-nav { 
+            background: var(--card); position: absolute; 
+            bottom: 25px; /* Sobe a barra para evitar botões do Android/iOS */
+            left: 15px; right: 15px; border-radius: 30px; 
+            display: flex; justify-content: space-around; align-items: center; 
+            padding: 10px 5px 12px; border: 1px solid var(--border); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); z-index: 1000;
+        }
+
+        .nav-item { text-align: center; color: var(--subtext); font-size: 10px; cursor: pointer; flex: 1; }
+        .nav-item.active { color: var(--primary); }
+        
+        /* Ícones maiores no celular para facilitar o clique */
+        @media (max-width: 600px) {
+            .nav-item i { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+            .btn-plus { width: 65px; height: 65px; transform: translateY(-35px); }
+        }
+
+        @media (min-width: 601px) {
+            .nav-item i { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+            .btn-plus { width: 55px; height: 55px; transform: translateY(-25px); }
+        }
+
+        .btn-plus-wrap { flex: 1; display: flex; justify-content: center; }
+        .btn-plus { 
+            background: var(--primary); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; color: #000;
+            border: 5px solid var(--bg); box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        /* Sidebar e Menus */
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100%; background: var(--card); z-index: 2000; transition: 0.3s; padding: 25px; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+        .sidebar.active { left: 0; }
+        .overlay { position: fixed; display: none; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1500; }
+        
+        .dropdown { position: relative; }
+        .dropdown-content { display: none; position: absolute; right: 0; background: var(--card); min-width: 180px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); z-index: 2001; border: 1px solid var(--border); }
+        .dropdown-content button { width: 100%; padding: 12px; text-align: left; background: none; border: none; color: var(--text); border-bottom: 1px solid var(--border); cursor: pointer; }
+        .show { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <div class="app-shell">
+        <div class="sidebar" id="sidebar">
+            <h2 style="color:var(--primary)">Rocha Finance</h2>
+            <hr style="border:0; border-top:1px solid var(--border); margin:15px 0">
+            <div onclick="showView('home'); toggleMenu()" style="padding:15px 0; cursor:pointer"><i class="fa-solid fa-house"></i> Principal</div>
+            <div onclick="showView('trans'); toggleMenu()" style="padding:15px 0; cursor:pointer"><i class="fa-solid fa-receipt"></i> Extrato</div>
+            <div onclick="showView('graph'); toggleMenu()" style="padding:15px 0; cursor:pointer"><i class="fa-solid fa-chart-line"></i> Gráficos</div>
+            <div onclick="showView('perfil'); toggleMenu()" style="padding:15px 0; cursor:pointer"><i class="fa-solid fa-user-gear"></i> Perfil</div>
+        </div>
+
+        <header class="app-header">
+            <i class="fa-solid fa-bars-staggered fa-lg" onclick="toggleMenu()"></i>
+            <b id="active-title">Principal</b>
+            <div class="dropdown">
+                <i class="fa-solid fa-palette fa-lg" onclick="toggleDropdown()"></i>
+                <div class="dropdown-content" id="myDropdown">
+                    <button onclick="toggleDarkMode()">Trocar Claro/Escuro</button>
+                    <button onclick="changeColor('neon')">🟢 Neon</button>
+                    <button onclick="changeColor('gold')">🟡 Ouro</button>
+                    <button onclick="changeColor('purple')">🟣 Roxo</button>
+                    <button onclick="changeColor('blue')">🔵 Azul</button>
+                    <button onclick="clearAllData()" style="color:red">Resetar Tudo</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-container">
+            <div id="view-home" class="view active">
+                <div style="text-align:center; padding:20px 0;">
+                    <small style="color:var(--subtext)">Saldo Atual Consolidado</small>
+                    <h1 id="h-balance" style="font-size:38px; margin:5px 0; color:var(--primary)">R$ 0,00</h1>
+                </div>
+                <div class="grid-layout">
+                    <div class="card">
+                        <h4>Comparativo de Caixa</h4>
+                        <canvas id="barChartHome" style="max-height:250px"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-trans" class="view">
+                <div class="card">
+                    <h4>Histórico de Movimentações</h4>
+                    <div id="trans-list"></div>
+                </div>
+            </div>
+
+            <div id="view-plus" class="view">
+                <div class="card" style="max-width: 600px; margin: 0 auto;">
+                    <h4 id="form-title">Novo Lançamento</h4>
+                    <input type="hidden" id="f-id">
+                    <div class="field-group">
+                        <span class="label-main">Descrição</span>
+                        <span class="label-desc">Nomeie o ganho ou gasto (Ex: Venda Y).</span>
+                        <input type="text" id="f-desc" placeholder="Ex: Salário, Mercado...">
+                    </div>
+                    <div class="field-group">
+                        <span class="label-main">Valor (R$)</span>
+                        <span class="label-desc">Use ponto para centavos.</span>
+                        <input type="number" id="f-val" step="0.01">
+                    </div>
+                    <div class="field-group">
+                        <span class="label-main">Tipo</span>
+                        <select id="f-type" onchange="loadCatOptions()">
+                            <option value="gasto">Despesa (Saída)</option>
+                            <option value="ganho">Receita (Entrada)</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <span class="label-main">Categoria</span>
+                        <select id="f-cat"></select>
+                    </div>
+                    <button class="btn" onclick="saveEntry()"><i class="fa-solid fa-check"></i> Salvar Registro</button>
+                </div>
+            </div>
+
+            <div id="view-graph" class="view">
+                <div class="grid-layout">
+                    <div class="card">
+                        <h4>Exportar p/ Telegram</h4>
+                        <div class="field-group">
+                            <span class="label-main">Período</span>
+                            <select id="report-period" onchange="toggleDateFilter()">
+                                <option value="7">Últimos 7 dias</option>
+                                <option value="30">Mensal (30 dias)</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+                        <div id="custom-date-filter" style="display:none; gap:10px; margin-bottom:15px">
+                            <input type="date" id="date-start">
+                            <input type="date" id="date-end">
+                        </div>
+                        <button class="btn" style="background:#0088cc; color:#fff" onclick="sendTelegramReport()">
+                            <i class="fa-brands fa-telegram"></i> Enviar p/ Bot
+                        </button>
+                    </div>
+                    <div class="card">
+                        <h4>Origem dos Ganhos</h4>
+                        <canvas id="pieGainChart" style="max-height:220px"></canvas>
+                    </div>
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <h4>Histórico de Fluxo</h4>
+                        <canvas id="lineFlowChart" style="max-height:250px"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-perfil" class="view">
+                <div class="grid-layout">
+                    <div class="card">
+                        <h4>Meus Dados</h4>
+                        <div class="field-group">
+                            <span class="label-main">Nome de Usuário</span>
+                            <span class="label-desc">Coloque aqui seu nome de usuário.</span>
+                            <input type="text" id="user-name">
+                        </div>
+                        <div class="field-group">
+                            <span class="label-main">Número de Telefone</span>
+                            <span class="label-desc">Coloque aqui seu número de telefone com DDD.</span>
+                            <input type="text" id="user-phone">
+                        </div>
+                        <button class="btn" onclick="saveUserData()">Atualizar Perfil</button>
+                    </div>
+                    <div class="card">
+                        <h4>Robô Telegram</h4>
+                        <div class="field-group">
+                            <span class="label-main">Token (Key)</span>
+                            <span class="label-desc">A chave fornecida pelo @BotFather.</span>
+                            <input type="password" id="tg-token">
+                        </div>
+                        <div class="field-group">
+                            <span class="label-main">Chat ID</span>
+                            <span class="label-desc">Seu ID numérico do Telegram.</span>
+                            <input type="text" id="tg-chatid">
+                        </div>
+                        <button class="btn" style="background:#333; color:#fff" onclick="saveTelegramData()">Salvar Configuração</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="showView('home')"><i class="fa-solid fa-house"></i>Início</div>
+            <div class="nav-item" onclick="showView('trans')"><i class="fa-solid fa-wallet"></i>Extrato</div>
+            <div class="btn-plus-wrap"><div class="btn-plus" onclick="showView('plus')"><i class="fa-solid fa-plus"></i></div></div>
+            <div class="nav-item" onclick="showView('graph')"><i class="fa-solid fa-chart-pie"></i>Gráficos</div>
+            <div class="nav-item" onclick="showView('perfil')"><i class="fa-solid fa-user"></i>Perfil</div>
+        </nav>
+    </div>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('fin_v13_master')) || {
+        trans: [], cats: { ganho: ['Salário', 'Venda Y', 'Freelance', 'Investimento'], gasto: ['Moradia', 'Saúde', 'Alimentação', 'Lazer'] },
+        user: { name: '', phone: '' }, telegram: { token: '', chatid: '' }
+    };
+
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').style.display = document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none'; }
+    function toggleDropdown() { document.getElementById("myDropdown").classList.toggle("show"); }
+    function toggleDateFilter() { const v = document.getElementById('report-period').value; document.getElementById('custom-date-filter').style.display = v === 'custom' ? 'flex' : 'none'; }
+
+    function showView(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('view-' + id).classList.add('active');
+        const map = {home:0, trans:1, plus:2, graph:3, perfil:4};
+        document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
+        document.getElementById('active-title').innerText = id === 'plus' ? 'Lançar' : id.charAt(0).toUpperCase() + id.slice(1);
+        if(id === 'home' || id === 'graph') updateCharts();
+        if(id === 'trans') renderTransactions();
+        if(id === 'plus' && !document.getElementById('f-id').value) loadCatOptions();
+    }
+
+    function changeColor(theme) { document.body.classList.remove('theme-neon', 'theme-gold', 'theme-purple', 'theme-blue'); document.body.classList.add('theme-' + theme); }
+    function toggleDarkMode() { document.body.classList.toggle('light-mode'); updateCharts(); }
+
+    function loadCatOptions() { const t = document.getElementById('f-type').value; document.getElementById('f-cat').innerHTML = db.cats[t].map(c => `<option value="${c}">${c}</option>`).join(''); }
+
+    function saveEntry() {
+        const id = document.getElementById('f-id').value;
+        const entry = { id: id ? parseInt(id) : Date.now(), desc: document.getElementById('f-desc').value, val: parseFloat(document.getElementById('f-val').value), type: document.getElementById('f-type').value, cat: document.getElementById('f-cat').value, date: new Date().toISOString() };
+        if(!entry.desc || !entry.val) return alert("Preencha os campos!");
+        if(id) db.trans = db.trans.map(t => t.id === entry.id ? entry : t);
+        else db.trans.push(entry);
+        save(); document.getElementById('f-id').value = ''; document.getElementById('f-desc').value = ''; document.getElementById('f-val').value = ''; showView('home');
+    }
+
+    function renderTransactions() {
+        document.getElementById('trans-list').innerHTML = db.trans.length ? db.trans.map(t => `
+            <div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid var(--border)">
+                <div><b>${t.desc}</b><br><small>${t.cat} | ${new Date(t.date).toLocaleDateString()}</small></div>
+                <div style="text-align:right">
+                    <b style="color:${t.type=='ganho'?'#2ecc71':'#e74c3c'}">R$ ${t.val.toFixed(2)}</b><br>
+                    <span onclick="editTrans(${t.id})" style="color:var(--primary); font-size:11px; cursor:pointer">EDITAR</span> | 
+                    <span onclick="delTrans(${t.id})" style="color:red; font-size:11px; cursor:pointer">EXCLUIR</span>
+                </div>
+            </div>
+        `).reverse().join('') : "<p style='color:var(--subtext)'>Nenhum registro encontrado.</p>";
+    }
+
+    function editTrans(id) {
+        const t = db.trans.find(x => x.id === id);
+        document.getElementById('f-id').value = t.id;
+        document.getElementById('f-desc').value = t.desc;
+        document.getElementById('f-val').value = t.val;
+        document.getElementById('f-type').value = t.type;
+        loadCatOptions();
+        document.getElementById('f-cat').value = t.cat;
+        showView('plus');
+        document.getElementById('form-title').innerText = "Editar Registro";
+    }
+
+    function delTrans(id) { if(confirm("Apagar permanentemente?")) { db.trans = db.trans.filter(t => t.id !== id); save(); renderTransactions(); updateCharts(); } }
+
+    function updateCharts() {
+        let g = 0, l = 0, catsGain = {}, flow = [];
+        db.trans.forEach(t => {
+            if(t.type=='ganho') { g += t.val; catsGain[t.cat] = (catsGain[t.cat] || 0) + t.val; }
+            else { l += t.val; }
+            flow.push({ d: new Date(t.date).toLocaleDateString(), v: t.type == 'ganho' ? t.val : -t.val });
+        });
+        document.getElementById('h-balance').innerText = `R$ ${(g-l).toFixed(2)}`;
+
+        const ctxB = document.getElementById('barChartHome').getContext('2d');
+        if(window.hBar) window.hBar.destroy();
+        window.hBar = new Chart(ctxB, { type: 'bar', data: { labels: ['Ganhos', 'Gastos'], datasets: [{ data: [g, l], backgroundColor: ['#2ecc71', '#e74c3c'] }] }, options: { plugins: { legend: { display: false } } } });
+
+        const ctxP = document.getElementById('pieGainChart').getContext('2d');
+        if(window.gPie) window.gPie.destroy();
+        window.gPie = new Chart(ctxP, { type: 'pie', data: { labels: Object.keys(catsGain), datasets: [{ data: Object.values(catsGain), backgroundColor: ['#2ecc71', '#3498db', '#9b59b6', '#f1c40f'] }] } });
+
+        const ctxL = document.getElementById('lineFlowChart').getContext('2d');
+        if(window.gLine) window.gLine.destroy();
+        window.gLine = new Chart(ctxL, { type: 'line', data: { labels: flow.map(f=>f.d), datasets: [{ label: 'Fluxo R$', data: flow.map(f=>f.v), borderColor: getComputedStyle(document.body).getPropertyValue('--primary'), tension: 0.3 }] } });
+    }
+
+    async function sendTelegramReport() {
+        if(!db.telegram.token || !db.telegram.chatid) return alert("Configure o Telegram!");
+        const p = document.getElementById('report-period').value;
+        let f = db.trans;
+        if(p === 'custom') {
+            const s = new Date(document.getElementById('date-start').value).getTime();
+            const e = new Date(document.getElementById('date-end').value).getTime();
+            if(!s || !e) return alert("Datas inválidas!");
+            f = db.trans.filter(t => { const d = new Date(t.date).getTime(); return d >= s && d <= e; });
+        } else {
+            const limit = Date.now() - (parseInt(p) * 24 * 60 * 60 * 1000);
+            f = db.trans.filter(t => new Date(t.date).getTime() > limit);
+        }
+        let g=0, l=0; f.forEach(t => t.type=='ganho' ? g+=t.val : l+=t.val);
+        const msg = `📊 Relatório: ${db.user.name}\n✅ Ganhos: R$ ${g.toFixed(2)}\n❌ Gastos: R$ ${l.toFixed(2)}\n💰 Saldo: R$ ${(g-l).toFixed(2)}`;
+        await fetch(`https://api.telegram.org/bot${db.telegram.token}/sendMessage?chat_id=${db.telegram.chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+        alert("Enviado!");
+    }
+
+    function saveUserData() { db.user.name = document.getElementById('user-name').value; db.user.phone = document.getElementById('user-phone').value; save(); alert("Salvo!"); }
+    function saveTelegramData() { db.telegram.token = document.getElementById('tg-token').value; db.telegram.chatid = document.getElementById('tg-chatid').value; save(); alert("Salvo!"); }
+    function save() { localStorage.setItem('fin_v13_master', JSON.stringify(db)); }
+    function clearAllData() { if(confirm("Apagar tudo?")) { localStorage.clear(); location.reload(); } }
+    
+    function init() { 
+        document.getElementById('user-name').value = db.user.name; 
+        document.getElementById('user-phone').value = db.user.phone; 
+        document.getElementById('tg-token').value = db.telegram.token; 
+        document.getElementById('tg-chatid').value = db.telegram.chatid; 
+        updateCharts(); 
+    }
+    init();
+</script>
+</body>
+</html>
