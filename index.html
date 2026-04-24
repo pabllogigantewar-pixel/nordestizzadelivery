@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Finance Pro Premium</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0b0e11; --card: #161b22; --text: #ffffff; --subtext: #8b949e;
+            --primary: #007bff; --border: #30363d;
+        }
+
+        /* Temas de Cores */
+        body.theme-neon { --primary: #00ff88; }
+        body.theme-gold { --primary: #ffcc00; }
+        body.theme-purple { --primary: #bf40bf; }
+        body.theme-blue { --primary: #007bff; }
+        
+        body.light-mode {
+            --bg: #f8f9fa; --card: #ffffff; --text: #1c1e21; --subtext: #606770; --border: #dee2e6;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: background 0.3s, color 0.2s; }
+        
+        body { 
+            background: var(--bg); margin: 0; padding: 0; height: 100vh; 
+            display: flex; justify-content: center; overflow: hidden; 
+        }
+
+        /* Shell Fluida: Adapta-se ao Celular, Tablet (deitado ou em pé) */
+        .app-shell { 
+            width: 100%; 
+            max-width: 100%; 
+            background: var(--bg); color: var(--text); 
+            display: flex; flex-direction: column; position: relative; height: 100%;
+        }
+
+        .app-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: var(--card); border-bottom: 1px solid var(--border); }
+        
+        .main-container { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 110px; width: 100%; max-width: 900px; margin: 0 auto; }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
+        
+        /* Inputs com Descrição */
+        .field-group { margin-bottom: 15px; }
+        .label-main { display: block; color: var(--primary); font-weight: bold; font-size: 14px; margin-bottom: 2px; }
+        .label-desc { display: block; color: var(--subtext); font-size: 11px; margin-bottom: 8px; }
+
+        input, select { 
+            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); 
+            background: var(--bg); color: var(--text); font-size: 16px; 
+        }
+
+        .btn { 
+            width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: bold; 
+            cursor: pointer; background: var(--primary); color: #000; 
+        }
+
+        /* Nav Inferior Adaptativa */
+        .bottom-nav { 
+            background: var(--card); position: absolute; bottom: 0; width: 100%; 
+            display: flex; justify-content: space-around; align-items: center; 
+            padding: 10px 0 25px; border-top: 1px solid var(--border); 
+        }
+        .nav-item { text-align: center; color: var(--subtext); font-size: 10px; cursor: pointer; flex: 1; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 1.3rem; display: block; margin-bottom: 3px; }
+
+        .btn-plus-wrap { flex: 1; display: flex; justify-content: center; }
+        .btn-plus { 
+            background: var(--primary); width: 60px; height: 60px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; color: #000;
+            transform: translateY(-25px); border: 5px solid var(--bg); box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Sidebar e Dropdown */
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100%; background: var(--card); z-index: 200; transition: 0.3s; padding: 25px; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+        .sidebar.active { left: 0; }
+        .overlay { position: fixed; display: none; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 150; }
+        
+        .dropdown { position: relative; }
+        .dropdown-content { display: none; position: absolute; right: 0; background: var(--card); min-width: 180px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); z-index: 201; border: 1px solid var(--border); }
+        .dropdown-content button { width: 100%; padding: 12px; text-align: left; background: none; border: none; color: var(--text); border-bottom: 1px solid var(--border); cursor: pointer; }
+        .show { display: block; }
+
+        /* Ajustes para telas maiores (Tablet deitado) */
+        @media (min-width: 768px) {
+            .main-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
+            .balance-hero h1 { font-size: 48px; }
+        }
+    </style>
+</head>
+<body id="app-body">
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <div class="app-shell">
+        <div class="sidebar" id="sidebar">
+            <h2 style="color:var(--primary)">Rocha Finance</h2>
+            <div onclick="showView('home'); toggleMenu()" style="padding:15px 0; cursor:pointer"><i class="fa-solid fa-house"></i> Home</div>
+            <div onclick="showView('trans'); toggleMenu()" style="padding:15px 0; cursor:pointer"><i class="fa-solid fa-wallet"></i> Extrato</div>
+            <div onclick="showView('graph'); toggleMenu()" style="padding:15px 0; cursor:pointer"><i class="fa-solid fa-chart-pie"></i> Gráficos</div>
+            <div onclick="showView('perfil'); toggleMenu()" style="padding:15px 0; cursor:pointer"><i class="fa-solid fa-user"></i> Perfil</div>
+        </div>
+
+        <header class="app-header">
+            <i class="fa-solid fa-bars-staggered fa-lg" onclick="toggleMenu()"></i>
+            <b id="active-title">Principal</b>
+            <div class="dropdown">
+                <i class="fa-solid fa-palette fa-lg" onclick="toggleDropdown()"></i>
+                <div class="dropdown-content" id="myDropdown">
+                    <button onclick="toggleDarkMode()">Modo Claro/Escuro</button>
+                    <button onclick="changeColor('neon')">🟢 Neon</button>
+                    <button onclick="changeColor('gold')">🟡 Ouro</button>
+                    <button onclick="changeColor('purple')">🟣 Roxo</button>
+                    <button onclick="changeColor('blue')">🔵 Azul</button>
+                    <button onclick="clearAllData()" style="color:red">Resetar App</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-container">
+            <div id="view-home" class="view active">
+                <div class="balance-hero" style="text-align:center; padding:20px 0;">
+                    <small style="color:var(--subtext)">Saldo em Conta</small>
+                    <h1 id="h-balance" style="font-size:36px; margin:5px 0; color:var(--primary)">R$ 0,00</h1>
+                </div>
+                <div class="card" style="display:flex; justify-content:space-around; text-align:center">
+                    <div><small>Ganhos</small><br><b id="h-gain" style="color:#2ecc71">R$ 0</b></div>
+                    <div><small>Gastos</small><br><b id="h-loss" style="color:#e74c3c">R$ 0</b></div>
+                </div>
+                <div class="card">
+                    <h4>Distribuição</h4>
+                    <canvas id="homeChart" style="max-height:220px"></canvas>
+                </div>
+            </div>
+
+            <div id="view-trans" class="view">
+                <div class="card">
+                    <h4>Movimentações</h4>
+                    <div id="trans-list"></div>
+                </div>
+            </div>
+
+            <div id="view-plus" class="view">
+                <div class="card">
+                    <h4 id="form-title">Lançar Valor</h4>
+                    <div class="field-group">
+                        <span class="label-main">Descrição</span>
+                        <span class="label-desc">O que foi comprado ou recebido.</span>
+                        <input type="text" id="f-desc" placeholder="Ex: Aluguel">
+                    </div>
+                    <div class="field-group">
+                        <span class="label-main">Valor (R$)</span>
+                        <span class="label-desc">Use ponto para centavos.</span>
+                        <input type="number" id="f-val" placeholder="0.00">
+                    </div>
+                    <select id="f-type" onchange="loadCatOptions()" style="margin-bottom:10px">
+                        <option value="gasto">Despesa</option>
+                        <option value="ganho">Receita</option>
+                    </select>
+                    <select id="f-cat"></select>
+                    <button class="btn" onclick="saveEntry()" style="margin-top:15px">Confirmar</button>
+                </div>
+                <div class="card">
+                    <h4>Categorias</h4>
+                    <div style="display:flex; gap:10px">
+                        <input type="text" id="new-cat-name" placeholder="Nova categoria...">
+                        <button class="btn" style="width:auto; padding:0 15px" onclick="addNewCategory()">+</button>
+                    </div>
+                    <div id="cat-manage-list"></div>
+                </div>
+            </div>
+
+            <div id="view-graph" class="view">
+                <div class="card">
+                    <h4>Relatório Telegram</h4>
+                    <button class="btn" style="background:#0088cc; color:#fff" onclick="sendTelegramReport()">Enviar p/ Telegram</button>
+                </div>
+                <div class="card">
+                    <h4>Gráfico Detalhado</h4>
+                    <canvas id="pieChartDetailed"></canvas>
+                </div>
+            </div>
+
+            <div id="view-perfil" class="view">
+                <div class="card">
+                    <h4>Meus Dados</h4>
+                    <div class="field-group">
+                        <span class="label-main">Seu Nome</span>
+                        <span class="label-desc">Nome de identificação no perfil.</span>
+                        <input type="text" id="user-name">
+                    </div>
+                    <div class="field-group">
+                        <span class="label-main">Telefone</span>
+                        <span class="label-desc">Número de contato com DDD.</span>
+                        <input type="text" id="user-phone">
+                    </div>
+                    <button class="btn" onclick="saveUserData()">Salvar Perfil</button>
+                </div>
+                <div class="card">
+                    <h4>Robô Telegram</h4>
+                    <div class="field-group">
+                        <span class="label-main">Token do Bot</span>
+                        <span class="label-desc">A chave fornecida pelo @BotFather.</span>
+                        <input type="password" id="tg-token">
+                    </div>
+                    <div class="field-group">
+                        <span class="label-main">Seu Chat ID</span>
+                        <span class="label-desc">Obtenha no bot @userinfobot.</span>
+                        <input type="text" id="tg-chatid">
+                    </div>
+                    <button class="btn" style="background:#333; color:#fff" onclick="saveTelegramData()">Salvar Bot</button>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="showView('home')"><i class="fa-solid fa-house"></i>Home</div>
+            <div class="nav-item" onclick="showView('trans')"><i class="fa-solid fa-wallet"></i>Extrato</div>
+            <div class="btn-plus-wrap">
+                <div class="btn-plus" onclick="showView('plus')"><i class="fa-solid fa-plus fa-xl"></i></div>
+            </div>
+            <div class="nav-item" onclick="showView('graph')"><i class="fa-solid fa-chart-pie"></i>Gráficos</div>
+            <div class="nav-item" onclick="showView('perfil')"><i class="fa-solid fa-user"></i>Perfil</div>
+        </nav>
+    </div>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('fin_v10_final')) || {
+        trans: [], cats: { ganho: ['Salário', 'Freelance'], gasto: ['Mercado', 'Aluguel', 'Saúde'] },
+        user: { name: '', phone: '' }, telegram: { token: '', chatid: '' }
+    };
+    let editId = null;
+
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('overlay').style.display = document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
+    }
+
+    function toggleDropdown() { document.getElementById("myDropdown").classList.toggle("show"); }
+
+    function showView(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('view-' + id).classList.add('active');
+        
+        const map = {home:0, trans:1, plus:2, graph:3, perfil:4};
+        document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
+        document.getElementById('active-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
+        
+        if(id === 'home' || id === 'graph') updateCharts();
+        if(id === 'trans') renderTransactions();
+        if(id === 'plus') { loadCatOptions(); renderCatList(); }
+        if(id === 'perfil') loadProfileFields();
+    }
+
+    function changeColor(theme) {
+        document.body.classList.remove('theme-neon', 'theme-gold', 'theme-purple', 'theme-blue');
+        document.body.classList.add('theme-' + theme);
+    }
+
+    function toggleDarkMode() { document.body.classList.toggle('light-mode'); updateCharts(); }
+
+    function saveUserData() {
+        db.user.name = document.getElementById('user-name').value;
+        db.user.phone = document.getElementById('user-phone').value;
+        save(); alert("Perfil Salvo!");
+    }
+
+    function saveTelegramData() {
+        db.telegram.token = document.getElementById('tg-token').value;
+        db.telegram.chatid = document.getElementById('tg-chatid').value;
+        save(); alert("Bot Salvo!");
+    }
+
+    function loadProfileFields() {
+        document.getElementById('user-name').value = db.user.name;
+        document.getElementById('user-phone').value = db.user.phone;
+        document.getElementById('tg-token').value = db.telegram.token;
+        document.getElementById('tg-chatid').value = db.telegram.chatid;
+    }
+
+    function loadCatOptions() {
+        const type = document.getElementById('f-type').value;
+        document.getElementById('f-cat').innerHTML = db.cats[type].map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    function addNewCategory() {
+        const name = document.getElementById('new-cat-name').value;
+        const type = document.getElementById('f-type').value;
+        if(name) { db.cats[type].push(name); save(); renderCatList(); loadCatOptions(); document.getElementById('new-cat-name').value = ''; }
+    }
+
+    function renderCatList() {
+        const type = document.getElementById('f-type').value;
+        document.getElementById('cat-manage-list').innerHTML = db.cats[type].map((c, i) => `
+            <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border)">
+                <span>${c}</span>
+                <i class="fa-solid fa-trash" onclick="delCat('${type}',${i})" style="color:red; cursor:pointer"></i>
+            </div>
+        `).join('');
+    }
+
+    function delCat(type, i) { db.cats[type].splice(i,1); save(); renderCatList(); loadCatOptions(); }
+
+    function saveEntry() {
+        const desc = document.getElementById('f-desc').value;
+        const val = parseFloat(document.getElementById('f-val').value);
+        if(!desc || !val) return alert("Preencha tudo!");
+        db.trans.push({ id: Date.now(), desc, val, type: document.getElementById('f-type').value, cat: document.getElementById('f-cat').value, date: new Date().toLocaleDateString() });
+        save(); showView('home');
+    }
+
+    function renderTransactions() {
+        document.getElementById('trans-list').innerHTML = db.trans.length ? db.trans.map(t => `
+            <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border)">
+                <div><b>${t.desc}</b><br><small>${t.cat}</small></div>
+                <div style="text-align:right">
+                    <b style="color:${t.type=='ganho'?'#2ecc71':'#e74c3c'}">R$ ${t.val.toFixed(2)}</b><br>
+                    <span onclick="delTrans(${t.id})" style="color:red; font-size:11px; cursor:pointer">Excluir</span>
+                </div>
+            </div>
+        `).reverse().join('') : "Nenhum lançamento.";
+    }
+
+    function delTrans(id) { db.trans = db.trans.filter(t => t.id !== id); save(); renderTransactions(); updateCharts(); }
+
+    function updateCharts() {
+        let g = 0, l = 0, c = {};
+        db.trans.forEach(t => { if(t.type=='ganho') g+=t.val; else { l+=t.val; c[t.cat]=(c[t.cat]||0)+t.val; } });
+        document.getElementById('h-balance').innerText = `R$ ${(g-l).toFixed(2)}`;
+        document.getElementById('h-gain').innerText = `R$ ${g.toFixed(2)}`;
+        document.getElementById('h-loss').innerText = `R$ ${l.toFixed(2)}`;
+        const ctx = document.getElementById('homeChart').getContext('2d');
+        if(window.hChart) window.hChart.destroy();
+        window.hChart = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: ['#00ff88', '#007bff', '#ffcc00', '#bf40bf', '#ff4444'] }] }, options: { cutout: '75%', plugins: { legend: { display: false } } } });
+    }
+
+    async function sendTelegramReport() {
+        if(!db.telegram.token || !db.telegram.chatid) return alert("Configure no Perfil!");
+        let g=0, l=0; db.trans.forEach(t => t.type=='ganho' ? g+=t.val : l+=t.val);
+        const msg = `📊 Resumo: ${db.user.name}\nSaldo: R$ ${(g-l).toFixed(2)}`;
+        await fetch(`https://api.telegram.org/bot${db.telegram.token}/sendMessage?chat_id=${db.telegram.chatid}&text=${encodeURIComponent(msg)}`);
+        alert("Enviado!");
+    }
+
+    function save() { localStorage.setItem('fin_v10_final', JSON.stringify(db)); }
+    function clearAllData() { if(confirm("Apagar tudo?")) { localStorage.clear(); location.reload(); } }
+
+    loadProfileFields();
+    updateCharts();
+</script>
+</body>
+</html>
