@@ -201,6 +201,10 @@
             cursor: pointer;
             transition: 0.2s;
         }
+        .today-workout-card.all-done {
+            background: rgba(40, 167, 69, 0.25);
+            border: 2px solid #28a745;
+        }
         .today-workout-card:active { transform: scale(0.99); }
         .exercise-item {
             display: flex;
@@ -377,7 +381,7 @@
             </div>
 
             <div class="card">
-                <h2>📅 Quadro Semanal de Treinos</h2>
+                <h2>📅 Quadro Semanal de Treinos (Clique para Expandir)</h2>
                 <div id="lista-treinos-cadastrados">
                     <!-- Injetado pelo JS -->
                 </div>
@@ -502,6 +506,18 @@
         <button type="button" class="btn-danger" onclick="closeModals()">Fechar</button>
     </div>
 
+    <!-- Modal Visualização Expandida de Treino Cadastrado -->
+    <div class="modal" id="modal-ver-treino-cadastrado">
+        <h2 id="ver-treino-titulo">Treino Cadastrado</h2>
+        <p id="ver-treino-obs" style="font-size:0.85rem; opacity:0.8; margin-bottom: 12px;"></p>
+
+        <div id="ver-treino-exercicios-list">
+            <!-- Lista de exercícios -->
+        </div>
+
+        <button type="button" class="btn-danger" style="margin-top:15px;" onclick="closeModals()">Fechar</button>
+    </div>
+
     <!-- Modal Pop-up Detalhado do Treino Concluído -->
     <div class="modal" id="modal-detalhe-treino-concluido">
         <h2 id="detalhe-treino-titulo">Detalhes do Treino</h2>
@@ -569,35 +585,50 @@
     </div>
 
     <script>
-        // BANCO DE DADOS PREDEFINIDO DE EXERCÍCIOS POR CATEGORIA
+        // BANCO COMPLETO E DIVERSIFICADO DE EXERCÍCIOS DE ACADEMIA POR CATEGORIA
         const exerciciosDB = {
             "Peitoral 🛡️": [
-                "Supino Reto com Barra", "Supino Reto com Halteres", "Supino Inclinado com Barra", 
-                "Supino Inclinado com Halteres", "Crucifixo Inclinado", "Crossover na Polia", "Peck Deck / Voador"
+                "Supino Reto com Barra", "Supino Reto com Halteres", "Supino Reto Articulado / Máquina",
+                "Supino Inclinado com Barra", "Supino Inclinado com Halteres", "Supino Inclinado Articulado",
+                "Supino Declinado com Barra / Halteres", "Crucifixo Reto com Halteres", "Crucifixo Inclinado com Halteres",
+                "Crossover na Polia Alta", "Crossover na Polia Média", "Crossover na Polia Baixa",
+                "Peck Deck / Voador", "Flexão de Braços (Solo)", "Paralelas para Peitoral"
             ],
-            "Costas 🦅": [
-                "Puxada Alta Frontal", "Remada Curvada com Barra", "Remada Baixa na Triângulo", 
-                "Remada Unilateral com Halter (Serrote)", "Levantamento Terra", "Pulldown na Polia"
+            "Costas & Trapézio 🦅": [
+                "Puxada Alta Frontal (Pegada Aberta)", "Puxada Alta Supinada (Pegada Fechada)", "Puxada Alta com Triângulo",
+                "Remada Curvada com Barra", "Remada Curvada com Halteres", "Remada Cavalo / Barra T",
+                "Remada Baixa na Triângulo", "Remada Unilateral com Halter (Serrote)", "Remada Articulada",
+                "Levantamento Terra", "Pulldown na Polia com Corda / Barra", "Encolhimento de Ombros com Barra / Halter"
             ],
-            "Pernas & Quadríceps 🦵": [
-                "Agachamento Livre com Barra", "Leg Press 45°", "Cadeira Extensora", 
-                "Agachamento Búlgaro", "Mesa Flexora", "Stiff com Halteres / Barra", "Cadeira Abdutora"
+            "Quadríceps & Pernas 🦵": [
+                "Agachamento Livre com Barra", "Agachamento Smith (Barra Guiada)", "Agachamento Hack",
+                "Agachamento Búlgaro com Halteres", "Agachamento Sissy", "Leg Press 45°", "Leg Press Horizontal",
+                "Cadeira Extensora", "Afundo / Passada com Halteres"
+            ],
+            "Posterior & Glúteos 🍑": [
+                "Mesa Flexora", "Cadeira Flexora", "Stiff com Barra", "Stiff com Halteres",
+                "Elevação Pélvica com Barra", "Elevação Pélvica na Máquina", "Cadeira Abdutora",
+                "Glúteo Quatro Apoios / Polia"
             ],
             "Ombros 🏛️": [
-                "Desenvolvimento com Halteres", "Elevação Lateral na Polia / Halter", 
-                "Elevação Frontal", "Crucifixo Invertido", "Encolhimento de Ombros"
+                "Desenvolvimento com Halteres", "Desenvolvimento Militar com Barra", "Desenvolvimento no Smith",
+                "Elevação Lateral com Halteres", "Elevação Lateral na Polia", "Elevação Frontal com Halter / Barra",
+                "Crucifixo Invertido com Halteres", "Crucifixo Invertido no Peck Deck", "Remada Alta com Barra W / Polia"
             ],
-            "Bíceps 💪": [
-                "Rosca Direta com Barra W", "Rosca Alternada com Halteres", 
-                "Rosca Martelo", "Rosca Scott na Máquina"
+            "Bíceps & Antebraço 💪": [
+                "Rosca Direta com Barra Reta", "Rosca Direta com Barra W", "Rosca Alternada com Halteres",
+                "Rosca Martelo com Halteres", "Rosca Martelo na Polia com Corda", "Rosca Scott com Barra W",
+                "Rosca Scott na Máquina", "Rosca Concentrada com Halter", "Rosca 21", "Rosca Inversa (Antebraço)"
             ],
             "Tríceps ⚡": [
-                "Tríceps Pulley na Corda", "Tríceps Testa com Barra W", 
-                "Tríceps Francês Unilateral", "Tríceps Mergulho nas Paralelas"
+                "Tríceps Pulley na Corda", "Tríceps Pulley na Barra Reta / V", "Tríceps Testa com Barra W",
+                "Tríceps Testa com Halteres", "Tríceps Francês Unilateral com Halter", "Tríceps Francês na Polia",
+                "Tríceps Mergulho no Banco", "Paralelas para Tríceps"
             ],
-            "Panturrilha & Abdômen 👟": [
-                "Gêmeos em Pé na Máquina", "Panturrilha Sentado (Soleira)", 
-                "Abdominal Supra na Polia", "Abdominal Infra na Barra Fixa", "Prancha Isométrica"
+            "Panturrilha & Core / Abdômen 👟": [
+                "Gêmeos em Pé na Máquina / Smith", "Panturrilha Sentado (Soleira)", "Panturrilha no Leg Press",
+                "Abdominal Supra no Solo", "Abdominal Supra na Polia com Corda", "Abdominal Infra na Barra Fixa",
+                "Abdominal Remador", "Prancha Isométrica", "Roda Abdominal (Ab Wheel)"
             ]
         };
 
@@ -635,9 +666,9 @@
                 const st = window.pageYOffset || document.documentElement.scrollTop;
 
                 if (st === 0) {
-                    header.classList.remove('header-hidden'); // No topo absoluto, aparece
+                    header.classList.remove('header-hidden');
                 } else if (st > lastScrollTop && st > 40) {
-                    header.classList.add('header-hidden'); // Rolando para baixo, esconde
+                    header.classList.add('header-hidden');
                 }
 
                 lastScrollTop = st <= 0 ? 0 : st;
@@ -1022,7 +1053,7 @@
                 });
 
                 container.innerHTML += `
-                    <div class="history-card">
+                    <div class="history-card" onclick="openVerTreinoCadastradoModal('${t.id}')">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <strong>${t.nome}</strong>
                             <span style="font-size:0.75rem; background:var(--primary); color:var(--btn-text); padding:2px 8px; border-radius:10px;">${t.dia}</span>
@@ -1031,13 +1062,38 @@
                         <div style="font-size:0.85rem; margin:8px 0; background:var(--bg-color); padding:8px; border-radius:5px;">
                             ${exHtml || 'Nenhum exercício detalhado.'}
                         </div>
-                        <div style="display:flex; gap:10px;">
+                        <div style="display:flex; gap:10px;" onclick="event.stopPropagation();">
                             <button class="btn-warning btn-sm" onclick="editTreino('${t.id}')">✏️ Editar</button>
                             <button class="btn-danger btn-sm" onclick="deleteTreino('${t.id}')">🗑️ Excluir</button>
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function openVerTreinoCadastradoModal(id) {
+            const treinos = db.get('treinos') || [];
+            const t = treinos.find(item => item.id === id);
+            if (!t) return;
+
+            document.getElementById('ver-treino-titulo').innerText = `${t.dia} - ${t.nome}`;
+            document.getElementById('ver-treino-obs').innerText = t.obs ? `Observação: ${t.obs}` : '';
+
+            const listContainer = document.getElementById('ver-treino-exercicios-list');
+            listContainer.innerHTML = '';
+
+            t.exercicios.forEach(ex => {
+                listContainer.innerHTML += `
+                    <div class="exercise-item">
+                        <div>
+                            <strong>${ex.nome}</strong><br>
+                            <small>${ex.detalhe} | Carga Inicial: ${ex.carga}kg</small>
+                        </div>
+                    </div>
+                `;
+            });
+
+            openModal('modal-ver-treino-cadastrado');
         }
 
         function editTreino(id) {
@@ -1095,15 +1151,20 @@
 
             const totalEx = treinoHoje.exercicios.length;
             const concluidos = treinoHoje.exercicios.filter(e => e.concluido).length;
+            const allDone = totalEx > 0 && concluidos === totalEx;
 
             container.innerHTML = `
-                <div class="today-workout-card" onclick="openExecucaoTreinoModal('${treinoHoje.id}')">
+                <div class="today-workout-card ${allDone ? 'all-done' : ''}" onclick="openExecucaoTreinoModal('${treinoHoje.id}')">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <h2>🏋️ Treino de Hoje (${diaHoje})</h2>
-                        <span style="font-size:0.8rem; font-weight:bold; color:var(--primary);">${concluidos}/${totalEx} Concluídos</span>
+                        <span style="font-size:0.8rem; font-weight:bold; color:${allDone ? '#28a745' : 'var(--primary)'};">
+                            ${allDone ? '✅ 100% Concluído' : concluidos + '/' + totalEx + ' Concluídos'}
+                        </span>
                     </div>
                     <h3 style="color:var(--primary); font-size:1.2rem; margin:5px 0;">${treinoHoje.nome}</h3>
-                    <p style="font-size:0.85rem; opacity:0.8;">${treinoHoje.obs ? '📌 ' + treinoHoje.obs : 'Clique para ver os exercícios e marcar concluídos.'}</p>
+                    <p style="font-size:0.85rem; opacity:0.9; font-weight:${allDone ? 'bold' : 'normal'};">
+                        ${allDone ? '🎉 Todos os treinos concluídos por hoje! Clique para rever.' : (treinoHoje.obs ? '📌 ' + treinoHoje.obs : 'Clique para ver os exercícios e marcar concluídos.')}
+                    </p>
                 </div>
             `;
         }
