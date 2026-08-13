@@ -79,6 +79,7 @@
         .btn-success { background: var(--secondary); }
         .btn-danger { background: #dc3545; }
         .btn-warning { background: #ffc107; color: #000; }
+        .btn-info { background: #17a2b8; color: #fff; }
         .btn-sm { padding: 6px 10px; font-size: 0.8rem; margin-bottom: 0; width: auto; }
 
         /* DISPLAY IMC E TIMER */
@@ -165,6 +166,27 @@
         .history-item img { width: 100%; height: auto; display: block; }
         .history-item .details { padding: 10px; background: var(--card-bg); font-size: 0.9rem; }
 
+        /* LISTAS CATEGORIZADAS DE EXERCÍCIOS NO MODAL */
+        .cat-title {
+            background: var(--primary);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        .ex-option-btn {
+            background: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            text-align: left;
+            margin-bottom: 4px;
+            border-radius: 5px;
+            font-weight: normal;
+        }
+
         /* NAVEGAÇÃO INFERIOR ADAPTADA PARA BARRA DE NAVEGAÇÃO DO CELULAR */
         nav {
             position: fixed; bottom: 0; left: 0; width: 100%;
@@ -233,10 +255,16 @@
 
         <!-- ABA: TREINOS (MONTAGEM, CALENDÁRIO E TIMER DE DESCANSO) -->
         <section id="tab-treino" class="tab-content">
-            <!-- TIMER DE DESCANSO ENTRE SÉRIES -->
+            <!-- TIMER DE DESCANSO ENTRE SÉRIES COM ALARME E INPUT MANUAL -->
             <div class="card">
                 <h2>⏱️ Timer de Descanso entre Séries</h2>
                 <div class="rest-timer-display" id="rest-timer-display">00:00</div>
+                
+                <div class="grid-2" style="margin-bottom: 5px;">
+                    <input type="number" id="manual-timer-sec" placeholder="Tempo em Segundos (Ex: 90)" style="margin-bottom: 0;">
+                    <button type="button" class="btn-info" onclick="setRestTimerManual()">Definir Tempo</button>
+                </div>
+
                 <div class="timer-presets">
                     <button type="button" onclick="setRestTimer(30)">30s</button>
                     <button type="button" onclick="setRestTimer(45)">45s</button>
@@ -267,11 +295,11 @@
 
                 <textarea id="treino-obs" placeholder="Observações (Ex: Descanso de 60s, focar no pico de contração)"></textarea>
 
-                <h3 style="font-size: 0.95rem; margin: 10px 0 5px; color: var(--primary);">Exercícios</h3>
+                <h3 style="font-size: 0.95rem; margin: 10px 0 5px; color: var(--primary);">Exercícios do Treino</h3>
                 <div id="lista-exercicios-form">
                     <!-- Dynamic Rows -->
                 </div>
-                <button type="button" style="background: #17a2b8;" onclick="addExerciciosRow()">+ Adicionar Exercício</button>
+                <button type="button" class="btn-info" onclick="openSelectExerciciosModal()">+ Selecionar Exercício da Lista</button>
                 
                 <button type="button" class="btn-success" onclick="saveTreino()">Salvar Treino Completo</button>
             </div>
@@ -280,6 +308,13 @@
                 <h2>📅 Quadro Semanal de Treinos</h2>
                 <div id="lista-treinos-cadastrados">
                     <!-- Injetado pelo JS -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Relatório e Histórico de Treinos Concluídos</h2>
+                <div id="lista-historico-treinos-concluidos">
+                    <!-- Injetado via JS -->
                 </div>
             </div>
         </section>
@@ -359,7 +394,7 @@
         <input type="text" id="input-nome" placeholder="Seu Nome">
         <input type="number" id="input-idade" placeholder="Sua Idade">
         <button onclick="savePerfil()">Salvar Perfil</button>
-        <button style="background: #dc3545;" onclick="closeModals()">Cancelar</button>
+        <button class="btn-danger" onclick="closeModals()">Cancelar</button>
     </div>
 
     <!-- Modal Atualizar Dados Corporais -->
@@ -379,7 +414,7 @@
         </select>
 
         <button onclick="saveDadosCorporais()">Atualizar e Iniciar Timer</button>
-        <button style="background: #dc3545;" onclick="closeModals()">Cancelar</button>
+        <button class="btn-danger" onclick="closeModals()">Cancelar</button>
     </div>
 
     <!-- Modal Execução do Treino do Dia -->
@@ -391,10 +426,86 @@
             <!-- Exercícios com Checkbox -->
         </div>
 
-        <button type="button" class="btn-success" style="margin-top:15px;" onclick="closeModals()">Concluir Sessão</button>
+        <button type="button" class="btn-success" style="margin-top:15px;" onclick="concluirSessaoTreino()">Registrar Treino Concluído</button>
+        <button type="button" class="btn-danger" onclick="closeModals()">Fechar</button>
+    </div>
+
+    <!-- Modal Seleção de Exercícios por Categoria -->
+    <div class="modal" id="modal-selecao-exercicio">
+        <h2>Selecione o Exercício</h2>
+        <div id="container-categorias-exercicios">
+            <!-- Categorias e Botões Injetados via JS -->
+        </div>
+        <button type="button" class="btn-danger" style="margin-top:10px;" onclick="closeModalExSelecao()">Cancelar</button>
+    </div>
+
+    <!-- Modal Configuração da Série/Repetição do Exercício Selecionado -->
+    <div class="modal" id="modal-config-exercicio">
+        <h2 id="config-ex-nome-titulo">Configurar Exercício</h2>
+        
+        <label style="font-size: 0.85rem;">Séries x Repetições:</label>
+        <select id="config-ex-reps">
+            <option value="4x10-12 reps">4 Séries x 10 a 12 Repetições</option>
+            <option value="3x8-10 reps">3 Séries x 8 a 10 Repetições</option>
+            <option value="4x Falha 🔥">4 Séries até a Falha 🔥</option>
+            <option value="3x Falha 🔥">3 Séries até a Falha 🔥</option>
+            <option value="Pirâmide Crescente 📈">Pirâmide Crescente (Carga ↑ / Reps ↓) 📈</option>
+            <option value="Pirâmide Decrescente / Drop 📉">Pirâmide Decrescente / Drop Set 📉</option>
+            <option value="5x5 (Força) 💪">5 Séries x 5 Reps (Força Máxima) 💪</option>
+        </select>
+
+        <label style="font-size: 0.85rem;">Carga Inicial (kg):</label>
+        <input type="number" id="config-ex-carga" placeholder="Ex: 20">
+
+        <button type="button" class="btn-success" onclick="confirmarAddExerciciosRow()">Adicionar ao Treino</button>
+        <button type="button" class="btn-danger" onclick="closeModalExConfig()">Voltar</button>
+    </div>
+
+    <!-- Modal Alteração de Foto do Histórico -->
+    <div class="modal" id="modal-editar-foto">
+        <h2>Alterar Foto da Lembrança</h2>
+        <input type="hidden" id="edit-foto-index">
+        <input type="file" id="edit-foto-upload" accept="image/*">
+        <button type="button" class="btn-success" onclick="salvarAlteracaoFoto()">Salvar Nova Foto</button>
+        <button type="button" class="btn-danger" onclick="closeModals()">Cancelar</button>
     </div>
 
     <script>
+        // BANCO DE DADOS PREDEFINIDO DE EXERCÍCIOS POR CATEGORIA
+        const exerciciosDB = {
+            "Peitoral 🛡️": [
+                "Supino Reto com Barra", "Supino Reto com Halteres", "Supino Inclinado com Barra", 
+                "Supino Inclinado com Halteres", "Crucifixo Inclinado", "Crossover na Polia", "Peck Deck / Voador"
+            ],
+            "Costas 🦅": [
+                "Puxada Alta Frontal", "Remada Curvada com Barra", "Remada Baixa na Triângulo", 
+                "Remada Unilateral com Halter (Serrote)", "Levantamento Terra", "Pulldown na Polia"
+            ],
+            "Pernas & Quadríceps 🦵": [
+                "Agachamento Livre com Barra", "Leg Press 45°", "Cadeira Extensora", 
+                "Agachamento Búlgaro", "Mesa Flexora", "Stiff com Halteres / Barra", "Cadeira Abdutora"
+            ],
+            "Ombros 🏛️": [
+                "Desenvolvimento com Halteres", "Elevação Lateral na Polia / Halter", 
+                "Elevação Frontal", "Crucifixo Invertido", "Encolhimento de Ombros"
+            ],
+            "Bíceps 💪": [
+                "Rosca Direta com Barra W", "Rosca Alternada com Halteres", 
+                "Rosca Martelo", "Rosca Scott na Máquina"
+            ],
+            "Tríceps ⚡": [
+                "Tríceps Pulley na Corda", "Tríceps Testa com Barra W", 
+                "Tríceps Francês Unilateral", "Tríceps Mergulho nas Paralelas"
+            ],
+            "Panturrilha & Abdômen 👟": [
+                "Gêmeos em Pé na Máquina", "Panturrilha Sentado (Soleira)", 
+                "Abdominal Supra na Polia", "Abdominal Infra na Barra Fixa", "Prancha Isométrica"
+            ]
+        };
+
+        let tempSelectedExNome = "";
+        let idTreinoExecucaoAtual = null;
+
         // CORE: Gerenciamento de LocalStorage
         const db = {
             get: (key) => JSON.parse(localStorage.getItem(key)) || null,
@@ -412,9 +523,10 @@
             loadHistorico();
             
             // Inicializar Treinos
-            addExerciciosRow(); // Linha inicial padrão do formulário
+            renderCategoriasExerciciosModal();
             loadTreinos();
             loadTreinoHoje();
+            loadHistoricoTreinosConcluidos();
 
             setInterval(updateCountdown, 1000);
         });
@@ -519,7 +631,7 @@
             }
         }
 
-        // CRONÔMETRO
+        // CRONÔMETRO DE AVALIAÇÃO
         function updateCountdown() {
             const dados = db.get('dados');
             if (!dados || !dados.dataAlvo) return;
@@ -542,11 +654,38 @@
         }
 
         /* -------------------------------------------------------------
-           SISTEMA DE GERENCIAMENTO DE TREINOS & TIMER DE DESCANSO
+           SISTEMA DE TIMER DE DESCANSO COM ALARME SONORO E INPUT MANUAL
         ------------------------------------------------------------- */
         let restTimerInterval = null;
         let restTimeSeconds = 0;
         let restTimeInitial = 0;
+
+        function playBeepSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 880; // Nota Lá (A5)
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1.2);
+                setTimeout(() => osc.stop(), 1200);
+            } catch(e) {
+                console.log("Audio API não suportada ou bloqueada.");
+            }
+        }
+
+        function setRestTimerManual() {
+            const val = parseInt(document.getElementById('manual-timer-sec').value);
+            if (val > 0) {
+                setRestTimer(val);
+                document.getElementById('manual-timer-sec').value = '';
+            } else {
+                alert("Digite um tempo válido em segundos!");
+            }
+        }
 
         function setRestTimer(sec) {
             clearInterval(restTimerInterval);
@@ -573,6 +712,7 @@
                         clearInterval(restTimerInterval);
                         restTimerInterval = null;
                         btn.innerText = "Iniciar";
+                        playBeepSound();
                         alert("⏰ Fim do descanso! Hora da próxima série!");
                     }
                 }, 1000);
@@ -593,15 +733,70 @@
             document.getElementById('rest-timer-display').innerText = `${m}:${s}`;
         }
 
-        // MONTAGEM DE TREINO (FORMULÁRIO)
-        function addExerciciosRow(nome = '', series = '', reps = '', carga = '') {
+        /* -------------------------------------------------------------
+           SELEÇÃO DE EXERCÍCIOS E POP-UP DE CONFIGURAÇÃO DE REPETIÇÕES
+        ------------------------------------------------------------- */
+        function renderCategoriasExerciciosModal() {
+            const container = document.getElementById('container-categorias-exercicios');
+            container.innerHTML = '';
+            
+            for (let cat in exerciciosDB) {
+                container.innerHTML += `<div class="cat-title">${cat}</div>`;
+                exerciciosDB[cat].forEach(ex => {
+                    container.innerHTML += `
+                        <button type="button" class="ex-option-btn" onclick="selectExercicioFromModal('${ex.replace(/'/g, "\\'")}')">
+                            🔹 ${ex}
+                        </button>
+                    `;
+                });
+            }
+        }
+
+        function openSelectExerciciosModal() {
+            openModal('modal-selecao-exercicio');
+        }
+
+        function closeModalExSelecao() {
+            document.getElementById('modal-selecao-exercicio').classList.remove('active');
+            if (!document.querySelector('.modal.active')) {
+                document.getElementById('app-wrapper').classList.remove('blur-active');
+                document.getElementById('overlay').classList.remove('active');
+            }
+        }
+
+        function selectExercicioFromModal(nomeEx) {
+            tempSelectedExNome = nomeEx;
+            closeModalExSelecao();
+            document.getElementById('config-ex-nome-titulo').innerText = nomeEx;
+            openModal('modal-config-exercicio');
+        }
+
+        function closeModalExConfig() {
+            document.getElementById('modal-config-exercicio').classList.remove('active');
+            openModal('modal-selecao-exercicio');
+        }
+
+        function confirmarAddExerciciosRow() {
+            const repsDet = document.getElementById('config-ex-reps').value;
+            const cargaVal = document.getElementById('config-ex-carga').value || '0';
+
+            addExerciciosRow(tempSelectedExNome, repsDet, cargaVal);
+
+            document.getElementById('config-ex-carga').value = '';
+            document.getElementById('modal-config-exercicio').classList.remove('active');
+            document.getElementById('app-wrapper').classList.remove('blur-active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        // ADICIONAR LINHA NA LISTA DE MONTAGEM DE TREINO
+        function addExerciciosRow(nome = '', det = '', carga = '') {
             const container = document.getElementById('lista-exercicios-form');
             const row = document.createElement('div');
             row.className = 'grid-2 ex-row';
             row.style.marginBottom = '8px';
             row.innerHTML = `
-                <input type="text" class="ex-nome" placeholder="Nome Ex: Supino" value="${nome}" style="grid-column: span 2; margin-bottom: 4px;">
-                <input type="text" class="ex-det" placeholder="Séries x Reps (Ex: 4x10)" value="${series ? series + 'x' + reps : ''}">
+                <input type="text" class="ex-nome" placeholder="Exercício" value="${nome}" readonly style="grid-column: span 2; margin-bottom: 4px; background: rgba(0,123,255,0.05); font-weight:bold;">
+                <input type="text" class="ex-det" placeholder="Séries / Reps" value="${det}">
                 <div style="display:flex; gap: 4px;">
                     <input type="number" class="ex-carga" placeholder="Carga (kg)" value="${carga}">
                     <button type="button" class="btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()" style="height:38px;">X</button>
@@ -632,23 +827,26 @@
                 if (exNome) {
                     exercicios.push({
                         nome: exNome,
-                        detalhe: exDet || '3x10',
+                        detalhe: exDet || '4x10-12',
                         carga: exCarga || '0',
                         concluido: false
                     });
                 }
             });
 
+            if (exercicios.length === 0) {
+                alert("Adicione pelo menos 1 exercício ao treino!");
+                return;
+            }
+
             const treinos = db.get('treinos') || [];
 
             if (idEdit) {
-                // Modo Edição
                 const index = treinos.findIndex(t => t.id === idEdit);
                 if (index !== -1) {
                     treinos[index] = { ...treinos[index], nome, dia, obs, exercicios };
                 }
             } else {
-                // Novo Treino
                 treinos.push({
                     id: 'tr_' + new Date().getTime(),
                     nome,
@@ -670,7 +868,6 @@
             document.getElementById('treino-nome').value = '';
             document.getElementById('treino-obs').value = '';
             document.getElementById('lista-exercicios-form').innerHTML = '';
-            addExerciciosRow();
         }
 
         function loadTreinos() {
@@ -723,13 +920,10 @@
 
             if (t.exercicios && t.exercicios.length > 0) {
                 t.exercicios.forEach(ex => {
-                    addExerciciosRow(ex.nome, '', ex.detalhe, ex.carga);
+                    addExerciciosRow(ex.nome, ex.detalhe, ex.carga);
                 });
-            } else {
-                addExerciciosRow();
             }
 
-            // Rola até o formulário
             document.getElementById('treino-nome').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -780,6 +974,7 @@
         }
 
         function openExecucaoTreinoModal(idTreino) {
+            idTreinoExecucaoAtual = idTreino;
             const treinos = db.get('treinos') || [];
             const t = treinos.find(item => item.id === idTreino);
             if (!t) return;
@@ -814,6 +1009,62 @@
                 openExecucaoTreinoModal(idTreino);
                 loadTreinoHoje();
             }
+        }
+
+        // SALVAR SESSÃO CONCLUÍDA NO HISTÓRICO DETALHADO DE TREINOS
+        function concluirSessaoTreino() {
+            if (!idTreinoExecucaoAtual) return;
+            const treinos = db.get('treinos') || [];
+            const t = treinos.find(item => item.id === idTreinoExecucaoAtual);
+            if (!t) return;
+
+            const agora = new Date();
+            const dataStr = agora.toLocaleDateString('pt-BR');
+            const horaStr = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+            const histTreinos = db.get('histTreinosConcluidos') || [];
+            histTreinos.unshift({
+                nome: t.nome,
+                dia: t.dia,
+                data: dataStr,
+                hora: horaStr,
+                exercicios: JSON.parse(JSON.stringify(t.exercicios))
+            });
+
+            db.set('histTreinosConcluidos', histTreinos);
+            loadHistoricoTreinosConcluidos();
+            closeModals();
+            alert(`Sessão de treino "${t.nome}" registrada às ${horaStr} do dia ${dataStr}!`);
+        }
+
+        function loadHistoricoTreinosConcluidos() {
+            const histTreinos = db.get('histTreinosConcluidos') || [];
+            const container = document.getElementById('lista-historico-treinos-concluidos');
+
+            if (histTreinos.length === 0) {
+                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Nenhum treino concluído no histórico ainda.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            histTreinos.forEach(item => {
+                let exRows = '';
+                item.exercicios.forEach(e => {
+                    exRows += `<span style="font-size:0.8rem; display:block;">${e.concluido ? '✅' : '⚪'} ${e.nome} (${e.detalhe} - ${e.carga}kg)</span>`;
+                });
+
+                container.innerHTML += `
+                    <div class="history-card" style="border-left-color: var(--secondary);">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong>🏋️ ${item.nome}</strong>
+                            <span style="font-size:0.75rem; opacity:0.8;">📅 ${item.data} às ${item.hora}</span>
+                        </div>
+                        <div style="margin-top:6px; background:var(--bg-color); padding:6px; border-radius:5px;">
+                            ${exRows}
+                        </div>
+                    </div>
+                `;
+            });
         }
 
         // MEDIDAS MUSCULARES E HISTÓRICO DE MEDIDAS
@@ -939,7 +1190,7 @@
             });
         }
 
-        // HISTÓRICO DE FOTOS
+        // HISTÓRICO DE FOTOS COM EDIÇÃO E EXCLUSÃO MANTENDO OS DADOS ORIGINAIS
         function saveHistorico() {
             const inputFoto = document.getElementById('foto-upload');
             if (!inputFoto.files[0]) {
@@ -978,7 +1229,7 @@
             const container = document.getElementById('galeria-historico');
             container.innerHTML = '';
             
-            historico.forEach(item => {
+            historico.forEach((item, index) => {
                 container.innerHTML += `
                     <div class="history-item">
                         <img src="${item.img}" alt="Histórico do corpo">
@@ -986,10 +1237,50 @@
                             <strong>📅 ${item.data}</strong><br>
                             ⚖️ Peso: ${item.peso}kg | 🔥 BF: ${item.bf}%<br>
                             💪 Braço: ${item.braco}cm | Peito: ${item.peito}cm | Coxa: ${item.coxa}cm
+                            <div style="display:flex; gap:10px; margin-top:8px;">
+                                <button class="btn-warning btn-sm" onclick="openEditarFotoModal(${index})">✏️ Alterar Foto</button>
+                                <button class="btn-danger btn-sm" onclick="deleteHistoricoFoto(${index})">🗑️ Excluir</button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function openEditarFotoModal(index) {
+            document.getElementById('edit-foto-index').value = index;
+            openModal('modal-editar-foto');
+        }
+
+        function salvarAlteracaoFoto() {
+            const index = parseInt(document.getElementById('edit-foto-index').value);
+            const input = document.getElementById('edit-foto-upload');
+
+            if (!input.files[0]) {
+                alert("Selecione a nova imagem para substituir!");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const historico = db.get('historico') || [];
+                if (historico[index]) {
+                    historico[index].img = e.target.result; // Altera APENAS a imagem, preservando datas e métricas
+                    db.set('historico', historico);
+                    loadHistorico();
+                    closeModals();
+                    alert("Foto atualizada com sucesso!");
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function deleteHistoricoFoto(index) {
+            if (!confirm("Tem certeza que deseja excluir esta foto do histórico?")) return;
+            const historico = db.get('historico') || [];
+            historico.splice(index, 1);
+            db.set('historico', historico);
+            loadHistorico();
         }
     </script>
 </body>
