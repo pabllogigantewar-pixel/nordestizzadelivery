@@ -8,18 +8,39 @@
         :root {
             --bg-color: #f4f4f9;
             --text-color: #333;
-            --primary: #007bff;
-            --secondary: #28a745;
+            --primary: #28a745; /* Padrão Verde */
+            --secondary: #218838;
             --card-bg: #fff;
             --nav-bg: #fff;
             --border: #ddd;
+            --btn-text: #ffffff;
         }
 
+        /* TEMA VERDE (PADRÃO) */
+        body.theme-green {
+            --primary: #28a745;
+            --secondary: #1e7e34;
+            --btn-text: #ffffff;
+        }
+
+        /* TEMA AMARELO */
+        body.theme-yellow {
+            --primary: #ffc107;
+            --secondary: #d39e00;
+            --btn-text: #000000;
+        }
+
+        /* TEMA VERMELHO */
+        body.theme-red {
+            --primary: #dc3545;
+            --secondary: #bd2130;
+            --btn-text: #ffffff;
+        }
+
+        /* MODO ESCURO SIMPLES */
         body.dark-mode {
             --bg-color: #121212;
             --text-color: #f4f4f9;
-            --primary: #4facfe;
-            --secondary: #00f2fe;
             --card-bg: #1e1e1e;
             --nav-bg: #1e1e1e;
             --border: #333;
@@ -30,14 +51,14 @@
         body { 
             background-color: var(--bg-color); 
             color: var(--text-color); 
-            transition: 0.3s; 
+            transition: background-color 0.3s, color 0.3s; 
             padding-bottom: calc(85px + env(safe-area-inset-bottom)); 
         }
 
-        /* CABEÇALHO COM NOME DESTACADO ROCHA PERSONAL */
+        /* CABEÇALHO OCULTÁVEL NA ROLAGEM */
         header {
             background: var(--card-bg);
-            padding: 18px 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -45,16 +66,47 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
+        
+        header.header-hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .header-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
         .profile-info h1 { 
-            font-size: 1.6rem; 
+            font-size: 1.5rem; 
             font-weight: 900; 
             color: var(--primary); 
             text-transform: uppercase; 
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         .profile-info p { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
-        .theme-toggle { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color); }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theme-toggle, .color-toggle { 
+            background: var(--bg-color); 
+            border: 1px solid var(--border); 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            color: var(--text-color); 
+            padding: 6px 8px;
+            border-radius: 6px;
+        }
 
         /* CONTAINER PRINCIPAL E EFEITO BLUR */
         #app-wrapper { transition: filter 0.3s; padding: 15px; }
@@ -77,13 +129,13 @@
         }
         textarea { resize: vertical; min-height: 60px; }
         button {
-            width: 100%; padding: 12px; background: var(--primary); color: #fff;
+            width: 100%; padding: 12px; background: var(--primary); color: var(--btn-text);
             border: none; border-radius: 5px; font-weight: bold; cursor: pointer;
             margin-bottom: 10px; transition: 0.2s;
         }
         button:active { transform: scale(0.98); }
-        .btn-success { background: var(--secondary); }
-        .btn-danger { background: #dc3545; }
+        .btn-success { background: var(--secondary); color: #fff; }
+        .btn-danger { background: #dc3545; color: #fff; }
         .btn-warning { background: #ffc107; color: #000; }
         .btn-info { background: #17a2b8; color: #fff; }
         .btn-sm { padding: 6px 10px; font-size: 0.8rem; margin-bottom: 0; width: auto; }
@@ -133,7 +185,7 @@
             margin-top: 8px;
         }
         .progress-bar-fill {
-            background: var(--secondary);
+            background: var(--primary);
             height: 100%;
             width: 0%;
             transition: width 0.4s ease;
@@ -142,7 +194,7 @@
         /* CARD DO TREINO DO DIA E LISTA DE EXERCÍCIOS */
         .today-workout-card {
             background: rgba(40, 167, 69, 0.1);
-            border: 2px solid var(--secondary);
+            border: 2px solid var(--primary);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 15px;
@@ -176,7 +228,7 @@
         /* LISTAS CATEGORIZADAS DE EXERCÍCIOS NO MODAL */
         .cat-title {
             background: var(--primary);
-            color: #fff;
+            color: var(--btn-text);
             padding: 6px 10px;
             border-radius: 5px;
             font-size: 0.9rem;
@@ -203,7 +255,7 @@
             border-top: 1px solid var(--border); z-index: 10;
         }
         nav button { background: none; color: var(--text-color); font-size: 0.75rem; padding: 5px; margin: 0; display: flex; flex-direction: column; align-items: center; border: none; }
-        nav button.active { color: var(--primary); }
+        nav button.active { color: var(--primary); font-weight: bold; }
 
         /* MODAL */
         .modal {
@@ -223,12 +275,17 @@
 </head>
 <body>
 
-    <header>
-        <div class="profile-info" onclick="openModal('modal-perfil')">
-            <h1>ROCHA PERSONAL</h1>
-            <p><span id="display-name">Configurar Perfil</span> | <span id="display-age">--</span> anos</p>
+    <header id="main-header">
+        <div class="header-title-wrapper" onclick="openModal('modal-perfil')">
+            <div class="profile-info">
+                <h1>ROCHA PERSONAL</h1>
+                <p><span id="display-name">Configurar Perfil</span> | <span id="display-age">--</span> anos</p>
+            </div>
         </div>
-        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+        <div class="header-controls">
+            <button class="color-toggle" onclick="cycleThemeColor()" title="Mudar Cor de Destaque">🎨</button>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Modo Claro/Escuro">🌓</button>
+        </div>
     </header>
 
     <div id="app-wrapper">
@@ -259,7 +316,7 @@
                 </div>
                 <div class="grid-2">
                     <button type="button" id="btn-start-timer" onclick="toggleRestTimer()">Iniciar</button>
-                    <button type="button" style="background:#6c757d;" onclick="resetRestTimer()">Resetar</button>
+                    <button type="button" style="background:#6c757d; color:#fff;" onclick="resetRestTimer()">Resetar</button>
                 </div>
             </div>
 
@@ -499,7 +556,7 @@
         </div>
         <button type="button" class="btn-success" onclick="salvarEdicaoMeta()">Salvar Alterações</button>
         <button type="button" class="btn-danger" onclick="deleteMetaFromModal()">Excluir Meta</button>
-        <button type="button" style="background:#6c757d;" onclick="closeModals()">Cancelar</button>
+        <button type="button" style="background:#6c757d; color:#fff;" onclick="closeModals()">Cancelar</button>
     </div>
 
     <!-- Modal Alteração de Foto do Histórico -->
@@ -546,6 +603,7 @@
 
         let tempSelectedExNome = "";
         let idTreinoExecucaoAtual = null;
+        let lastScrollTop = 0;
 
         // CORE: Gerenciamento de LocalStorage
         const db = {
@@ -556,6 +614,7 @@
         // INICIALIZAÇÃO
         document.addEventListener("DOMContentLoaded", () => {
             loadTheme();
+            loadThemeColor();
             loadPerfil();
             loadDadosCorporais();
             loadMedidas();
@@ -570,6 +629,20 @@
             loadTreinoHoje();
             loadHistoricoTreinosConcluidos();
 
+            // ROLAGEM INTELIGENTE DO CABEÇALHO (Oculta ao rolar para baixo, volta SOMENTE no topo)
+            window.addEventListener('scroll', () => {
+                const header = document.getElementById('main-header');
+                const st = window.pageYOffset || document.documentElement.scrollTop;
+
+                if (st === 0) {
+                    header.classList.remove('header-hidden'); // No topo absoluto, aparece
+                } else if (st > lastScrollTop && st > 40) {
+                    header.classList.add('header-hidden'); // Rolando para baixo, esconde
+                }
+
+                lastScrollTop = st <= 0 ? 0 : st;
+            });
+
             setInterval(updateCountdown, 1000);
         });
 
@@ -582,13 +655,31 @@
             btnElement.classList.add('active');
         }
 
-        // TEMA (CLARO/ESCURO)
+        // GERENCIAMENTO DE MODO CLARO/ESCURO E CORES DE DESTAQUE
         function toggleTheme() {
             const isDark = document.body.classList.toggle('dark-mode');
             db.set('theme', isDark ? 'dark' : 'light');
         }
+        
         function loadTheme() {
             if (db.get('theme') === 'dark') document.body.classList.add('dark-mode');
+        }
+
+        function cycleThemeColor() {
+            const themes = ['theme-green', 'theme-yellow', 'theme-red'];
+            let current = db.get('themeColor') || 'theme-green';
+            let nextIndex = (themes.indexOf(current) + 1) % themes.length;
+            let nextTheme = themes[nextIndex];
+
+            document.body.classList.remove('theme-green', 'theme-yellow', 'theme-red');
+            document.body.classList.add(nextTheme);
+            db.set('themeColor', nextTheme);
+        }
+
+        function loadThemeColor() {
+            const color = db.get('themeColor') || 'theme-green';
+            document.body.classList.remove('theme-green', 'theme-yellow', 'theme-red');
+            document.body.classList.add(color);
         }
 
         // MODAIS E EFEITO BLUR
@@ -597,6 +688,7 @@
             document.getElementById('overlay').classList.add('active');
             document.getElementById(modalId).classList.add('active');
         }
+        
         function closeModals() {
             document.getElementById('app-wrapper').classList.remove('blur-active');
             document.getElementById('overlay').classList.remove('active');
@@ -611,6 +703,7 @@
             loadPerfil();
             closeModals();
         }
+        
         function loadPerfil() {
             const perfil = db.get('perfil');
             if (perfil) {
@@ -932,7 +1025,7 @@
                     <div class="history-card">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <strong>${t.nome}</strong>
-                            <span style="font-size:0.75rem; background:var(--primary); color:#fff; padding:2px 8px; border-radius:10px;">${t.dia}</span>
+                            <span style="font-size:0.75rem; background:var(--primary); color:var(--btn-text); padding:2px 8px; border-radius:10px;">${t.dia}</span>
                         </div>
                         ${t.obs ? `<p style="font-size:0.8rem; opacity:0.8; margin:5px 0;"><em>${t.obs}</em></p>` : ''}
                         <div style="font-size:0.85rem; margin:8px 0; background:var(--bg-color); padding:8px; border-radius:5px;">
@@ -1007,7 +1100,7 @@
                 <div class="today-workout-card" onclick="openExecucaoTreinoModal('${treinoHoje.id}')">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <h2>🏋️ Treino de Hoje (${diaHoje})</h2>
-                        <span style="font-size:0.8rem; font-weight:bold; color:var(--secondary);">${concluidos}/${totalEx} Concluídos</span>
+                        <span style="font-size:0.8rem; font-weight:bold; color:var(--primary);">${concluidos}/${totalEx} Concluídos</span>
                     </div>
                     <h3 style="color:var(--primary); font-size:1.2rem; margin:5px 0;">${treinoHoje.nome}</h3>
                     <p style="font-size:0.85rem; opacity:0.8;">${treinoHoje.obs ? '📌 ' + treinoHoje.obs : 'Clique para ver os exercícios e marcar concluídos.'}</p>
@@ -1033,7 +1126,7 @@
                         <div>
                             <strong>${ex.nome}</strong><br>
                             <small>${ex.detalhe} | Carga: ${ex.carga}kg</small>
-                            ${ex.horaConclusao ? `<br><small style="color:var(--secondary); font-weight:bold;">🕒 Concluído às: ${ex.horaConclusao}</small>` : ''}
+                            ${ex.horaConclusao ? `<br><small style="color:var(--primary); font-weight:bold;">🕒 Concluído às: ${ex.horaConclusao}</small>` : ''}
                         </div>
                         <input type="checkbox" ${ex.concluido ? 'checked' : ''} onchange="toggleExConcluido('${t.id}', ${idx})">
                     </div>
@@ -1102,12 +1195,12 @@
             histTreinos.forEach(item => {
                 const concluidosCount = item.exercicios.filter(e => e.concluido).length;
                 container.innerHTML += `
-                    <div class="history-card" style="border-left-color: var(--secondary);" onclick="openDetalhesTreinoConcluidoModal('${item.id}')">
+                    <div class="history-card" style="border-left-color: var(--primary);" onclick="openDetalhesTreinoConcluidoModal('${item.id}')">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <strong>🏋️ ${item.nome}</strong>
                             <span style="font-size:0.75rem; opacity:0.8;">📅 ${item.data} às ${item.hora}</span>
                         </div>
-                        <div style="font-size:0.85rem; margin-top:5px; color:var(--secondary); font-weight:bold;">
+                        <div style="font-size:0.85rem; margin-top:5px; color:var(--primary); font-weight:bold;">
                             ${concluidosCount}/${item.exercicios.length} Exercícios Registrados (Clique para Expandir 🔍)
                         </div>
                     </div>
@@ -1132,7 +1225,7 @@
                         <div>
                             <strong>${ex.nome}</strong><br>
                             <small>${ex.detalhe} | Carga: ${ex.carga}kg</small>
-                            ${ex.horaConclusao ? `<br><small style="color:var(--secondary); font-weight:bold;">🕒 Concluído exatamente às: ${ex.horaConclusao}</small>` : '<br><small style="opacity:0.6;">Não marcado como concluído</small>'}
+                            ${ex.horaConclusao ? `<br><small style="color:var(--primary); font-weight:bold;">🕒 Concluído exatamente às: ${ex.horaConclusao}</small>` : '<br><small style="opacity:0.6;">Não marcado como concluído</small>'}
                         </div>
                         <span style="font-size:1.2rem;">${ex.concluido ? '✅' : '⚪'}</span>
                     </div>
@@ -1154,8 +1247,8 @@
                 return;
             }
 
-            const rec = histMedidas[0].dataObj; // Registro Mais Recente
-            const ant = histMedidas[histMedidas.length - 1].dataObj; // Registro Mais Antigo para comparação
+            const rec = histMedidas[0].dataObj;
+            const ant = histMedidas[histMedidas.length - 1].dataObj;
 
             function diff(a, b) {
                 const valA = parseFloat(a) || 0;
@@ -1286,7 +1379,7 @@
                 if (isNaN(pct)) pct = 0;
 
                 container.innerHTML += `
-                    <div class="history-card" style="border-left-color: var(--secondary);" onclick="openEditarMetaModal('${key}')">
+                    <div class="history-card" style="border-left-color: var(--primary);" onclick="openEditarMetaModal('${key}')">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
                             <strong>🏋️ ${m.nome}</strong>
                             <span style="font-size: 0.8rem; opacity: 0.8;">${m.data}</span>
@@ -1328,7 +1421,7 @@
             }
 
             const metas = db.get('metas') || {};
-            delete metas[oldKey]; // Remove a chave antiga caso tenha trocado o nome
+            delete metas[oldKey];
 
             metas[nome.toLowerCase()] = {
                 nome,
