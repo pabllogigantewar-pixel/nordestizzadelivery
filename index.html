@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ROCHA TREINING</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --primary: #007bff;
+            --secondary: #28a745;
+            --card-bg: #fff;
+            --nav-bg: #fff;
+            --border: #ddd;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #f4f4f9;
+            --primary: #4facfe;
+            --secondary: #00f2fe;
+            --card-bg: #1e1e1e;
+            --nav-bg: #1e1e1e;
+            --border: #333;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            transition: 0.3s; 
+            padding-bottom: calc(85px + env(safe-area-inset-bottom)); 
+        }
+
+        /* CABEÇALHO */
+        header {
+            background: var(--card-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .profile-info h1 { font-size: 1.2rem; color: var(--primary); text-transform: uppercase; }
+        .profile-info p { font-size: 0.8rem; opacity: 0.8; }
+        .theme-toggle { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color); }
+
+        /* CONTAINER PRINCIPAL E EFEITO BLUR */
+        #app-wrapper { transition: filter 0.3s; padding: 15px; }
+        .blur-active { filter: blur(5px); pointer-events: none; }
+
+        /* ABAS */
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* CARDS E FORMULÁRIOS */
+        .card { background: var(--card-bg); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+        .card h2 { font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        input, select, textarea {
+            width: 100%; padding: 10px; margin-bottom: 10px;
+            border: 1px solid var(--border); border-radius: 5px;
+            background: var(--bg-color); color: var(--text-color);
+        }
+        textarea { resize: vertical; min-height: 60px; }
+        button {
+            width: 100%; padding: 12px; background: var(--primary); color: #fff;
+            border: none; border-radius: 5px; font-weight: bold; cursor: pointer;
+            margin-bottom: 10px; transition: 0.2s;
+        }
+        button:active { transform: scale(0.98); }
+        .btn-success { background: var(--secondary); }
+        .btn-danger { background: #dc3545; }
+        .btn-warning { background: #ffc107; color: #000; }
+        .btn-sm { padding: 6px 10px; font-size: 0.8rem; margin-bottom: 0; width: auto; }
+
+        /* DISPLAY IMC E TIMER */
+        .highlight-box { text-align: center; padding: 20px; background: rgba(0, 123, 255, 0.1); border-radius: 10px; margin-bottom: 15px; }
+        .highlight-box h3 { font-size: 2.5rem; color: var(--primary); margin: 10px 0; }
+        
+        .timer-box { text-align: center; font-size: 1.2rem; font-weight: bold; color: var(--secondary); padding: 10px; }
+
+        /* TIMER DE DESCANSO */
+        .rest-timer-display {
+            font-size: 2.8rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--primary);
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .timer-presets { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+        .timer-presets button { flex: 1; padding: 8px 4px; font-size: 0.75rem; min-width: 50px; }
+
+        /* HISTÓRICO DE MEDIDAS E METAS */
+        .history-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .history-card header {
+            background: none; padding: 0; border: none; margin-bottom: 8px;
+            font-size: 0.85rem; opacity: 0.8; font-weight: bold;
+        }
+
+        /* BARRA DE PROGRESSO DE METAS */
+        .progress-bar-bg {
+            background: var(--bg-color);
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-top: 8px;
+        }
+        .progress-bar-fill {
+            background: var(--secondary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* CARD DO TREINO DO DIA E LISTA DE EXERCÍCIOS */
+        .today-workout-card {
+            background: rgba(40, 167, 69, 0.1);
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .today-workout-card:active { transform: scale(0.99); }
+        .exercise-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-color);
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+        .exercise-item.completed {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+        .exercise-item input[type="checkbox"] {
+            width: 22px; height: 22px; margin: 0; cursor: pointer;
+        }
+
+        /* HISTÓRICO DE FOTOS */
+        .history-item { margin-bottom: 20px; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; }
+        .history-item img { width: 100%; height: auto; display: block; }
+        .history-item .details { padding: 10px; background: var(--card-bg); font-size: 0.9rem; }
+
+        /* NAVEGAÇÃO INFERIOR ADAPTADA PARA BARRA DE NAVEGAÇÃO DO CELULAR */
+        nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--nav-bg); display: flex; justify-content: space-around;
+            padding-top: 10px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            border-top: 1px solid var(--border); z-index: 10;
+        }
+        nav button { background: none; color: var(--text-color); font-size: 0.75rem; padding: 5px; margin: 0; display: flex; flex-direction: column; align-items: center; border: none; }
+        nav button.active { color: var(--primary); }
+
+        /* MODAL */
+        .modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: var(--card-bg); padding: 20px; border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100;
+            width: 90%; max-width: 420px; display: none; border: 1px solid var(--border);
+            max-height: 85vh; overflow-y: auto;
+        }
+        .modal.active { display: block; }
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 99; display: none;
+        }
+        .overlay.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="profile-info" onclick="openModal('modal-perfil')">
+            <h1>ROCHA TREINING</h1>
+            <p><span id="display-name">Configurar Perfil</span> | <span id="display-age">--</span> anos</p>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+    </header>
+
+    <div id="app-wrapper">
+        
+        <!-- ABA: INÍCIO (TREINO DO DIA, IMC E TIMER DE AVALIAÇÃO) -->
+        <section id="tab-inicio" class="tab-content active">
+            <!-- CARD RESUMO DO TREINO DE HOJE -->
+            <div id="container-treino-hoje">
+                <!-- Injetado via JS -->
+            </div>
+
+            <div class="card">
+                <h2>Seu IMC Atual</h2>
+                <div class="highlight-box">
+                    <p>Índice de Massa Corporal</p>
+                    <h3 id="display-imc">0.00</h3>
+                    <p id="display-imc-status">--</p>
+                </div>
+                <div class="grid-2">
+                    <div><small>Peso (kg)</small><h4 id="display-peso">0</h4></div>
+                    <div><small>Gordura (%)</small><h4 id="display-bf">0</h4></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Próxima Avaliação</h2>
+                <div class="timer-box" id="countdown">-- dias --:--:--</div>
+                <button class="btn-success" onclick="openModal('modal-atualizar')">Configurar Cronômetro</button>
+            </div>
+        </section>
+
+        <!-- ABA: TREINOS (MONTAGEM, CALENDÁRIO E TIMER DE DESCANSO) -->
+        <section id="tab-treino" class="tab-content">
+            <!-- TIMER DE DESCANSO ENTRE SÉRIES -->
+            <div class="card">
+                <h2>⏱️ Timer de Descanso entre Séries</h2>
+                <div class="rest-timer-display" id="rest-timer-display">00:00</div>
+                <div class="timer-presets">
+                    <button type="button" onclick="setRestTimer(30)">30s</button>
+                    <button type="button" onclick="setRestTimer(45)">45s</button>
+                    <button type="button" onclick="setRestTimer(60)">60s</button>
+                    <button type="button" onclick="setRestTimer(90)">90s</button>
+                    <button type="button" onclick="setRestTimer(120)">120s</button>
+                </div>
+                <div class="grid-2">
+                    <button type="button" id="btn-start-timer" onclick="toggleRestTimer()">Iniciar</button>
+                    <button type="button" style="background:#6c757d;" onclick="resetRestTimer()">Resetar</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🏋️ Montar / Cadastrar Treino</h2>
+                <input type="hidden" id="treino-edit-id">
+                <input type="text" id="treino-nome" placeholder="Nome do Treino (Ex: Treino A - Peito e Tríceps)">
+                
+                <select id="treino-dia">
+                    <option value="Segunda-feira">Segunda-feira</option>
+                    <option value="Terça-feira">Terça-feira</option>
+                    <option value="Quarta-feira">Quarta-feira</option>
+                    <option value="Quinta-feira">Quinta-feira</option>
+                    <option value="Sexta-feira">Sexta-feira</option>
+                    <option value="Sábado">Sábado</option>
+                    <option value="Domingo">Domingo</option>
+                </select>
+
+                <textarea id="treino-obs" placeholder="Observações (Ex: Descanso de 60s, focar no pico de contração)"></textarea>
+
+                <h3 style="font-size: 0.95rem; margin: 10px 0 5px; color: var(--primary);">Exercícios</h3>
+                <div id="lista-exercicios-form">
+                    <!-- Dynamic Rows -->
+                </div>
+                <button type="button" style="background: #17a2b8;" onclick="addExerciciosRow()">+ Adicionar Exercício</button>
+                
+                <button type="button" class="btn-success" onclick="saveTreino()">Salvar Treino Completo</button>
+            </div>
+
+            <div class="card">
+                <h2>📅 Quadro Semanal de Treinos</h2>
+                <div id="lista-treinos-cadastrados">
+                    <!-- Injetado pelo JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: MEDIDAS -->
+        <section id="tab-medidas" class="tab-content">
+            <div class="card">
+                <h2>Anatomia Muscular (cm)</h2>
+                <div class="grid-2">
+                    <input type="number" id="med-braco" placeholder="Braço">
+                    <input type="number" id="med-antebraco" placeholder="Antebraço">
+                    <input type="number" id="med-peito" placeholder="Peitoral">
+                    <input type="number" id="med-barriga" placeholder="Abdômen">
+                    <input type="number" id="med-coxa" placeholder="Coxa">
+                    <input type="number" id="med-panturrilha" placeholder="Panturrilha">
+                </div>
+                <button onclick="saveMedidas()">Salvar Medidas</button>
+            </div>
+
+            <div class="card">
+                <h2>Histórico de Medidas</h2>
+                <div id="lista-historico-medidas">
+                    <!-- Histórico injetado via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: METAS -->
+        <section id="tab-metas" class="tab-content">
+            <div class="card">
+                <h2>Registrar ou Atualizar Meta</h2>
+                <input type="text" id="meta-exercicio" placeholder="Exercício / Foco (Ex: Supino, Bíceps)">
+                <div class="grid-2">
+                    <input type="number" id="meta-carga-atual" placeholder="Carga Atual (kg)">
+                    <input type="number" id="meta-carga-alvo" placeholder="Carga Meta (kg)">
+                </div>
+                <button class="btn-success" onclick="saveMetas()">Atualizar Evolução</button>
+            </div>
+
+            <div class="card">
+                <h2>Evolução das Metas</h2>
+                <div id="lista-metas">
+                    <!-- Lista de Metas injetada via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: HISTÓRICO (FOTOS) -->
+        <section id="tab-historico" class="tab-content">
+            <div class="card">
+                <h2>Adicionar Lembrança</h2>
+                <input type="file" id="foto-upload" accept="image/*">
+                <button onclick="saveHistorico()">Salvar Foto e Dados de Hoje</button>
+            </div>
+            <div id="galeria-historico">
+                <!-- Fotos injetadas pelo JS -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- NAVEGAÇÃO INFERIOR -->
+    <nav>
+        <button class="nav-btn active" onclick="switchTab('tab-inicio', this)">🏠<br>Início</button>
+        <button class="nav-btn" onclick="switchTab('tab-treino', this)">💪<br>Treino</button>
+        <button class="nav-btn" onclick="switchTab('tab-medidas', this)">📏<br>Medidas</button>
+        <button class="nav-btn" onclick="switchTab('tab-metas', this)">🎯<br>Metas</button>
+        <button class="nav-btn" onclick="switchTab('tab-historico', this)">📸<br>Histórico</button>
+    </nav>
+
+    <!-- MODAIS -->
+    <div class="overlay" id="overlay" onclick="closeModals()"></div>
+
+    <!-- Modal Perfil -->
+    <div class="modal" id="modal-perfil">
+        <h2>Seu Perfil</h2>
+        <input type="text" id="input-nome" placeholder="Seu Nome">
+        <input type="number" id="input-idade" placeholder="Sua Idade">
+        <button onclick="savePerfil()">Salvar Perfil</button>
+        <button style="background: #dc3545;" onclick="closeModals()">Cancelar</button>
+    </div>
+
+    <!-- Modal Atualizar Dados Corporais -->
+    <div class="modal" id="modal-atualizar">
+        <h2>Atualizar Dados Corporais</h2>
+        <input type="number" step="0.01" id="input-peso" placeholder="Peso Atual (kg)">
+        <input type="number" step="0.01" id="input-altura" placeholder="Altura (m)">
+        <input type="number" step="0.1" id="input-bf" placeholder="Taxa de Gordura (%)">
+        
+        <h3 style="margin: 15px 0 5px; font-size: 1rem;">Nova Avaliação em:</h3>
+        <select id="select-timer">
+            <option value="14">2 Semanas</option>
+            <option value="30">1 Mês</option>
+            <option value="45">45 Dias</option>
+            <option value="60">2 Meses</option>
+            <option value="90">3 Meses</option>
+        </select>
+
+        <button onclick="saveDadosCorporais()">Atualizar e Iniciar Timer</button>
+        <button style="background: #dc3545;" onclick="closeModals()">Cancelar</button>
+    </div>
+
+    <!-- Modal Execução do Treino do Dia -->
+    <div class="modal" id="modal-execucao-treino">
+        <h2 id="modal-treino-titulo">Treino de Hoje</h2>
+        <p id="modal-treino-obs" style="font-size:0.85rem; opacity:0.8; margin-bottom: 12px;"></p>
+        
+        <div id="modal-treino-exercicios-list">
+            <!-- Exercícios com Checkbox -->
+        </div>
+
+        <button type="button" class="btn-success" style="margin-top:15px;" onclick="closeModals()">Concluir Sessão</button>
+    </div>
+
+    <script>
+        // CORE: Gerenciamento de LocalStorage
+        const db = {
+            get: (key) => JSON.parse(localStorage.getItem(key)) || null,
+            set: (key, value) => localStorage.setItem(key, JSON.stringify(value))
+        };
+
+        // INICIALIZAÇÃO
+        document.addEventListener("DOMContentLoaded", () => {
+            loadTheme();
+            loadPerfil();
+            loadDadosCorporais();
+            loadMedidas();
+            loadHistMedidas();
+            loadMetas();
+            loadHistorico();
+            
+            // Inicializar Treinos
+            addExerciciosRow(); // Linha inicial padrão do formulário
+            loadTreinos();
+            loadTreinoHoje();
+
+            setInterval(updateCountdown, 1000);
+        });
+
+        // NAVEGAÇÃO DE ABAS
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+        }
+
+        // TEMA (CLARO/ESCURO)
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-mode');
+            db.set('theme', isDark ? 'dark' : 'light');
+        }
+        function loadTheme() {
+            if (db.get('theme') === 'dark') document.body.classList.add('dark-mode');
+        }
+
+        // MODAIS E EFEITO BLUR
+        function openModal(modalId) {
+            document.getElementById('app-wrapper').classList.add('blur-active');
+            document.getElementById('overlay').classList.add('active');
+            document.getElementById(modalId).classList.add('active');
+        }
+        function closeModals() {
+            document.getElementById('app-wrapper').classList.remove('blur-active');
+            document.getElementById('overlay').classList.remove('active');
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        }
+
+        // PERFIL
+        function savePerfil() {
+            const nome = document.getElementById('input-nome').value || "Atleta";
+            const idade = document.getElementById('input-idade').value || "--";
+            db.set('perfil', { nome, idade });
+            loadPerfil();
+            closeModals();
+        }
+        function loadPerfil() {
+            const perfil = db.get('perfil');
+            if (perfil) {
+                document.getElementById('display-name').innerText = perfil.nome;
+                document.getElementById('display-age').innerText = perfil.idade;
+                document.getElementById('input-nome').value = perfil.nome;
+                document.getElementById('input-idade').value = perfil.idade;
+            }
+        }
+
+        // DADOS CORPORAIS, IMC COM LÓGICA DE BF E TIMER
+        function saveDadosCorporais() {
+            const peso = parseFloat(document.getElementById('input-peso').value);
+            const altura = parseFloat(document.getElementById('input-altura').value);
+            const bf = parseFloat(document.getElementById('input-bf').value) || 0;
+            const dias = parseInt(document.getElementById('select-timer').value);
+
+            if (peso && altura) {
+                const imc = (peso / (altura * altura)).toFixed(2);
+                const dataAlvo = new Date().getTime() + (dias * 24 * 60 * 60 * 1000);
+                
+                db.set('dados', { peso, altura, bf, imc, dataAlvo });
+                loadDadosCorporais();
+                closeModals();
+            } else {
+                alert("Preencha peso e altura!");
+            }
+        }
+
+        function loadDadosCorporais() {
+            const dados = db.get('dados');
+            if (dados) {
+                document.getElementById('display-imc').innerText = dados.imc;
+                document.getElementById('display-peso').innerText = dados.peso;
+                document.getElementById('display-bf').innerText = dados.bf;
+                
+                let status = "Normal";
+                const imcVal = parseFloat(dados.imc);
+                const bfVal = parseFloat(dados.bf);
+
+                if (imcVal < 18.5) {
+                    status = "Abaixo do peso";
+                } else if (imcVal >= 25) {
+                    if (bfVal > 0 && bfVal < 15) {
+                        status = "Massa Muscular / Atleta 🏋️‍♂️";
+                    } else if (imcVal < 30) {
+                        status = "Sobrepeso";
+                    } else {
+                        status = "Obesidade";
+                    }
+                } else {
+                    status = "Peso Normal";
+                }
+
+                document.getElementById('display-imc-status').innerText = status;
+
+                document.getElementById('input-peso').value = dados.peso;
+                document.getElementById('input-altura').value = dados.altura;
+                document.getElementById('input-bf').value = dados.bf;
+            }
+        }
+
+        // CRONÔMETRO
+        function updateCountdown() {
+            const dados = db.get('dados');
+            if (!dados || !dados.dataAlvo) return;
+
+            const agora = new Date().getTime();
+            const diferenca = dados.dataAlvo - agora;
+
+            if (diferenca < 0) {
+                document.getElementById('countdown').innerText = "AVALIAÇÃO HOJE!";
+                return;
+            }
+
+            const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const min = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+            const seg = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerText = 
+                `${dias} dias, ${String(horas).padStart(2,'0')}:${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}`;
+        }
+
+        /* -------------------------------------------------------------
+           SISTEMA DE GERENCIAMENTO DE TREINOS & TIMER DE DESCANSO
+        ------------------------------------------------------------- */
+        let restTimerInterval = null;
+        let restTimeSeconds = 0;
+        let restTimeInitial = 0;
+
+        function setRestTimer(sec) {
+            clearInterval(restTimerInterval);
+            restTimerInterval = null;
+            restTimeSeconds = sec;
+            restTimeInitial = sec;
+            updateRestTimerDisplay();
+            document.getElementById('btn-start-timer').innerText = "Iniciar";
+        }
+
+        function toggleRestTimer() {
+            const btn = document.getElementById('btn-start-timer');
+            if (restTimerInterval) {
+                clearInterval(restTimerInterval);
+                restTimerInterval = null;
+                btn.innerText = "Continuar";
+            } else {
+                if (restTimeSeconds <= 0) return;
+                btn.innerText = "Pausar";
+                restTimerInterval = setInterval(() => {
+                    restTimeSeconds--;
+                    updateRestTimerDisplay();
+                    if (restTimeSeconds <= 0) {
+                        clearInterval(restTimerInterval);
+                        restTimerInterval = null;
+                        btn.innerText = "Iniciar";
+                        alert("⏰ Fim do descanso! Hora da próxima série!");
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetRestTimer() {
+            clearInterval(restTimerInterval);
+            restTimerInterval = null;
+            restTimeSeconds = restTimeInitial;
+            updateRestTimerDisplay();
+            document.getElementById('btn-start-timer').innerText = "Iniciar";
+        }
+
+        function updateRestTimerDisplay() {
+            const m = String(Math.floor(restTimeSeconds / 60)).padStart(2, '0');
+            const s = String(restTimeSeconds % 60).padStart(2, '0');
+            document.getElementById('rest-timer-display').innerText = `${m}:${s}`;
+        }
+
+        // MONTAGEM DE TREINO (FORMULÁRIO)
+        function addExerciciosRow(nome = '', series = '', reps = '', carga = '') {
+            const container = document.getElementById('lista-exercicios-form');
+            const row = document.createElement('div');
+            row.className = 'grid-2 ex-row';
+            row.style.marginBottom = '8px';
+            row.innerHTML = `
+                <input type="text" class="ex-nome" placeholder="Nome Ex: Supino" value="${nome}" style="grid-column: span 2; margin-bottom: 4px;">
+                <input type="text" class="ex-det" placeholder="Séries x Reps (Ex: 4x10)" value="${series ? series + 'x' + reps : ''}">
+                <div style="display:flex; gap: 4px;">
+                    <input type="number" class="ex-carga" placeholder="Carga (kg)" value="${carga}">
+                    <button type="button" class="btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()" style="height:38px;">X</button>
+                </div>
+            `;
+            container.appendChild(row);
+        }
+
+        function saveTreino() {
+            const idEdit = document.getElementById('treino-edit-id').value;
+            const nome = document.getElementById('treino-nome').value.trim();
+            const dia = document.getElementById('treino-dia').value;
+            const obs = document.getElementById('treino-obs').value.trim();
+
+            if (!nome) {
+                alert("Por favor, digite o nome do treino!");
+                return;
+            }
+
+            const exRows = document.querySelectorAll('.ex-row');
+            const exercicios = [];
+
+            exRows.forEach(row => {
+                const exNome = row.querySelector('.ex-nome').value.trim();
+                const exDet = row.querySelector('.ex-det').value.trim();
+                const exCarga = row.querySelector('.ex-carga').value;
+
+                if (exNome) {
+                    exercicios.push({
+                        nome: exNome,
+                        detalhe: exDet || '3x10',
+                        carga: exCarga || '0',
+                        concluido: false
+                    });
+                }
+            });
+
+            const treinos = db.get('treinos') || [];
+
+            if (idEdit) {
+                // Modo Edição
+                const index = treinos.findIndex(t => t.id === idEdit);
+                if (index !== -1) {
+                    treinos[index] = { ...treinos[index], nome, dia, obs, exercicios };
+                }
+            } else {
+                // Novo Treino
+                treinos.push({
+                    id: 'tr_' + new Date().getTime(),
+                    nome,
+                    dia,
+                    obs,
+                    exercicios
+                });
+            }
+
+            db.set('treinos', treinos);
+            resetTreinoForm();
+            loadTreinos();
+            loadTreinoHoje();
+            alert("Treino salvo com sucesso!");
+        }
+
+        function resetTreinoForm() {
+            document.getElementById('treino-edit-id').value = '';
+            document.getElementById('treino-nome').value = '';
+            document.getElementById('treino-obs').value = '';
+            document.getElementById('lista-exercicios-form').innerHTML = '';
+            addExerciciosRow();
+        }
+
+        function loadTreinos() {
+            const treinos = db.get('treinos') || [];
+            const container = document.getElementById('lista-treinos-cadastrados');
+
+            if (treinos.length === 0) {
+                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Nenhum treino cadastrado.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            treinos.forEach(t => {
+                let exHtml = '';
+                t.exercicios.forEach(ex => {
+                    exHtml += `• ${ex.nome} (${ex.detalhe} - ${ex.carga}kg)<br>`;
+                });
+
+                container.innerHTML += `
+                    <div class="history-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong>${t.nome}</strong>
+                            <span style="font-size:0.75rem; background:var(--primary); color:#fff; padding:2px 8px; border-radius:10px;">${t.dia}</span>
+                        </div>
+                        ${t.obs ? `<p style="font-size:0.8rem; opacity:0.8; margin:5px 0;"><em>${t.obs}</em></p>` : ''}
+                        <div style="font-size:0.85rem; margin:8px 0; background:var(--bg-color); padding:8px; border-radius:5px;">
+                            ${exHtml || 'Nenhum exercício detalhado.'}
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-warning btn-sm" onclick="editTreino('${t.id}')">✏️ Editar</button>
+                            <button class="btn-danger btn-sm" onclick="deleteTreino('${t.id}')">🗑️ Excluir</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function editTreino(id) {
+            const treinos = db.get('treinos') || [];
+            const t = treinos.find(item => item.id === id);
+            if (!t) return;
+
+            document.getElementById('treino-edit-id').value = t.id;
+            document.getElementById('treino-nome').value = t.nome;
+            document.getElementById('treino-dia').value = t.dia;
+            document.getElementById('treino-obs').value = t.obs || '';
+
+            const container = document.getElementById('lista-exercicios-form');
+            container.innerHTML = '';
+
+            if (t.exercicios && t.exercicios.length > 0) {
+                t.exercicios.forEach(ex => {
+                    addExerciciosRow(ex.nome, '', ex.detalhe, ex.carga);
+                });
+            } else {
+                addExerciciosRow();
+            }
+
+            // Rola até o formulário
+            document.getElementById('treino-nome').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteTreino(id) {
+            if (!confirm("Tem certeza que deseja excluir este treino?")) return;
+            let treinos = db.get('treinos') || [];
+            treinos = treinos.filter(t => t.id !== id);
+            db.set('treinos', treinos);
+            loadTreinos();
+            loadTreinoHoje();
+        }
+
+        // TREINO DO DIA NA TELA INICIAL
+        function getDiaSemanaAtual() {
+            const dias = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+            return dias[new Date().getDay()];
+        }
+
+        function loadTreinoHoje() {
+            const diaHoje = getDiaSemanaAtual();
+            const treinos = db.get('treinos') || [];
+            const treinoHoje = treinos.find(t => t.dia === diaHoje);
+            const container = document.getElementById('container-treino-hoje');
+
+            if (!treinoHoje) {
+                container.innerHTML = `
+                    <div class="card" style="text-align: center; opacity: 0.8;">
+                        <h2>🏋️ Treino de Hoje (${diaHoje})</h2>
+                        <p style="font-size: 0.9rem;">Dia de descanso ou nenhum treino agendado para hoje.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const totalEx = treinoHoje.exercicios.length;
+            const concluidos = treinoHoje.exercicios.filter(e => e.concluido).length;
+
+            container.innerHTML = `
+                <div class="today-workout-card" onclick="openExecucaoTreinoModal('${treinoHoje.id}')">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h2>🏋️ Treino de Hoje (${diaHoje})</h2>
+                        <span style="font-size:0.8rem; font-weight:bold; color:var(--secondary);">${concluidos}/${totalEx} Concluídos</span>
+                    </div>
+                    <h3 style="color:var(--primary); font-size:1.2rem; margin:5px 0;">${treinoHoje.nome}</h3>
+                    <p style="font-size:0.85rem; opacity:0.8;">${treinoHoje.obs ? '📌 ' + treinoHoje.obs : 'Clique para ver os exercícios e marcar concluídos.'}</p>
+                </div>
+            `;
+        }
+
+        function openExecucaoTreinoModal(idTreino) {
+            const treinos = db.get('treinos') || [];
+            const t = treinos.find(item => item.id === idTreino);
+            if (!t) return;
+
+            document.getElementById('modal-treino-titulo').innerText = `${t.dia} - ${t.nome}`;
+            document.getElementById('modal-treino-obs').innerText = t.obs ? `Observação: ${t.obs}` : '';
+
+            const listContainer = document.getElementById('modal-treino-exercicios-list');
+            listContainer.innerHTML = '';
+
+            t.exercicios.forEach((ex, idx) => {
+                listContainer.innerHTML += `
+                    <div class="exercise-item ${ex.concluido ? 'completed' : ''}">
+                        <div>
+                            <strong>${ex.nome}</strong><br>
+                            <small>${ex.detalhe} | Carga: ${ex.carga}kg</small>
+                        </div>
+                        <input type="checkbox" ${ex.concluido ? 'checked' : ''} onchange="toggleExConcluido('${t.id}', ${idx})">
+                    </div>
+                `;
+            });
+
+            openModal('modal-execucao-treino');
+        }
+
+        function toggleExConcluido(idTreino, exIdx) {
+            const treinos = db.get('treinos') || [];
+            const index = treinos.findIndex(t => t.id === idTreino);
+            if (index !== -1) {
+                treinos[index].exercicios[exIdx].concluido = !treinos[index].exercicios[exIdx].concluido;
+                db.set('treinos', treinos);
+                openExecucaoTreinoModal(idTreino);
+                loadTreinoHoje();
+            }
+        }
+
+        // MEDIDAS MUSCULARES E HISTÓRICO DE MEDIDAS
+        function saveMedidas() {
+            const medidas = {
+                braco: document.getElementById('med-braco').value || '--',
+                antebraco: document.getElementById('med-antebraco').value || '--',
+                peito: document.getElementById('med-peito').value || '--',
+                barriga: document.getElementById('med-barriga').value || '--',
+                coxa: document.getElementById('med-coxa').value || '--',
+                panturrilha: document.getElementById('med-panturrilha').value || '--'
+            };
+            
+            db.set('medidas', medidas);
+
+            const histMedidas = db.get('histMedidas') || [];
+            histMedidas.unshift({
+                data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
+                dataObj: medidas
+            });
+            db.set('histMedidas', histMedidas);
+
+            loadHistMedidas();
+            alert("Medidas salvas e adicionadas ao histórico!");
+        }
+
+        function loadMedidas() {
+            const medidas = db.get('medidas');
+            if (medidas) {
+                document.getElementById('med-braco').value = medidas.braco !== '--' ? medidas.braco : '';
+                document.getElementById('med-antebraco').value = medidas.antebraco !== '--' ? medidas.antebraco : '';
+                document.getElementById('med-peito').value = medidas.peito !== '--' ? medidas.peito : '';
+                document.getElementById('med-barriga').value = medidas.barriga !== '--' ? medidas.barriga : '';
+                document.getElementById('med-coxa').value = medidas.coxa !== '--' ? medidas.coxa : '';
+                document.getElementById('med-panturrilha').value = medidas.panturrilha !== '--' ? medidas.panturrilha : '';
+            }
+        }
+
+        function loadHistMedidas() {
+            const histMedidas = db.get('histMedidas') || [];
+            const container = document.getElementById('lista-historico-medidas');
+            
+            if (histMedidas.length === 0) {
+                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Nenhum registro no histórico ainda.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            histMedidas.forEach(item => {
+                const m = item.dataObj;
+                container.innerHTML += `
+                    <div class="history-card">
+                        <header>📅 Registrado em: ${item.data}</header>
+                        <div class="grid-2" style="font-size: 0.85rem;">
+                            <span>💪 Braço: <strong>${m.braco} cm</strong></span>
+                            <span>🥖 Antebraço: <strong>${m.antebraco} cm</strong></span>
+                            <span>🛡️ Peitoral: <strong>${m.peito} cm</strong></span>
+                            <span>🎯 Abdômen: <strong>${m.barriga} cm</strong></span>
+                            <span>🦵 Coxa: <strong>${m.coxa} cm</strong></span>
+                            <span>👟 Panturrilha: <strong>${m.panturrilha} cm</strong></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // METAS POR CATEGORIA/EXERCÍCIO COM BARRA DE EVOLUÇÃO
+        function saveMetas() {
+            const metas = db.get('metas') || {};
+            const exercicio = document.getElementById('meta-exercicio').value.trim();
+            const cargaAtual = parseFloat(document.getElementById('meta-carga-atual').value);
+            const cargaAlvo = parseFloat(document.getElementById('meta-carga-alvo').value);
+
+            if (exercicio && !isNaN(cargaAtual) && !isNaN(cargaAlvo)) {
+                metas[exercicio.toLowerCase()] = {
+                    nome: exercicio,
+                    atual: cargaAtual,
+                    alvo: cargaAlvo,
+                    data: new Date().toLocaleDateString('pt-BR')
+                };
+
+                db.set('metas', metas);
+                loadMetas();
+
+                document.getElementById('meta-exercicio').value = '';
+                document.getElementById('meta-carga-atual').value = '';
+                document.getElementById('meta-carga-alvo').value = '';
+            } else {
+                alert("Preencha o nome do exercício, a carga atual e a carga meta!");
+            }
+        }
+
+        function loadMetas() {
+            const metas = db.get('metas') || {};
+            const container = document.getElementById('lista-metas');
+            
+            const keys = Object.keys(metas);
+            if (keys.length === 0) {
+                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Nenhuma meta cadastrada ainda.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            keys.forEach(key => {
+                const m = metas[key];
+                let pct = Math.min(Math.round((m.atual / m.alvo) * 100), 100);
+                if (isNaN(pct)) pct = 0;
+
+                container.innerHTML += `
+                    <div class="history-card" style="border-left-color: var(--secondary);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <strong>🏋️ ${m.nome}</strong>
+                            <span style="font-size: 0.8rem; opacity: 0.8;">${m.data}</span>
+                        </div>
+                        <div style="font-size: 0.85rem; margin-bottom: 5px;">
+                            Carga Atual: <strong>${m.atual} kg</strong> | Meta: <strong>${m.alvo} kg</strong> (${pct}%)
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // HISTÓRICO DE FOTOS
+        function saveHistorico() {
+            const inputFoto = document.getElementById('foto-upload');
+            if (!inputFoto.files[0]) {
+                alert("Selecione uma foto primeiro!");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imagemBase64 = e.target.result;
+                const historico = db.get('historico') || [];
+                const dados = db.get('dados') || { peso: '--', bf: '--' };
+                const medidas = db.get('medidas') || { braco: '--', peito: '--', coxa: '--' };
+
+                historico.unshift({
+                    img: imagemBase64,
+                    data: new Date().toLocaleDateString('pt-BR'),
+                    peso: dados.peso,
+                    bf: dados.bf,
+                    braco: medidas.braco,
+                    peito: medidas.peito,
+                    coxa: medidas.coxa
+                });
+
+                if(historico.length > 10) historico.pop();
+
+                db.set('historico', historico);
+                loadHistorico();
+                alert("Lembrança salva!");
+            };
+            reader.readAsDataURL(inputFoto.files[0]);
+        }
+
+        function loadHistorico() {
+            const historico = db.get('historico') || [];
+            const container = document.getElementById('galeria-historico');
+            container.innerHTML = '';
+            
+            historico.forEach(item => {
+                container.innerHTML += `
+                    <div class="history-item">
+                        <img src="${item.img}" alt="Histórico do corpo">
+                        <div class="details">
+                            <strong>📅 ${item.data}</strong><br>
+                            ⚖️ Peso: ${item.peso}kg | 🔥 BF: ${item.bf}%<br>
+                            💪 Braço: ${item.braco}cm | Peito: ${item.peito}cm | Coxa: ${item.coxa}cm
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
