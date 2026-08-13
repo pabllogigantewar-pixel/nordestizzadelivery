@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ROCHA TREINING</title>
+    <title>ROCHA PERSONAL</title>
     <style>
         :root {
             --bg-color: #f4f4f9;
@@ -34,20 +34,26 @@
             padding-bottom: calc(85px + env(safe-area-inset-bottom)); 
         }
 
-        /* CABEÇALHO */
+        /* CABEÇALHO COM NOME DESTACADO ROCHA PERSONAL */
         header {
             background: var(--card-bg);
-            padding: 15px 20px;
+            padding: 18px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 2px solid var(--primary);
             position: sticky;
             top: 0;
             z-index: 10;
         }
-        .profile-info h1 { font-size: 1.2rem; color: var(--primary); text-transform: uppercase; }
-        .profile-info p { font-size: 0.8rem; opacity: 0.8; }
+        .profile-info h1 { 
+            font-size: 1.6rem; 
+            font-weight: 900; 
+            color: var(--primary); 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+        .profile-info p { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
         .theme-toggle { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color); }
 
         /* CONTAINER PRINCIPAL E EFEITO BLUR */
@@ -109,6 +115,7 @@
             padding: 12px;
             margin-bottom: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            cursor: pointer;
         }
         .history-card header {
             background: none; padding: 0; border: none; margin-bottom: 8px;
@@ -218,7 +225,7 @@
 
     <header>
         <div class="profile-info" onclick="openModal('modal-perfil')">
-            <h1>ROCHA TREINING</h1>
+            <h1>ROCHA PERSONAL</h1>
             <p><span id="display-name">Configurar Perfil</span> | <span id="display-age">--</span> anos</p>
         </div>
         <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
@@ -226,36 +233,14 @@
 
     <div id="app-wrapper">
         
-        <!-- ABA: INÍCIO (TREINO DO DIA, IMC E TIMER DE AVALIAÇÃO) -->
+        <!-- ABA: INÍCIO (TREINO DO DIA, TIMER DE DESCANSO, EVOLUÇÃO MEDIDAS, IMC E TIMER AVALIAÇÃO) -->
         <section id="tab-inicio" class="tab-content active">
             <!-- CARD RESUMO DO TREINO DE HOJE -->
             <div id="container-treino-hoje">
                 <!-- Injetado via JS -->
             </div>
 
-            <div class="card">
-                <h2>Seu IMC Atual</h2>
-                <div class="highlight-box">
-                    <p>Índice de Massa Corporal</p>
-                    <h3 id="display-imc">0.00</h3>
-                    <p id="display-imc-status">--</p>
-                </div>
-                <div class="grid-2">
-                    <div><small>Peso (kg)</small><h4 id="display-peso">0</h4></div>
-                    <div><small>Gordura (%)</small><h4 id="display-bf">0</h4></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>Próxima Avaliação</h2>
-                <div class="timer-box" id="countdown">-- dias --:--:--</div>
-                <button class="btn-success" onclick="openModal('modal-atualizar')">Configurar Cronômetro</button>
-            </div>
-        </section>
-
-        <!-- ABA: TREINOS (MONTAGEM, CALENDÁRIO E TIMER DE DESCANSO) -->
-        <section id="tab-treino" class="tab-content">
-            <!-- TIMER DE DESCANSO ENTRE SÉRIES COM ALARME E INPUT MANUAL -->
+            <!-- TIMER DE DESCANSO ENTRE SÉRIES NA TELA INICIAL -->
             <div class="card">
                 <h2>⏱️ Timer de Descanso entre Séries</h2>
                 <div class="rest-timer-display" id="rest-timer-display">00:00</div>
@@ -278,6 +263,36 @@
                 </div>
             </div>
 
+            <!-- EVOLUÇÃO DAS MEDIDAS NA TELA INICIAL (CÁLCULO AUTOMÁTICO) -->
+            <div class="card">
+                <h2>📈 Evolução de Medidas (Semanal & Mensal)</h2>
+                <div id="display-evolucao-medidas-home">
+                    <!-- Calculado e injetado pelo JS -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Seu IMC Atual</h2>
+                <div class="highlight-box">
+                    <p>Índice de Massa Corporal</p>
+                    <h3 id="display-imc">0.00</h3>
+                    <p id="display-imc-status">--</p>
+                </div>
+                <div class="grid-2">
+                    <div><small>Peso (kg)</small><h4 id="display-peso">0</h4></div>
+                    <div><small>Gordura (%)</small><h4 id="display-bf">0</h4></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Próxima Avaliação</h2>
+                <div class="timer-box" id="countdown">-- dias --:--:--</div>
+                <button class="btn-success" onclick="openModal('modal-atualizar')">Configurar Cronômetro</button>
+            </div>
+        </section>
+
+        <!-- ABA: TREINOS (MONTAGEM, CALENDÁRIO E HISTÓRICO DETALHADO) -->
+        <section id="tab-treino" class="tab-content">
             <div class="card">
                 <h2>🏋️ Montar / Cadastrar Treino</h2>
                 <input type="hidden" id="treino-edit-id">
@@ -355,7 +370,7 @@
             </div>
 
             <div class="card">
-                <h2>Evolução das Metas</h2>
+                <h2>Evolução das Metas (Clique para Expandir / Editar)</h2>
                 <div id="lista-metas">
                     <!-- Lista de Metas injetada via JS -->
                 </div>
@@ -430,6 +445,18 @@
         <button type="button" class="btn-danger" onclick="closeModals()">Fechar</button>
     </div>
 
+    <!-- Modal Pop-up Detalhado do Treino Concluído -->
+    <div class="modal" id="modal-detalhe-treino-concluido">
+        <h2 id="detalhe-treino-titulo">Detalhes do Treino</h2>
+        <p id="detalhe-treino-data-hora" style="font-size:0.85rem; opacity:0.8; margin-bottom: 12px;"></p>
+
+        <div id="detalhe-treino-exercicios-list">
+            <!-- Exercícios com horário exato registrado -->
+        </div>
+
+        <button type="button" class="btn-danger" style="margin-top:15px;" onclick="closeModals()">Fechar Relatório</button>
+    </div>
+
     <!-- Modal Seleção de Exercícios por Categoria -->
     <div class="modal" id="modal-selecao-exercicio">
         <h2>Selecione o Exercício</h2>
@@ -459,6 +486,20 @@
 
         <button type="button" class="btn-success" onclick="confirmarAddExerciciosRow()">Adicionar ao Treino</button>
         <button type="button" class="btn-danger" onclick="closeModalExConfig()">Voltar</button>
+    </div>
+
+    <!-- Modal Edição de Meta -->
+    <div class="modal" id="modal-editar-meta">
+        <h2>Editar Meta</h2>
+        <input type="hidden" id="edit-meta-key">
+        <input type="text" id="edit-meta-nome" placeholder="Exercício / Foco">
+        <div class="grid-2">
+            <input type="number" id="edit-meta-atual" placeholder="Carga Atual (kg)">
+            <input type="number" id="edit-meta-alvo" placeholder="Carga Meta (kg)">
+        </div>
+        <button type="button" class="btn-success" onclick="salvarEdicaoMeta()">Salvar Alterações</button>
+        <button type="button" class="btn-danger" onclick="deleteMetaFromModal()">Excluir Meta</button>
+        <button type="button" style="background:#6c757d;" onclick="closeModals()">Cancelar</button>
     </div>
 
     <!-- Modal Alteração de Foto do Histórico -->
@@ -519,6 +560,7 @@
             loadDadosCorporais();
             loadMedidas();
             loadHistMedidas();
+            loadEvolucaoMedidasHome();
             loadMetas();
             loadHistorico();
             
@@ -666,7 +708,7 @@
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.value = 880; // Nota Lá (A5)
+                osc.frequency.value = 880;
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start();
@@ -788,7 +830,6 @@
             document.getElementById('overlay').classList.remove('active');
         }
 
-        // ADICIONAR LINHA NA LISTA DE MONTAGEM DE TREINO
         function addExerciciosRow(nome = '', det = '', carga = '') {
             const container = document.getElementById('lista-exercicios-form');
             const row = document.createElement('div');
@@ -829,7 +870,8 @@
                         nome: exNome,
                         detalhe: exDet || '4x10-12',
                         carga: exCarga || '0',
-                        concluido: false
+                        concluido: false,
+                        horaConclusao: null
                     });
                 }
             });
@@ -991,6 +1033,7 @@
                         <div>
                             <strong>${ex.nome}</strong><br>
                             <small>${ex.detalhe} | Carga: ${ex.carga}kg</small>
+                            ${ex.horaConclusao ? `<br><small style="color:var(--secondary); font-weight:bold;">🕒 Concluído às: ${ex.horaConclusao}</small>` : ''}
                         </div>
                         <input type="checkbox" ${ex.concluido ? 'checked' : ''} onchange="toggleExConcluido('${t.id}', ${idx})">
                     </div>
@@ -1004,14 +1047,22 @@
             const treinos = db.get('treinos') || [];
             const index = treinos.findIndex(t => t.id === idTreino);
             if (index !== -1) {
-                treinos[index].exercicios[exIdx].concluido = !treinos[index].exercicios[exIdx].concluido;
+                const ex = treinos[index].exercicios[exIdx];
+                ex.concluido = !ex.concluido;
+                if (ex.concluido) {
+                    const agora = new Date();
+                    ex.horaConclusao = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                } else {
+                    ex.horaConclusao = null;
+                }
+
                 db.set('treinos', treinos);
                 openExecucaoTreinoModal(idTreino);
                 loadTreinoHoje();
             }
         }
 
-        // SALVAR SESSÃO CONCLUÍDA NO HISTÓRICO DETALHADO DE TREINOS
+        // SALVAR SESSÃO CONCLUÍDA NO HISTÓRICO DETALHADO DE TREINOS COM EXPANSÃO POP-UP
         function concluirSessaoTreino() {
             if (!idTreinoExecucaoAtual) return;
             const treinos = db.get('treinos') || [];
@@ -1024,6 +1075,7 @@
 
             const histTreinos = db.get('histTreinosConcluidos') || [];
             histTreinos.unshift({
+                id: 'hist_' + new Date().getTime(),
                 nome: t.nome,
                 dia: t.dia,
                 data: dataStr,
@@ -1034,7 +1086,7 @@
             db.set('histTreinosConcluidos', histTreinos);
             loadHistoricoTreinosConcluidos();
             closeModals();
-            alert(`Sessão de treino "${t.nome}" registrada às ${horaStr} do dia ${dataStr}!`);
+            alert(`Sessão de treino "${t.nome}" registrada com sucesso!`);
         }
 
         function loadHistoricoTreinosConcluidos() {
@@ -1048,23 +1100,80 @@
 
             container.innerHTML = '';
             histTreinos.forEach(item => {
-                let exRows = '';
-                item.exercicios.forEach(e => {
-                    exRows += `<span style="font-size:0.8rem; display:block;">${e.concluido ? '✅' : '⚪'} ${e.nome} (${e.detalhe} - ${e.carga}kg)</span>`;
-                });
-
+                const concluidosCount = item.exercicios.filter(e => e.concluido).length;
                 container.innerHTML += `
-                    <div class="history-card" style="border-left-color: var(--secondary);">
+                    <div class="history-card" style="border-left-color: var(--secondary);" onclick="openDetalhesTreinoConcluidoModal('${item.id}')">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <strong>🏋️ ${item.nome}</strong>
                             <span style="font-size:0.75rem; opacity:0.8;">📅 ${item.data} às ${item.hora}</span>
                         </div>
-                        <div style="margin-top:6px; background:var(--bg-color); padding:6px; border-radius:5px;">
-                            ${exRows}
+                        <div style="font-size:0.85rem; margin-top:5px; color:var(--secondary); font-weight:bold;">
+                            ${concluidosCount}/${item.exercicios.length} Exercícios Registrados (Clique para Expandir 🔍)
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function openDetalhesTreinoConcluidoModal(histId) {
+            const histTreinos = db.get('histTreinosConcluidos') || [];
+            const item = histTreinos.find(h => h.id === histId);
+            if (!item) return;
+
+            document.getElementById('detalhe-treino-titulo').innerText = `${item.dia} - ${item.nome}`;
+            document.getElementById('detalhe-treino-data-hora').innerText = `Sessão Finalizada em: ${item.data} às ${item.hora}`;
+
+            const listContainer = document.getElementById('detalhe-treino-exercicios-list');
+            listContainer.innerHTML = '';
+
+            item.exercicios.forEach(ex => {
+                listContainer.innerHTML += `
+                    <div class="exercise-item ${ex.concluido ? 'completed' : ''}">
+                        <div>
+                            <strong>${ex.nome}</strong><br>
+                            <small>${ex.detalhe} | Carga: ${ex.carga}kg</small>
+                            ${ex.horaConclusao ? `<br><small style="color:var(--secondary); font-weight:bold;">🕒 Concluído exatamente às: ${ex.horaConclusao}</small>` : '<br><small style="opacity:0.6;">Não marcado como concluído</small>'}
+                        </div>
+                        <span style="font-size:1.2rem;">${ex.concluido ? '✅' : '⚪'}</span>
+                    </div>
+                `;
+            });
+
+            openModal('modal-detalhe-treino-concluido');
+        }
+
+        /* -------------------------------------------------------------
+           CÁLCULO DE EVOLUÇÃO DE MEDIDAS (SEMANAL E MENSAL) NA TELA INICIAL
+        ------------------------------------------------------------- */
+        function loadEvolucaoMedidasHome() {
+            const histMedidas = db.get('histMedidas') || [];
+            const container = document.getElementById('display-evolucao-medidas-home');
+
+            if (histMedidas.length < 2) {
+                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Cadastre pelo menos 2 registros de medidas para o sistema calcular a evolução semanal e mensal.</p>';
+                return;
+            }
+
+            const rec = histMedidas[0].dataObj; // Registro Mais Recente
+            const ant = histMedidas[histMedidas.length - 1].dataObj; // Registro Mais Antigo para comparação
+
+            function diff(a, b) {
+                const valA = parseFloat(a) || 0;
+                const valB = parseFloat(b) || 0;
+                const d = (valA - valB).toFixed(1);
+                return d > 0 ? `+${d} cm 📈` : d < 0 ? `${d} cm 📉` : `0 cm (Inalterado)`;
+            }
+
+            container.innerHTML = `
+                <div style="font-size: 0.85rem; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div>💪 Braço: <strong>${diff(rec.braco, ant.braco)}</strong></div>
+                    <div>🥖 Antebraço: <strong>${diff(rec.antebraco, ant.antebraco)}</strong></div>
+                    <div>🛡️ Peitoral: <strong>${diff(rec.peito, ant.peito)}</strong></div>
+                    <div>🎯 Abdômen: <strong>${diff(rec.barriga, ant.barriga)}</strong></div>
+                    <div>🦵 Coxa: <strong>${diff(rec.coxa, ant.coxa)}</strong></div>
+                    <div>👟 Panturrilha: <strong>${diff(rec.panturrilha, ant.panturrilha)}</strong></div>
+                </div>
+            `;
         }
 
         // MEDIDAS MUSCULARES E HISTÓRICO DE MEDIDAS
@@ -1088,6 +1197,7 @@
             db.set('histMedidas', histMedidas);
 
             loadHistMedidas();
+            loadEvolucaoMedidasHome();
             alert("Medidas salvas e adicionadas ao histórico!");
         }
 
@@ -1131,7 +1241,9 @@
             });
         }
 
-        // METAS POR CATEGORIA/EXERCÍCIO COM BARRA DE EVOLUÇÃO
+        /* -------------------------------------------------------------
+           GERENCIAMENTO E EDIÇÃO EXPANSÍVEL DE METAS
+        ------------------------------------------------------------- */
         function saveMetas() {
             const metas = db.get('metas') || {};
             const exercicio = document.getElementById('meta-exercicio').value.trim();
@@ -1174,7 +1286,7 @@
                 if (isNaN(pct)) pct = 0;
 
                 container.innerHTML += `
-                    <div class="history-card" style="border-left-color: var(--secondary);">
+                    <div class="history-card" style="border-left-color: var(--secondary);" onclick="openEditarMetaModal('${key}')">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
                             <strong>🏋️ ${m.nome}</strong>
                             <span style="font-size: 0.8rem; opacity: 0.8;">${m.data}</span>
@@ -1185,9 +1297,61 @@
                         <div class="progress-bar-bg">
                             <div class="progress-bar-fill" style="width: ${pct}%;"></div>
                         </div>
+                        <div style="font-size:0.75rem; text-align:right; margin-top:4px; opacity:0.7;">Clique para editar ✏️</div>
                     </div>
                 `;
             });
+        }
+
+        function openEditarMetaModal(key) {
+            const metas = db.get('metas') || {};
+            const m = metas[key];
+            if (!m) return;
+
+            document.getElementById('edit-meta-key').value = key;
+            document.getElementById('edit-meta-nome').value = m.nome;
+            document.getElementById('edit-meta-atual').value = m.atual;
+            document.getElementById('edit-meta-alvo').value = m.alvo;
+
+            openModal('modal-editar-meta');
+        }
+
+        function salvarEdicaoMeta() {
+            const oldKey = document.getElementById('edit-meta-key').value;
+            const nome = document.getElementById('edit-meta-nome').value.trim();
+            const atual = parseFloat(document.getElementById('edit-meta-atual').value);
+            const alvo = parseFloat(document.getElementById('edit-meta-alvo').value);
+
+            if (!nome || isNaN(atual) || isNaN(alvo)) {
+                alert("Preencha todos os campos da meta!");
+                return;
+            }
+
+            const metas = db.get('metas') || {};
+            delete metas[oldKey]; // Remove a chave antiga caso tenha trocado o nome
+
+            metas[nome.toLowerCase()] = {
+                nome,
+                atual,
+                alvo,
+                data: new Date().toLocaleDateString('pt-BR')
+            };
+
+            db.set('metas', metas);
+            loadMetas();
+            closeModals();
+            alert("Meta atualizada com sucesso!");
+        }
+
+        function deleteMetaFromModal() {
+            const key = document.getElementById('edit-meta-key').value;
+            if (!confirm("Tem certeza que deseja excluir esta meta?")) return;
+
+            const metas = db.get('metas') || {};
+            delete metas[key];
+            db.set('metas', metas);
+            loadMetas();
+            closeModals();
         }
 
         // HISTÓRICO DE FOTOS COM EDIÇÃO E EXCLUSÃO MANTENDO OS DADOS ORIGINAIS
@@ -1265,7 +1429,7 @@
             reader.onload = function(e) {
                 const historico = db.get('historico') || [];
                 if (historico[index]) {
-                    historico[index].img = e.target.result; // Altera APENAS a imagem, preservando datas e métricas
+                    historico[index].img = e.target.result;
                     db.set('historico', historico);
                     loadHistorico();
                     closeModals();
