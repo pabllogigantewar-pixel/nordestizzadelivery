@@ -6,7 +6,7 @@
   <title>Invest Consciente Pro • Inteligência Patrimonial</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -24,7 +24,7 @@
       --accent-red: #ff5252;
       --text-main: #f3f5f9;
       --text-muted: #8b95a8;
-      --header-bg: rgba(15, 18, 26, 0.88);
+      --header-bg: rgba(15, 18, 26, 0.92);
       --shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
       --radius: 16px;
     }
@@ -43,7 +43,7 @@
       --accent-red: #d32f2f;
       --text-main: #121826;
       --text-muted: #5c687e;
-      --header-bg: rgba(255, 255, 255, 0.92);
+      --header-bg: rgba(255, 255, 255, 0.95);
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
     }
 
@@ -59,7 +59,7 @@
       background: var(--bg);
       background-image: var(--bg-overlay);
       color: var(--text-main);
-      padding-bottom: 85px;
+      padding-bottom: 90px;
       min-height: 100vh;
       overflow-x: hidden;
       transition: background-color 0.25s, color 0.25s;
@@ -93,8 +93,8 @@
     }
 
     .brand-logo {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       background: linear-gradient(135deg, var(--accent-green), #00b0ff);
       border-radius: 10px;
       display: flex;
@@ -104,8 +104,8 @@
     }
 
     .brand-logo svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       fill: #fff;
     }
 
@@ -173,22 +173,22 @@
     }
 
     .container {
-      padding: 80px 16px 20px;
+      padding: 78px 16px 20px;
       max-width: 600px;
       margin: 0 auto;
     }
 
-    /* Barra Superior com Filtro de Crescimento e Tickers Clicáveis */
+    /* Barra Superior com Filtro e Tickers Ordenados */
     .top-filter-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .top-filter-title {
-      font-size: 0.75rem;
-      font-weight: 700;
+      font-size: 0.74rem;
+      font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -200,7 +200,7 @@
       color: var(--accent-green);
       font-weight: 700;
       font-size: 0.72rem;
-      padding: 3px 8px;
+      padding: 4px 8px;
       border-radius: 8px;
       outline: none;
     }
@@ -212,6 +212,7 @@
       padding-bottom: 8px;
       margin-bottom: 16px;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
     .ticker-bar::-webkit-scrollbar { display: none; }
 
@@ -219,17 +220,21 @@
       flex: 0 0 auto;
       background: var(--surface);
       border: 1px solid var(--card-border);
-      padding: 10px 13px;
+      padding: 10px 14px;
       border-radius: 14px;
-      min-width: 115px;
+      min-width: 125px;
       cursor: pointer;
       box-shadow: var(--shadow);
       transition: transform 0.15s, border-color 0.2s;
     }
 
+    .ticker-item.leader {
+      border-color: rgba(0, 230, 118, 0.45);
+      background: linear-gradient(180deg, var(--surface), var(--accent-green-dim));
+    }
+
     .ticker-item:active {
       transform: scale(0.96);
-      border-color: var(--accent-green);
     }
 
     .ticker-header-row {
@@ -243,18 +248,6 @@
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
-    }
-
-    .ticker-info-icon {
-      font-size: 0.65rem;
-      color: var(--accent-green);
-      background: var(--accent-green-dim);
-      border-radius: 50%;
-      width: 14px;
-      height: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .ticker-val {
@@ -331,7 +324,7 @@
       color: var(--text-main);
     }
 
-    /* Alternador Gráficos */
+    /* Alternador Gráfico */
     .chart-header {
       display: flex;
       justify-content: space-between;
@@ -362,7 +355,7 @@
       position: relative;
     }
 
-    /* Form & Inputs */
+    /* Inputs e Controles */
     .input-group {
       margin-bottom: 12px;
     }
@@ -389,13 +382,13 @@
       color: var(--text-muted);
     }
 
-    input[type="number"], input[type="text"], select {
+    input[type="number"], input[type="text"], input[type="date"], select, textarea {
       width: 100%;
       background: var(--surface-elevated);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 12px 14px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--text-main);
       outline: none;
@@ -405,7 +398,7 @@
       padding-left: 42px;
     }
 
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: var(--accent-green);
     }
 
@@ -443,6 +436,78 @@
 
     .btn:active {
       transform: scale(0.98);
+    }
+
+    .btn-telegram {
+      background: linear-gradient(135deg, #229ED9, #0088cc);
+      color: #ffffff;
+      box-shadow: 0 4px 18px rgba(34, 158, 217, 0.35);
+    }
+
+    /* CARDS DO SIMULADOR DESLIZÁVEIS (TOUCH SCROLL / ARRASTO) */
+    .sim-carousel-wrapper {
+      position: relative;
+      margin: 14px 0 16px;
+    }
+
+    .sim-results-track {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 8px;
+    }
+    .sim-results-track::-webkit-scrollbar {
+      height: 4px;
+    }
+    .sim-results-track::-webkit-scrollbar-thumb {
+      background: var(--card-border);
+      border-radius: 4px;
+    }
+
+    .sim-card-slide {
+      flex: 0 0 78%;
+      scroll-snap-align: start;
+      background: var(--surface-elevated);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .sim-card-slide.highlight-juros {
+      border-color: rgba(0, 230, 118, 0.45);
+      background: linear-gradient(180deg, var(--surface-elevated), var(--accent-green-dim));
+    }
+
+    .sim-card-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sim-card-val {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--text-main);
+      margin: 6px 0 3px;
+    }
+
+    .sim-card-pct {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .swipe-hint {
+      text-align: center;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 600;
     }
 
     /* Itens de Ativos */
@@ -496,47 +561,7 @@
       color: var(--accent-red);
     }
 
-    /* SIMULADOR DE RIQUEZA EM 3 CARDS */
-    .sim-results-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin: 14px 0;
-    }
-
-    .sim-card {
-      background: var(--surface-elevated);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 10px 8px;
-      text-align: center;
-    }
-
-    .sim-card.highlight-juros {
-      border-color: rgba(0, 230, 118, 0.4);
-      background: linear-gradient(180deg, var(--surface-elevated), var(--accent-green-dim));
-    }
-
-    .sim-card-title {
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    .sim-card-val {
-      font-size: 0.95rem;
-      font-weight: 900;
-      color: var(--text-main);
-      margin: 4px 0 2px;
-    }
-
-    .sim-card-pct {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--accent-green);
-    }
-
+    /* Tabela Breakdown */
     .breakdown-table {
       width: 100%;
       border-collapse: collapse;
@@ -581,27 +606,13 @@
       color: var(--accent-green);
     }
 
-    /* Decisão */
+    /* Badges Decisão */
     .decision-card {
       background: var(--surface-elevated);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 14px;
       margin-bottom: 12px;
-    }
-
-    .decision-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .decision-tag {
-      font-size: 0.68rem;
-      padding: 2px 6px;
-      border-radius: 6px;
-      font-weight: 700;
     }
 
     .asset-badge {
@@ -682,7 +693,7 @@
       flex: 1;
     }
 
-    /* Bottom Nav */
+    /* Navegação Mobile Inferior (Bottom Bar com 4 abas) */
     .nav-bar {
       position: fixed;
       bottom: 0;
@@ -708,10 +719,10 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       cursor: pointer;
-      padding: 6px 12px;
+      padding: 6px 10px;
     }
 
     .nav-item.active {
@@ -719,7 +730,7 @@
     }
 
     .nav-icon {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
     }
 
     .tab-content {
@@ -739,7 +750,7 @@
 </head>
 <body>
 
-  <!-- HEADER RETRÁTIL COM LOGO & THEME SWITCH -->
+  <!-- HEADER RETRÁTIL -->
   <header class="header" id="mainHeader">
     <div class="brand">
       <div class="brand-logo">
@@ -763,9 +774,9 @@
 
   <div class="container">
     
-    <!-- BARRA SUPERIOR DE CRESCIMENTO E JANELAS (3M, 6M, 12M) -->
+    <!-- BARRA SUPERIOR DE CRESCIMENTO E FILTRO TEMPORAL -->
     <div class="top-filter-bar">
-      <div class="top-filter-title">🔥 Indicadores Oficiais & Retornos</div>
+      <div class="top-filter-title">🏆 Maiores Retornos Reais</div>
       <div style="display: flex; align-items: center; gap: 6px;">
         <span style="font-size: 0.7rem; color: var(--text-muted);">Janela:</span>
         <select class="window-select" id="filtroJanela" onchange="atualizarTickerDestaques()">
@@ -776,15 +787,13 @@
       </div>
     </div>
 
-    <!-- TICKERS CLICÁVEIS COM HISTÓRICO REAL -->
-    <div class="ticker-bar" id="tickerContainer">
-      <!-- Injetado dinamicamente para permitir clique com modal explicativo -->
-    </div>
+    <!-- TICKERS CLICÁVEIS E AUTO-ORDENADOS PELO MELHOR RETORNO -->
+    <div class="ticker-bar" id="tickerContainer"></div>
 
     <!-- ==================== ABA 1: CARTEIRA ==================== -->
     <div id="page-carteira" class="tab-content active">
       
-      <!-- Cartão Principal Clicável (Abre Pop-up Detalhado) -->
+      <!-- Cartão Principal Clicável -->
       <div class="card card-clickable" onclick="abrirModalPatrimonio()">
         <div class="card-title">
           <span>💰 Patrimônio Total Alocado</span>
@@ -856,12 +865,12 @@
 
     </div>
 
-    <!-- ==================== ABA 2: SIMULADOR DE RIQUEZA FUTURA ==================== -->
+    <!-- ==================== ABA 2: SIMULADOR DE RIQUEZA COM CARROSEL ==================== -->
     <div id="page-projecoes" class="tab-content">
       <div class="card">
         <div class="card-title" style="margin-bottom: 8px;">⏳ Simulador Multiativo de Riqueza Futura</div>
         <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">
-          Calcula o crescimento individual de cada ativo que você possui, somando a rentabilidade real ponderada ao longo do prazo.
+          Calcula o crescimento composto e probabilidade de valorização anual média de cada ativo que você possui (incluindo o histórico longo de ativos de alta performance como Bitcoin e Ações).
         </p>
 
         <!-- Seletor de Período Flexível -->
@@ -896,23 +905,31 @@
           </div>
         </div>
 
-        <!-- OS 3 CARDS EXIGIDOS: GUARDADO, TOTAL E SÓ JUROS -->
-        <div class="sim-results-grid">
-          <div class="sim-card">
-            <div class="sim-card-title">📥 Valor Guardado</div>
-            <div class="sim-card-val" id="simValGuardado">R$ 0</div>
-            <div class="sim-card-pct" style="color: var(--text-muted);" id="simPctGuardado">Seus Aportes</div>
+        <!-- CARROSEL DESLIZÁVEL / ARRASTO LATERAL DOS RESULTADOS -->
+        <div class="sim-carousel-wrapper">
+          <div class="sim-results-track">
+            <div class="sim-card-slide">
+              <div class="sim-card-title">📥 Valor Guardado</div>
+              <div class="sim-card-val" id="simValGuardado">R$ 0</div>
+              <div class="sim-card-pct" style="color: var(--text-muted);" id="simPctGuardado">Total dos seus aportes</div>
+            </div>
+            <div class="sim-card-slide highlight-juros">
+              <div class="sim-card-title">⚡ Só de Juros / Ganho</div>
+              <div class="sim-card-val" style="color: var(--accent-green);" id="simValJuros">R$ 0</div>
+              <div class="sim-card-pct" id="simPctJuros">+0% de ganho composto</div>
+            </div>
+            <div class="sim-card-slide">
+              <div class="sim-card-title">💰 Patrimônio Total Final</div>
+              <div class="sim-card-val" id="simValTotal">R$ 0</div>
+              <div class="sim-card-pct" style="color: var(--accent-blue);" id="simRendaFutura">+R$ 0/mês</div>
+            </div>
+            <div class="sim-card-slide">
+              <div class="sim-card-title">🛡️ Rentabilidade Ponderada</div>
+              <div class="sim-card-val" id="simTaxaPonderada">0.0% a.a.</div>
+              <div class="sim-card-pct" style="color: var(--accent-gold);">Média real dos seus ativos</div>
+            </div>
           </div>
-          <div class="sim-card highlight-juros">
-            <div class="sim-card-title">⚡ Só de Juros</div>
-            <div class="sim-card-val" style="color: var(--accent-green);" id="simValJuros">R$ 0</div>
-            <div class="sim-card-pct" id="simPctJuros">+0% ganho</div>
-          </div>
-          <div class="sim-card">
-            <div class="sim-card-title">💰 Patrimônio Total</div>
-            <div class="sim-card-val" id="simValTotal">R$ 0</div>
-            <div class="sim-card-pct" style="color: var(--accent-blue);" id="simRendaFutura">+R$ 0/mês</div>
-          </div>
+          <div class="swipe-hint">👉 Arraste para o lado para navegar pelos valores 👈</div>
         </div>
 
         <div class="chart-box" style="height: 260px;">
@@ -921,7 +938,7 @@
 
         <!-- Detalhamento Individual de Cada Ativo no Futuro -->
         <div style="margin-top: 18px;">
-          <div class="card-title" style="margin-bottom: 6px;">📑 Crescimento Projetado por Ativo da Sua Carteira</div>
+          <div class="card-title" style="margin-bottom: 6px;">📑 Crescimento Projetado por Ativo</div>
           <table class="breakdown-table">
             <thead>
               <tr>
@@ -944,31 +961,23 @@
         <p style="font-size: 0.82rem; line-height: 1.5; margin-top: 6px;" id="melhorDecisaoDinamica"></p>
       </div>
 
-      <!-- Comparativo Específico de Renda Fixa -->
       <div class="decision-card">
-        <div class="decision-header">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
           <strong style="font-size: 0.92rem;">🎯 Renda Fixa: Qual está pagando mais?</strong>
-          <span class="decision-tag" style="background: rgba(0, 230, 118, 0.15); color: var(--accent-green);">Juro Real Alto</span>
+          <span style="font-size: 0.7rem; color: var(--accent-green); font-weight: 700;">Juro Real Alto</span>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">
-          Comparativo com base nos dados do Tesouro Nacional e do Banco Central:
-        </p>
         <div style="font-size: 0.82rem; line-height: 1.55;">
-          • <strong>Tesouro IPCA+ 2035/2045:</strong> Melhor opção absoluta para prazos acima de 7 anos. Trava rentabilidade real superior a 6% a.a. acima da inflação.<br>
-          • <strong>Tesouro Selic:</strong> Ideal para liquidez imediata (reserva de emergência).<br>
-          • <strong>CDB 110% do CDI:</strong> Rentabilidade líquida superior à poupança e aos grandes bancos tradicionais.
+          • <strong>Tesouro IPCA+ 2035/2045:</strong> Campeão para prazos acima de 7 anos, blindando ganho real contra a inflação.<br>
+          • <strong>Tesouro Selic:</strong> Melhor para liquidez imediata (reserva).<br>
+          • <strong>CDB 110% do CDI:</strong> Ótimo rendimento pós-fixado seguro.
         </div>
       </div>
 
-      <!-- Ações com Maiores Dividendos -->
       <div class="decision-card">
-        <div class="decision-header">
-          <strong style="font-size: 0.92rem;">🇧🇷 Top Dividendos & Fluxo de Caixa</strong>
-          <span class="decision-tag" style="background: rgba(41, 121, 255, 0.15); color: var(--accent-blue);">Previsibilidade</span>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <strong style="font-size: 0.92rem;">🇧🇷 Ações com Maiores Dividendos</strong>
+          <span style="font-size: 0.7rem; color: var(--accent-blue); font-weight: 700;">Fluxo Caixa</span>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;">
-          Empresas líderes em distribuição de proventos consistentes:
-        </p>
         <span class="asset-badge">BBAS3 (Banco do Brasil)</span>
         <span class="asset-badge">CPLE3 (Copel Geração)</span>
         <span class="asset-badge">BBSE3 (BB Seguridade)</span>
@@ -976,39 +985,79 @@
         <span class="asset-badge">ITUB4 (Itaú Unibanco)</span>
       </div>
 
-      <!-- FIIs Mais Sólidos -->
       <div class="decision-card">
-        <div class="decision-header">
-          <strong style="font-size: 0.92rem;">🏢 Fundos Imobiliários (FIIs) Líderes</strong>
-          <span class="decision-tag" style="background: rgba(255, 214, 0, 0.15); color: var(--accent-gold);">Renda Isenta IR</span>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <strong style="font-size: 0.92rem;">🏢 Fundos Imobiliários (FIIs)</strong>
+          <span style="font-size: 0.7rem; color: var(--accent-gold); font-weight: 700;">Renda Isenta IR</span>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;">
-          Imóveis de alta qualidade e títulos de crédito protegidos:
-        </p>
         <span class="asset-badge">HGLG11 (Galpões Logísticos)</span>
         <span class="asset-badge">MXRF11 (Crédito Imobiliário)</span>
-        <span class="asset-badge">KNIP11 (CRIs Indexados ao IPCA)</span>
+        <span class="asset-badge">KNIP11 (CRIs Indexados a IPCA)</span>
         <span class="asset-badge">XPML11 (Shoppings Centers)</span>
       </div>
 
-      <!-- Criptoativos com Maior Desempenho -->
       <div class="decision-card">
-        <div class="decision-header">
-          <strong style="font-size: 0.92rem;">🪙 Criptoativos em Destaque nos Últimos 6-12M</strong>
-          <span class="decision-tag" style="background: rgba(179, 136, 255, 0.15); color: var(--accent-purple);">Assimetria Global</span>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <strong style="font-size: 0.92rem;">🪙 Criptoativos com Maior Crescimento</strong>
+          <span style="font-size: 0.7rem; color: var(--accent-purple); font-weight: 700;">Assimetria</span>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;">
-          Os maiores ganhos com adoção institucional comprovada:
-        </p>
         <span class="asset-badge">Bitcoin (BTC) • Reserva Digital</span>
-        <span class="asset-badge">Solana (SOL) • Maior Aceleração</span>
-        <span class="asset-badge">Ethereum (ETH) • Infraestrutura DeFi</span>
+        <span class="asset-badge">Solana (SOL) • Alta Performance</span>
+        <span class="asset-badge">Ethereum (ETH) • Finanças Globais</span>
+      </div>
+    </div>
+
+    <!-- ==================== ABA 4: BACKUP & RELATÓRIO TELEGRAM ==================== -->
+    <div id="page-backup" class="tab-content">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 8px;">📲 Enviar Relatório ao Telegram</div>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">
+          Gera o resumo detalhado da sua carteira, histórico de aportes e rendimentos estimados no período selecionado, enviando diretamente para o seu bot do Telegram.
+        </p>
+
+        <!-- Filtro de Período por Calendário -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+          <div>
+            <label class="input-label">Data Inicial</label>
+            <input type="date" id="tgDataInicio" />
+          </div>
+          <div>
+            <label class="input-label">Data Final</label>
+            <input type="date" id="tgDataFim" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Seu Chat ID (Telegram)</label>
+          <input type="text" id="tgChatId" value="7080548404" />
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Bot Token (API Telegram)</label>
+          <input type="text" id="tgBotToken" value="8748118827:AAFZDCkUDYZlrboi_PvrCvqnmV5u68Jgrmc" />
+        </div>
+
+        <button class="btn btn-telegram" onclick="enviarRelatorioTelegram()">
+          <span>🚀</span> Enviar Relatório Completo via Telegram
+        </button>
+        <div id="tgStatusEnvio" style="margin-top: 10px; font-size: 0.8rem; text-align: center; font-weight: 700;"></div>
+      </div>
+
+      <!-- Exportar / Importar LocalStorage -->
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 8px;">💾 Backup do Banco de Dados Local</div>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">
+          Seus dados estão 100% gravados na memória local do celular (LocalStorage). Você também pode exportar um arquivo JSON de segurança.
+        </p>
+        <button class="btn" style="background: var(--surface-elevated); color: var(--text-main); border: 1px solid var(--card-border);" onclick="baixarBackupJSON()">
+          📥 Baixar Cópia dos Dados (JSON)
+        </button>
       </div>
     </div>
 
   </div>
 
-  <!-- MODAL INFORMATIVO DAS TAXAS (POP-UP AO CLICAR NO TICKER DO TOPO) -->
+  <!-- MODAL: INFORMAÇÕES CONFIÁVEIS DO INDICADOR -->
   <div class="modal-overlay" id="modalInfoTaxa">
     <div class="modal-content">
       <div class="modal-header">
@@ -1030,7 +1079,7 @@
     </div>
   </div>
 
-  <!-- MODAL: SELETOR E PESQUISA DE ATIVOS -->
+  <!-- MODAL: SELETOR DE ATIVOS DO MERCADO -->
   <div class="modal-overlay" id="modalSeletorAtivo">
     <div class="modal-content">
       <div class="modal-header">
@@ -1062,7 +1111,7 @@
     </div>
   </div>
 
-  <!-- NAVEGAÇÃO MOBILE -->
+  <!-- BARRA DE NAVEGAÇÃO MOBILE (4 ABAS) -->
   <nav class="nav-bar">
     <button class="nav-item active" onclick="mudarAba('carteira', this)">
       <span class="nav-icon">💼</span>
@@ -1070,77 +1119,88 @@
     </button>
     <button class="nav-item" onclick="mudarAba('projecoes', this)">
       <span class="nav-icon">📈</span>
-      <span>Simulador 10-30A</span>
+      <span>Simulador</span>
     </button>
     <button class="nav-item" onclick="mudarAba('decisao', this)">
       <span class="nav-icon">🎯</span>
       <span>Decisão</span>
     </button>
+    <button class="nav-item" onclick="mudarAba('backup', this)">
+      <span class="nav-icon">📲</span>
+      <span>Telegram</span>
+    </button>
   </nav>
 
   <script>
-    // --- CATALOGO COMPLETO DE ATIVOS COM TAXAS ANUAIS MÉDIAS REAIS E HISTÓRICO ---
+    // --- CATALOGO COMPLETO COM TAXAS REAIS ANUALIZADAS MÉDIAS E HISTÓRICO ---
     const ATIVOS_CATALOGO = [
-      { id: 'tesouro_selic', nome: 'Tesouro Selic (Reserva)', classe: 'Renda Fixa Pós-fixada', taxaAnualRef: 0.1065, rendMensalEst: 0.0075, hist3m: '+2.6%', hist6m: '+5.3%', hist12m: '+10.8%' },
-      { id: 'cdb_cdi', nome: 'CDB 105% a 110% CDI', classe: 'Renda Fixa Pós-fixada', taxaAnualRef: 0.1140, rendMensalEst: 0.0080, hist3m: '+2.8%', hist6m: '+5.7%', hist12m: '+11.5%' },
-      { id: 'lci_lca', nome: 'LCI / LCA (Isento de IR)', classe: 'Renda Fixa Isenta', taxaAnualRef: 0.0960, rendMensalEst: 0.0077, hist3m: '+2.4%', hist6m: '+4.8%', hist12m: '+9.8%' },
-      { id: 'tesouro_ipca', nome: 'Tesouro IPCA+ Longo Prazo', classe: 'Renda Fixa Inflação', taxaAnualRef: 0.1120, rendMensalEst: 0.0089, hist3m: '+3.1%', hist6m: '+6.4%', hist12m: '+13.2%' },
-      { id: 'fiis_tijolo', nome: 'FIIs Tijolo (HGLG11, XPML11)', classe: 'Fundos Imobiliários', taxaAnualRef: 0.1080, rendMensalEst: 0.0082, hist3m: '+2.9%', hist6m: '+6.1%', hist12m: '+12.4%' },
-      { id: 'fiis_papel', nome: 'FIIs Papel/CRI (MXRF11, KNIP11)', classe: 'Fundos Imobiliários', taxaAnualRef: 0.1220, rendMensalEst: 0.0094, hist3m: '+3.2%', hist6m: '+6.7%', hist12m: '+13.6%' },
-      { id: 'acoes_div', nome: 'Ações Dividendos (BBAS3, CPLE3)', classe: 'Renda Variável BR', taxaAnualRef: 0.1350, rendMensalEst: 0.0085, hist3m: '+4.5%', hist6m: '+9.8%', hist12m: '+19.2%' },
-      { id: 'acoes_cresc', nome: 'Ações Crescimento (VALE3, WEGE3)', classe: 'Renda Variável BR', taxaAnualRef: 0.1400, rendMensalEst: 0.0090, hist3m: '+5.2%', hist6m: '+11.4%', hist12m: '+21.5%' },
-      { id: 'ivvb11', nome: 'ETFs Globais / S&P 500 (IVVB11)', classe: 'Internacional / Dólar', taxaAnualRef: 0.1380, rendMensalEst: 0.0088, hist3m: '+4.8%', hist6m: '+12.1%', hist12m: '+24.6%' },
-      { id: 'wrld11', nome: 'ETF Global Neutro (WRLD11)', classe: 'Internacional / Dólar', taxaAnualRef: 0.1250, rendMensalEst: 0.0082, hist3m: '+3.9%', hist6m: '+9.5%', hist12m: '+18.9%' },
-      { id: 'btc', nome: 'Bitcoin (BTC) Reserva Digital', classe: 'Criptoativos', taxaAnualRef: 0.2800, rendMensalEst: 0.0160, hist3m: '+18.4%', hist6m: '+42.0%', hist12m: '+112.5%' },
-      { id: 'eth_sol', nome: 'Solana (SOL) / Ethereum (ETH)', classe: 'Criptoativos', taxaAnualRef: 0.3200, rendMensalEst: 0.0180, hist3m: '+24.1%', hist6m: '+58.6%', hist12m: '+135.0%' },
-      { id: 'ouro', nome: 'Ouro / Proteção Cambial', classe: 'Alternativos', taxaAnualRef: 0.0950, rendMensalEst: 0.0060, hist3m: '+3.8%', hist6m: '+8.2%', hist12m: '+16.7%' }
+      { id: 'btc', nome: 'Bitcoin (BTC) Reserva Digital', classe: 'Criptoativos', taxaAnualRef: 0.2800, rendMensalEst: 0.0160, ret3m: 18.4, ret6m: 42.0, ret12m: 112.5 },
+      { id: 'eth_sol', nome: 'Solana (SOL) / Ethereum (ETH)', classe: 'Criptoativos', taxaAnualRef: 0.3200, rendMensalEst: 0.0180, ret3m: 24.1, ret6m: 58.6, ret12m: 135.0 },
+      { id: 'acoes_cresc', nome: 'Ações Crescimento (VALE3, WEGE3)', classe: 'Renda Variável BR', taxaAnualRef: 0.1400, rendMensalEst: 0.0090, ret3m: 5.2, ret6m: 11.4, ret12m: 21.5 },
+      { id: 'ivvb11', nome: 'ETFs Globais / S&P 500 (IVVB11)', classe: 'Internacional / Dólar', taxaAnualRef: 0.1380, rendMensalEst: 0.0088, ret3m: 4.8, ret6m: 12.1, ret12m: 24.6 },
+      { id: 'acoes_div', nome: 'Ações Dividendos (BBAS3, CPLE3)', classe: 'Renda Variável BR', taxaAnualRef: 0.1350, rendMensalEst: 0.0085, ret3m: 4.5, ret6m: 9.8, ret12m: 19.2 },
+      { id: 'fiis_papel', nome: 'FIIs Papel/CRI (MXRF11, KNIP11)', classe: 'Fundos Imobiliários', taxaAnualRef: 0.1220, rendMensalEst: 0.0094, ret3m: 3.2, ret6m: 6.7, ret12m: 13.6 },
+      { id: 'cdb_cdi', nome: 'CDB 105% a 110% CDI', classe: 'Renda Fixa Pós-fixada', taxaAnualRef: 0.1140, rendMensalEst: 0.0080, ret3m: 2.8, ret6m: 5.7, ret12m: 11.5 },
+      { id: 'tesouro_ipca', nome: 'Tesouro IPCA+ Longo Prazo', classe: 'Renda Fixa Inflação', taxaAnualRef: 0.1120, rendMensalEst: 0.0089, ret3m: 3.1, ret6m: 6.4, ret12m: 13.2 },
+      { id: 'fiis_tijolo', nome: 'FIIs Tijolo (HGLG11, XPML11)', classe: 'Fundos Imobiliários', taxaAnualRef: 0.1080, rendMensalEst: 0.0082, ret3m: 2.9, ret6m: 6.1, ret12m: 12.4 },
+      { id: 'tesouro_selic', nome: 'Tesouro Selic (Reserva)', classe: 'Renda Fixa Pós-fixada', taxaAnualRef: 0.1065, rendMensalEst: 0.0075, ret3m: 2.6, ret6m: 5.3, ret12m: 10.8 },
+      { id: 'lci_lca', nome: 'LCI / LCA (Isento de IR)', classe: 'Renda Fixa Isenta', taxaAnualRef: 0.0960, rendMensalEst: 0.0077, ret3m: 2.4, ret6m: 4.8, ret12m: 9.8 },
+      { id: 'ouro', nome: 'Ouro / Proteção Cambial', classe: 'Alternativos', taxaAnualRef: 0.0950, rendMensalEst: 0.0060, ret3m: 3.8, ret6m: 8.2, ret12m: 16.7 }
     ];
 
-    // --- BASE DE INFORMAÇÕES CONFIÁVEIS PARA CADA INDICADOR (CLIQUE NO TOPO) ---
+    // --- DETALHES CONFIÁVEIS PARA POP-UP AO CLICAR NOS TICKERS ---
     const DETALHES_INDICADORES = {
+      btc: {
+        titulo: 'Bitcoin (BTC) • Reserva Digital Global',
+        taxaAtual: '+112.5% em 12M',
+        fonte: 'Consenso de Mercado Global / Blockchain Oficial',
+        descricao: 'O Bitcoin é o primeiro ativo digital descentralizado e escasso do mundo. Sua taxa média histórica de valorização supera a de todos os índices tradicionais na última década.',
+        historico: 'Nos últimos 3 meses: +18.4% | 6 meses: +42.0% | 12 meses: +112.5%. Possui ciclos de halving a cada 4 anos que reduzem a emissão da moeda.',
+        recomendacao: 'Mantenha entre 2% e 5% do portfólio para capturar retornos assimétricos sem comprometer a estabilidade do patrimônio.'
+      },
+      eth_sol: {
+        titulo: 'Solana (SOL) & Ethereum (ETH)',
+        taxaAtual: '+135.0% em 12M',
+        fonte: 'Rede Descentralizada / Mercados Cripto',
+        descricao: 'Plataformas de contratos inteligentes que suportam finanças descentralizadas (DeFi), tokenização de ativos reais (RWA) e liquidação rápida.',
+        historico: 'Apresentaram forte aceleração nos últimos 6 e 12 meses devido à eficiência energética e adesão institucional.',
+        recomendacao: 'Alocação máxima de 2% para quem busca maior ganho tecnológico.'
+      },
+      ivvb11: {
+        titulo: 'IVVB11 • S&P 500 em Reais',
+        taxaAtual: '+24.6% em 12M',
+        fonte: 'B3 / Standard & Poor’s',
+        descricao: 'ETF listado na bolsa brasileira que replica as 500 maiores corporações dos Estados Unidos com exposição à valorização do Dólar.',
+        historico: 'Em 3 meses: +4.8% | 6 meses: +12.1% | 12 meses: +24.6%.',
+        recomendacao: 'Fundamental para eliminar o risco exclusivo de investir apenas no Brasil.'
+      },
       cdi: {
         titulo: 'Certificado de Depósito Interbancário (CDI)',
         taxaAtual: '10.65% a.a.',
         fonte: 'B3 (Brasil, Bolsa, Balcão) & Banco Central do Brasil',
-        descricao: 'O CDI é a taxa média dos empréstimos diários entre bancos no Brasil. Ela serve como o principal referencial para mais de 70% das aplicações de renda fixa privada (como CDBs, LCIs, LCAs e fundos DI).',
-        historico: 'Nos últimos 3 meses rendeu +2.62%, em 6 meses +5.31% e em 12 meses acumulou cerca de +10.65%. Quando a Selic sobe ou desce pelo Copom, o CDI acompanha instantaneamente (ficando sempre cerca de 0,10 ponto percentual abaixo da Selic).',
-        recomendacao: 'Excelente para quem busca liquidez diária e segurança com rentabilidade previsível, sem sofrer volatilidade de mercado.'
+        descricao: 'Taxa média diária dos empréstimos entre bancos no Brasil, que baliza os CDBs, LCIs e fundos DI.',
+        historico: 'Acumula +2.6% em 3M, +5.3% em 6M e +10.65% em 12M.',
+        recomendacao: 'Perfeito para estabilidade e liquidez imediata com capital 100% seguro.'
       },
       selic: {
-        titulo: 'Taxa Selic Meta (Juros Básicos da Economia)',
+        titulo: 'Taxa Selic Meta (Banco Central)',
         taxaAtual: '10.75% a.a.',
-        fonte: 'Copom (Comitê de Política Monetária do Banco Central do Brasil)',
-        descricao: 'A taxa Selic é o instrumento oficial de política monetária usado pelo Governo para manter a inflação sob controle. Ela define o custo do dinheiro no país e remunera os títulos públicos do Tesouro Nacional.',
-        historico: 'Definida a cada 45 dias nas reuniões do Copom. Em ciclos de aperto monetário ela sobe para conter a inflação; em momentos de estímulo econômico ela cai.',
-        recomendacao: 'O Tesouro Selic é o ativo mais seguro do território nacional, protegido diretamente pelo Tesouro Nacional e ideal para reservas de emergência.'
+        fonte: 'Copom / Banco Central do Brasil',
+        descricao: 'Taxa de juros oficial definida pelo Copom para conter a inflação e regular o crédito nacional.',
+        historico: 'Atualizada a cada 45 dias pelo Banco Central.',
+        recomendacao: 'O Tesouro Selic é o título de menor risco do país.'
       },
       ipca: {
-        titulo: 'IPCA (Índice de Preços ao Consumidor Amplo)',
-        taxaAtual: '4.20% (Acumulado 12M)',
-        fonte: 'IBGE (Instituto Brasileiro de Geografia e Estatística)',
-        descricao: 'O IPCA mede a inflação oficial do país através do consumo de famílias que ganham de 1 a 40 salários mínimos nas principais regiões metropolitanas.',
-        historico: 'Acumula 4.20% nos últimos 12 meses. O centro da meta do Banco Central é de 3.00% a.a. com intervalo de tolerância de 1.5%.',
-        recomendacao: 'Qualquer estratégia com prazo superior a 5 anos deve investir em ativos indexados ao IPCA+ para blindar seu poder de compra.'
-      },
-      dolar: {
-        titulo: 'Dólar Comercial (USD / BRL)',
-        taxaAtual: 'R$ 5.42',
-        fonte: 'Banco Central do Brasil / Cotação de Câmbio de Fechamento',
-        descricao: 'Preço de negociação da moeda norte-americana no mercado financeiro interbancário para importações, exportações e transferências financeiras.',
-        historico: 'Oscilou entre R$ 4.90 e R$ 5.70 nos últimos 12 meses devido a diferenciais de juros entre EUA e Brasil e percepção de risco fiscal.',
-        recomendacao: 'Ter pelo menos 15% a 20% da carteira em ativos atrelados ao Dólar (IVVB11, WRLD11 ou BDRs) é essencial para eliminar o risco-país.'
-      },
-      juro_real: {
-        titulo: 'Juro Real Líquido da Economia',
-        taxaAtual: '6.45% a.a.',
-        fonte: 'Cálculo Técnico: Juro Nominal (CDI/Selic) descontado da Inflação (IPCA)',
-        descricao: 'Representa quanto seu dinheiro realmente cresce em termos de riqueza e poder de compra após descontar a perda inflacionária.',
-        historico: 'O Brasil mantém historicamente um dos maiores juros reais do planeta, variando entre 5.5% e 7.0% ao ano nos últimos 3 anos.',
-        recomendacao: 'O momento de juro real acima de 6% é historicamente o mais favorável para travar contratos longos no Tesouro IPCA+.'
+        titulo: 'Tesouro IPCA+ (Inflação + Juro Real)',
+        taxaAtual: 'IPCA + 6.3% a.a.',
+        fonte: 'Tesouro Nacional & IBGE',
+        descricao: 'Título público soberano que garante a recomposição total da inflação mais uma taxa fixa real garantida.',
+        historico: 'Com juro real acima de 6% ao ano, oferece um dos maiores retornos reais seguros do planeta.',
+        recomendacao: 'A melhor opção para horizontes superiores a 7 anos.'
       }
     };
 
-    // --- ESTADO LOCAL ---
+    // --- ESTADO GERAL (LOCALSTORAGE) ---
     let userCarteira = {};
     let userHistorico = [];
     let ativoSelecionadoAporte = ATIVOS_CATALOGO[0];
@@ -1157,7 +1217,7 @@
       dolar: 5.42
     };
 
-    // --- ROLAGEM RETRÁTIL DO HEADER ---
+    // --- HEADER RETRÁTIL ---
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
       const header = document.getElementById('mainHeader');
@@ -1170,7 +1230,6 @@
       lastScrollY = cur;
     });
 
-    // --- TEMA DARK / LIGHT ---
     function alternarTema() {
       const html = document.documentElement;
       const cur = html.getAttribute('data-theme');
@@ -1180,25 +1239,17 @@
       renderizarTudo();
     }
 
-    function carregarTema() {
-      const t = localStorage.getItem('invest_consciente_theme') || 'dark';
-      document.documentElement.setAttribute('data-theme', t);
-    }
-
     function formataBRL(v) {
       return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    // --- ATUALIZAÇÃO ONLINE (BANCO CENTRAL SGS + AWESOMEAPI) ---
+    // --- SINCRONIZAÇÃO DAS TAXAS ONLINE (BANCO CENTRAL DO BRASIL SGS) ---
     async function fetchLiveRates() {
       try {
         const resD = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
         if (resD.ok) {
           const d = await resD.json();
-          if (d.USDBRL) {
-            marketRates.dolar = parseFloat(d.USDBRL.bid);
-            DETALHES_INDICADORES.dolar.taxaAtual = `R$ ${marketRates.dolar.toFixed(2)}`;
-          }
+          if (d.USDBRL) marketRates.dolar = parseFloat(d.USDBRL.bid);
         }
         const resS = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados/ultimos/1?formato=json');
         if (resS.ok) {
@@ -1208,20 +1259,15 @@
             marketRates.cdi = marketRates.selic - 0.10;
             DETALHES_INDICADORES.selic.taxaAtual = `${marketRates.selic.toFixed(2)}% a.a.`;
             DETALHES_INDICADORES.cdi.taxaAtual = `${marketRates.cdi.toFixed(2)}% a.a.`;
-            // Atualiza no catálogo
-            ATIVOS_CATALOGO[0].taxaAnualRef = marketRates.selic / 100;
+            const ativoSelic = ATIVOS_CATALOGO.find(a => a.id === 'tesouro_selic');
+            if (ativoSelic) ativoSelic.taxaAnualRef = marketRates.selic / 100;
           }
         }
         const resI = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json');
         if (resI.ok) {
           const ip = await resI.json();
-          if (ip && ip[0]) {
-            marketRates.ipca = parseFloat(ip[0].valor);
-            DETALHES_INDICADORES.ipca.taxaAtual = `${marketRates.ipca.toFixed(2)}% (12M)`;
-          }
+          if (ip && ip[0]) marketRates.ipca = parseFloat(ip[0].valor);
         }
-        const jr = marketRates.cdi - marketRates.ipca;
-        DETALHES_INDICADORES.juro_real.taxaAtual = `${jr.toFixed(2)}% a.a.`;
         document.getElementById('liveStatus').innerText = 'Online (BCB)';
       } catch (e) {
         document.getElementById('liveStatus').innerText = 'Online (Local)';
@@ -1230,63 +1276,71 @@
       renderizarTudo();
     }
 
-    // --- TICKERS CLICÁVEIS COM HISTÓRICO REAL ---
+    // --- ATUALIZA E ORDENA SEMPRE O MELHOR ATIVO NO TOPO ---
     function atualizarTickerDestaques() {
       const janela = document.getElementById('filtroJanela').value;
-      const c = document.getElementById('tickerContainer');
-      c.innerHTML = '';
+      const container = document.getElementById('tickerContainer');
+      container.innerHTML = '';
 
-      const tickers = [
-        { key: 'cdi', nome: '📊 CDI (B3)', val: DETALHES_INDICADORES.cdi.taxaAtual, delta: janela === '3m' ? '+2.6%' : (janela === '6m' ? '+5.3%' : '+10.6%') },
-        { key: 'selic', nome: '🎯 Selic Meta', val: DETALHES_INDICADORES.selic.taxaAtual, delta: 'Banco Central' },
-        { key: 'ipca', nome: '📈 IPCA (IBGE)', val: DETALHES_INDICADORES.ipca.taxaAtual, delta: janela === '3m' ? '+1.1%' : (janela === '6m' ? '+2.2%' : '+4.2%') },
-        { key: 'dolar', nome: '💵 Dólar Comercial', val: DETALHES_INDICADORES.dolar.taxaAtual, delta: janela === '3m' ? '+1.8%' : (janela === '6m' ? '+6.4%' : '+11.2%') },
-        { key: 'juro_real', nome: '🛡️ Juro Real Líq.', val: DETALHES_INDICADORES.juro_real.taxaAtual, delta: 'Prêmio Risco' }
-      ];
+      // Ordenar ativos pelo retorno na janela selecionada (Do maior para o menor)
+      const listaOrdenada = [...ATIVOS_CATALOGO].sort((a, b) => {
+        const retA = janela === '3m' ? a.ret3m : (janela === '6m' ? a.ret6m : a.ret12m);
+        const retB = janela === '3m' ? b.ret3m : (janela === '6m' ? b.ret6m : b.ret12m);
+        return retB - retA;
+      });
 
-      tickers.forEach(t => {
-        const d = document.createElement('div');
-        d.className = 'ticker-item';
-        d.onclick = () => abrirModalInfoTaxa(t.key);
-        d.innerHTML = `
+      listaOrdenada.slice(0, 6).forEach((item, index) => {
+        const retVal = janela === '3m' ? item.ret3m : (janela === '6m' ? item.ret6m : item.ret12m);
+        const div = document.createElement('div');
+        div.className = `ticker-item ${index === 0 ? 'leader' : ''}`;
+        div.onclick = () => abrirModalInfoTaxa(item.id);
+        div.innerHTML = `
           <div class="ticker-header-row">
-            <span class="ticker-name">${t.nome}</span>
-            <span class="ticker-info-icon">ℹ</span>
+            <span class="ticker-name">${index === 0 ? '🥇 ' : ''}${item.nome.split(' ')[0]}</span>
+            <span style="font-size: 0.65rem; color: var(--accent-green);">ℹ</span>
           </div>
-          <div class="ticker-val">${t.val}</div>
-          <div class="ticker-delta">${t.delta}</div>
+          <div class="ticker-val">+${retVal.toFixed(1)}%</div>
+          <div class="ticker-delta">${janela.toUpperCase()} • ${item.classe.split(' ')[0]}</div>
         `;
-        c.appendChild(d);
+        container.appendChild(div);
       });
     }
 
-    // --- POP-UP DETALHADO DO INDICADOR / TAXA ---
-    function abrirModalInfoTaxa(key) {
-      const info = DETALHES_INDICADORES[key];
+    // --- POP-UP DO INDICADOR AO TOCAR NO TOPO ---
+    function abrirModalInfoTaxa(id) {
+      let info = DETALHES_INDICADORES[id];
+      if (!info) {
+        const cat = ATIVOS_CATALOGO.find(a => a.id === id);
+        if (cat) {
+          info = {
+            titulo: cat.nome,
+            taxaAtual: `+${cat.ret12m}% em 12M`,
+            fonte: 'Mercado Financeiro / Registro B3',
+            descricao: `Ativo da classe de ${cat.classe}, com taxa média de longo prazo estimada em ${(cat.taxaAnualRef * 100).toFixed(1)}% ao ano.`,
+            historico: `Desempenho: 3M: +${cat.ret3m}% | 6M: +${cat.ret6m}% | 12M: +${cat.ret12m}%.`,
+            recomendacao: 'Diversifique alocando aportes regulares sem tentar antecipar topos e fundos do mercado.'
+          };
+        }
+      }
       if (!info) return;
 
       document.getElementById('infoTaxaTitulo').innerText = info.titulo;
-      const corpo = document.getElementById('infoTaxaCorpo');
-      corpo.innerHTML = `
+      document.getElementById('infoTaxaCorpo').innerHTML = `
         <div style="background: var(--surface-elevated); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border); margin-bottom: 12px;">
-          <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">VALOR VIGENTE OFICIAL</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">PERFORMANCE RECENTE / TAXA</div>
           <div style="font-size: 1.4rem; font-weight: 900; color: var(--accent-green); margin-top: 2px;">${info.taxaAtual}</div>
-          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Fonte Reguladora: <strong>${info.fonte}</strong></div>
+          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Fonte Oficial: <strong>${info.fonte}</strong></div>
         </div>
-
         <p style="margin-bottom: 12px;">${info.descricao}</p>
-
         <div style="margin-bottom: 12px;">
-          <strong style="color: var(--accent-green);">📈 Crescimento e Comportamento Recente:</strong>
+          <strong style="color: var(--accent-green);">📈 Histórico e Comportamento:</strong>
           <p style="margin-top: 4px; color: var(--text-muted);">${info.historico}</p>
         </div>
-
         <div>
-          <strong style="color: var(--accent-gold);">💡 Como Usar na Decisão dos Seus Investimentos:</strong>
+          <strong style="color: var(--accent-gold);">💡 Recomendação para sua Carteira:</strong>
           <p style="margin-top: 4px; color: var(--text-muted);">${info.recomendacao}</p>
         </div>
       `;
-
       document.getElementById('modalInfoTaxa').classList.add('active');
     }
 
@@ -1294,7 +1348,7 @@
       document.getElementById('modalInfoTaxa').classList.remove('active');
     }
 
-    // --- MODAL DE SELEÇÃO E PESQUISA DE ATIVOS ---
+    // --- SELEÇÃO DE ATIVOS & APORTE ---
     function abrirModalSeletorAtivo() {
       document.getElementById('modalSeletorAtivo').classList.add('active');
       document.getElementById('inpBuscaAtivo').value = '';
@@ -1311,8 +1365,7 @@
       container.innerHTML = '';
 
       const filtrados = ATIVOS_CATALOGO.filter(a => 
-        a.nome.toLowerCase().includes(termo) || 
-        a.classe.toLowerCase().includes(termo)
+        a.nome.toLowerCase().includes(termo) || a.classe.toLowerCase().includes(termo)
       );
 
       filtrados.forEach(item => {
@@ -1321,7 +1374,7 @@
         div.innerHTML = `
           <div>
             <div style="font-weight: 700; color: var(--text-main);">${item.nome}</div>
-            <div style="font-size: 0.72rem; color: var(--text-muted);">${item.classe} • Cresc. 12M: ${item.hist12m}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">${item.classe} • Retorno 12M: +${item.ret12m}%</div>
           </div>
           <span style="color: var(--accent-green); font-size: 0.8rem; font-weight: 800;">Selecionar</span>
         `;
@@ -1334,7 +1387,6 @@
       });
     }
 
-    // --- APORTE CUMULATIVO ---
     function executarAporte() {
       const inp = document.getElementById('inp-novo-valor');
       const val = parseFloat(inp.value);
@@ -1349,9 +1401,11 @@
 
       const agora = new Date();
       const dataStr = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const isoData = agora.toISOString().split('T')[0];
 
       userHistorico.unshift({
         data: dataStr,
+        isoDate: isoData,
         ativoNome: ativoSelecionadoAporte.nome,
         valor: val
       });
@@ -1361,7 +1415,6 @@
       renderizarTudo();
     }
 
-    // --- EDIÇÃO DE SALDOS ---
     function abrirModalEdicao(id) {
       idEditando = id;
       const cat = ATIVOS_CATALOGO.find(a => a.id === id);
@@ -1434,12 +1487,12 @@
               <div class="ativo-info-title">${cat.nome}</div>
               <div class="ativo-info-sub">${cat.classe} • ${pct}% do total</div>
               <div style="font-size: 0.72rem; color: var(--accent-green); margin-top: 2px;">
-                Rendimento médio: +${formataBRL(rendM)}/mês
+                Rendimento médio estimado: +${formataBRL(rendM)}/mês
               </div>
             </div>
             <div style="text-align: right;">
               <div class="ativo-val">${formataBRL(val)}</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">Taxa ref: ${(cat.taxaAnualRef * 100).toFixed(1)}% a.a.</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">Média: ${(cat.taxaAnualRef * 100).toFixed(1)}% a.a.</div>
             </div>
           `;
           corpo.appendChild(item);
@@ -1466,7 +1519,7 @@
       document.getElementById('modalPatrimonio').classList.remove('active');
     }
 
-    // --- RENDERIZAÇÃO COMPLETA DOS DADOS ---
+    // --- RENDER GERAL DE DADOS ---
     function renderizarTudo() {
       let totalGeral = 0;
       let totalRendaMensal = 0;
@@ -1481,7 +1534,6 @@
       document.getElementById('displayPatrimonio').innerText = formataBRL(totalGeral);
       document.getElementById('displayRendaMensal').innerText = formataBRL(totalRendaMensal);
 
-      // Lista de Ativos
       const containerLista = document.getElementById('listaAtivos');
       containerLista.innerHTML = '';
       const chaves = Object.keys(userCarteira);
@@ -1497,7 +1549,7 @@
           div.innerHTML = `
             <div>
               <div class="ativo-info-title">${cat.nome}</div>
-              <div class="ativo-info-sub">${(cat.taxaAnualRef * 100).toFixed(1)}% a.a. • Rendimento: +${formataBRL(val * cat.rendMensalEst)}/mês</div>
+              <div class="ativo-info-sub">${(cat.taxaAnualRef * 100).toFixed(1)}% a.a. • Rend: +${formataBRL(val * cat.rendMensalEst)}/mês</div>
             </div>
             <div style="text-align: right;">
               <div class="ativo-val">${formataBRL(val)}</div>
@@ -1511,7 +1563,6 @@
         });
       }
 
-      // Histórico
       const containerHist = document.getElementById('listaHistorico');
       containerHist.innerHTML = '';
       if (userHistorico.length === 0) {
@@ -1533,7 +1584,6 @@
       atualizarMelhorDecisao(totalGeral);
     }
 
-    // --- GRÁFICO DA CARTEIRA ---
     function renderizarGraficoCarteira() {
       const ctx = document.getElementById('carteiraChart').getContext('2d');
       const labels = [];
@@ -1584,7 +1634,7 @@
       });
     }
 
-    // --- SIMULADOR MULTIATIVO DE RIQUEZA FUTURA ---
+    // --- SIMULADOR COM CARROSEL E TAXAS HISTÓRICAS REAIS ---
     function definirAnos(num) {
       document.getElementById('inp-custom-anos').value = num;
       document.querySelectorAll('.periodo-btn').forEach(b => b.classList.remove('active'));
@@ -1610,8 +1660,8 @@
         somaPonderadaTaxa += val * (cat ? cat.taxaAnualRef : 0.10);
       }
 
-      // Taxa composta ponderada dos ativos da carteira (ou taxa padrão de mercado 10.5% se vazia)
-      const taxaAnualMedia = patrimonioInicial > 0 ? (somaPonderadaTaxa / patrimonioInicial) : 0.105;
+      // Taxa composta média ponderada dos ativos da sua carteira (ex: Bitcoin puxa mais alto, renda fixa equilibra)
+      const taxaAnualMedia = patrimonioInicial > 0 ? (somaPonderadaTaxa / patrimonioInicial) : 0.125;
       const taxaMensal = Math.pow(1 + taxaAnualMedia, 1 / 12) - 1;
 
       const labels = [];
@@ -1637,12 +1687,13 @@
       const pctJuros = guardadoFinal > 0 ? ((jurosFinal / guardadoFinal) * 100).toFixed(0) : 0;
       const rendaFutura = totalFinal * (taxaMensal * 0.85);
 
-      // Atualiza os 3 Cards Principais
+      // Atualiza os Cards Deslizáveis do Simulador
       document.getElementById('simValGuardado').innerText = formataBRL(guardadoFinal);
       document.getElementById('simValTotal').innerText = formataBRL(totalFinal);
       document.getElementById('simValJuros').innerText = formataBRL(jurosFinal);
-      document.getElementById('simPctJuros').innerText = `+${pctJuros}% de rendimento`;
+      document.getElementById('simPctJuros').innerText = `+${pctJuros}% só de lucro composto`;
       document.getElementById('simRendaFutura').innerText = `+${formataBRL(rendaFutura)}/mês`;
+      document.getElementById('simTaxaPonderada').innerText = `${(taxaAnualMedia * 100).toFixed(1)}% a.a.`;
 
       // Atualiza Tabela Individual por Ativo
       const corpoTabela = document.getElementById('corpoTabelaBreakdown');
@@ -1669,7 +1720,7 @@
         }
       }
 
-      // Renderiza Gráfico de Projeção Comparativo
+      // Renderiza Gráfico
       const isLight = document.documentElement.getAttribute('data-theme') === 'light';
       const textColor = isLight ? '#5c687e' : '#8b95a8';
       const gridColor = isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
@@ -1730,31 +1781,112 @@
       });
     }
 
-    // --- ABA DECISÃO: ANÁLISE DINÂMICA COM RECOMENDAÇÃO ESPECÍFICA ---
     function atualizarMelhorDecisao(total) {
       const box = document.getElementById('melhorDecisaoDinamica');
       if (total === 0) {
-        box.innerHTML = 'Cadastre seus primeiros ativos. O ponto de partida ideal hoje é construir sua reserva no <strong>Tesouro Selic</strong> e aproveitar o juro real histórico do <strong>Tesouro IPCA+ 2035</strong>.';
+        box.innerHTML = 'Cadastre seus primeiros ativos. O ponto de partida ideal hoje é construir sua reserva no <strong>Tesouro Selic</strong> e aproveitar o juro real do <strong>Tesouro IPCA+ 2035</strong>.';
         return;
       }
 
       let temIPCA = (userCarteira['tesouro_ipca'] || 0) > 0;
+      let temGlobal = (userCarteira['ivvb11'] || 0) > 0;
       let temFII = (userCarteira['fiis_tijolo'] || 0) + (userCarteira['fiis_papel'] || 0) > 0;
-      let temAcoes = (userCarteira['acoes_div'] || 0) + (userCarteira['acoes_cresc'] || 0) > 0;
-      let temGlobal = (userCarteira['ivvb11'] || 0) + (userCarteira['wrld11'] || 0) > 0;
 
       if (!temIPCA) {
-        box.innerHTML = '👑 <strong>A melhor opção de aporte agora:</strong> Comprar <u>Tesouro IPCA+ 2035</u>. Com juro real acima de 6% ao ano, você trava o maior rendimento com segurança do país.';
+        box.innerHTML = '👑 <strong>A melhor opção de aporte agora:</strong> Travar o maior juro real do mundo com <u>Tesouro IPCA+ 2035</u> (garantia soberana com taxa real acima de 6% a.a.).';
       } else if (!temGlobal) {
-        box.innerHTML = '👑 <strong>A melhor opção de aporte agora:</strong> Iniciar proteção internacional via <u>IVVB11 (S&P 500)</u> ou <u>WRLD11</u> para proteger seu capital contra a desvalorização cambial do Real.';
+        box.innerHTML = '👑 <strong>A melhor opção de aporte agora:</strong> Proteção internacional via <u>IVVB11 (S&P 500)</u> para blindar seu capital contra a inflação e desvalorização do Real.';
       } else if (!temFII) {
-        box.innerHTML = '👑 <strong>A melhor opção de aporte agora:</strong> Fundos Imobiliários como <u>HGLG11 (Galpões)</u> ou <u>KNIP11</u> para criar fluxo mensal de aluguel isento de Imposto de Renda.';
+        box.innerHTML = '👑 <strong>A melhor opção de aporte agora:</strong> Fundos Imobiliários como <u>HGLG11</u> e <u>KNIP11</u> para gerar aluguel mensal isento de IR.';
       } else {
-        box.innerHTML = '👑 <strong>A melhor opção de aporte agora:</strong> Rebalancear aportando nas maiores pagadoras de dividendos com caixa resiliente (ex: <u>BBAS3</u> e <u>CPLE3</u>).';
+        box.innerHTML = '👑 <strong>A melhor opção de aporte agora:</strong> Rebalancear aportando nas ações com maior histórico de dividendos (ex: <u>BBAS3</u> e <u>CPLE3</u>).';
       }
     }
 
-    // --- NAVEGAÇÃO DE ABAS ---
+    // --- ENVIO DO RELATÓRIO VIA TELEGRAM ---
+    async function enviarRelatorioTelegram() {
+      const statusDiv = document.getElementById('tgStatusEnvio');
+      const botToken = document.getElementById('tgBotToken').value.trim();
+      const chatId = document.getElementById('tgChatId').value.trim();
+      const dInicio = document.getElementById('tgDataInicio').value;
+      const dFim = document.getElementById('tgDataFim').value;
+
+      if (!botToken || !chatId) {
+        alert('Informe o Bot Token e o Chat ID do Telegram.');
+        return;
+      }
+
+      statusDiv.innerHTML = '<span style="color: var(--accent-gold);">⏳ Gerando e enviando relatório...</span>';
+
+      let total = 0;
+      let totalRenda = 0;
+      let listaTextoAtivos = '';
+
+      for (let id in userCarteira) {
+        const val = userCarteira[id];
+        total += val;
+        const cat = ATIVOS_CATALOGO.find(a => a.id === id);
+        if (cat) {
+          totalRenda += val * cat.rendMensalEst;
+          listaTextoAtivos += `  • *${cat.nome}*: ${formataBRL(val)} (Rend: +${formataBRL(val * cat.rendMensalEst)}/mês)\n`;
+        }
+      }
+
+      // Filtrar histórico pelo calendário selecionado (se informado)
+      let aportesFiltrados = userHistorico;
+      if (dInicio) aportesFiltrados = aportesFiltrados.filter(h => h.isoDate >= dInicio);
+      if (dFim) aportesFiltrados = aportesFiltrados.filter(h => h.isoDate <= dFim);
+
+      let totalAportadoPeriodo = aportesFiltrados.reduce((acc, h) => acc + h.valor, 0);
+
+      // Monta a mensagem com formatação Markdown e emojis
+      const mensagem = `⚡ *INVEST CONSCIENTE PRO • RELATÓRIO GERAL* ⚡\n\n` +
+        `📅 *Período de Análise:* ${dInicio ? dInicio.split('-').reverse().join('/') : 'Início'} até ${dFim ? dFim.split('-').reverse().join('/') : 'Hoje'}\n` +
+        `💰 *Patrimônio Total Alocado:* ${formataBRL(total)}\n` +
+        `💵 *Renda Passiva Média Estimada:* +${formataBRL(totalRenda)}/mês\n` +
+        `📈 *Aportes Realizados no Período:* ${formataBRL(totalAportadoPeriodo)}\n\n` +
+        `📊 *DETALHAMENTO DA SUA CARTEIRA:*\n${listaTextoAtivos || '  • Nenhum ativo cadastrado.\n'}\n` +
+        `🎯 *Últimas Movimentações (${aportesFiltrados.length} registradas):*\n` +
+        (aportesFiltrados.slice(0, 5).map(h => `  • +${formataBRL(h.valor)} em ${h.ativoNome} (${h.data})`).join('\n') || '  • Sem movimentações no filtro.') +
+        `\n\n_Relatório gerado automaticamente por Invest Consciente Pro._`;
+
+      try {
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: mensagem,
+            parse_mode: 'Markdown'
+          })
+        });
+
+        const data = await res.json();
+        if (data.ok) {
+          statusDiv.innerHTML = '<span style="color: var(--accent-green);">✅ Relatório enviado com sucesso para o seu Telegram!</span>';
+        } else {
+          statusDiv.innerHTML = `<span style="color: var(--accent-red);">❌ Erro Telegram: ${data.description}</span>`;
+        }
+      } catch (err) {
+        statusDiv.innerHTML = '<span style="color: var(--accent-red);">❌ Erro de conexão com a API do Telegram.</span>';
+      }
+    }
+
+    function baixarBackupJSON() {
+      const backup = {
+        carteira: userCarteira,
+        historico: userHistorico,
+        exportadoEm: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `invest_consciente_backup_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+    }
+
+    // --- NAVEGAÇÃO ENTRE AS ABAS ---
     function mudarAba(aba, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -1763,7 +1895,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // --- LOCALSTORAGE ---
     function salvarStorage() {
       localStorage.setItem('invest_consciente_carteira', JSON.stringify(userCarteira));
       localStorage.setItem('invest_consciente_historico', JSON.stringify(userHistorico));
@@ -1777,22 +1908,26 @@
 
       if (Object.keys(userCarteira).length === 0) {
         userCarteira = {
-          'tesouro_selic': 20000,
+          'btc': 10000,
           'tesouro_ipca': 35000,
+          'tesouro_selic': 20000,
           'fiis_tijolo': 15000,
           'acoes_div': 15000,
-          'ivvb11': 10000,
-          'btc': 5000
+          'ivvb11': 10000
         };
       }
     }
 
-    // --- INICIALIZAÇÃO ---
     window.addEventListener('DOMContentLoaded', () => {
-      carregarTema();
+      const t = localStorage.getItem('invest_consciente_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
       carregarStorage();
       fetchLiveRates();
       document.getElementById('selectedAtivoNome').innerText = `${ativoSelecionadoAporte.nome} (${ativoSelecionadoAporte.classe})`;
+      
+      // Definir data final do calendário como hoje
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('tgDataFim').value = hoje;
     });
   </script>
 </body>
