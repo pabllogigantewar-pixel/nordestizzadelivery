@@ -1,1605 +1,1067 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ROCHA PERSONAL</title>
-    <style>
-        :root {
-            --bg-color: #f4f4f9;
-            --text-color: #333;
-            --primary: #28a745; /* Padrão Verde */
-            --secondary: #218838;
-            --card-bg: #fff;
-            --nav-bg: #fff;
-            --border: #ddd;
-            --btn-text: #ffffff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>OmniInvest • Gestão & Inteligência Financeira</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #07080b;
+      --surface: #10121a;
+      --surface-elevated: #161a26;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-green: #00e676;
+      --accent-green-dim: rgba(0, 230, 118, 0.15);
+      --accent-blue: #2979ff;
+      --accent-purple: #b388ff;
+      --accent-gold: #ffd600;
+      --accent-cyan: #00e5ff;
+      --accent-red: #ff5252;
+      --text-main: #f0f3fa;
+      --text-muted: #8b95a8;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
 
-        /* TEMA VERDE (PADRÃO) */
-        body.theme-green {
-            --primary: #28a745;
-            --secondary: #1e7e34;
-            --btn-text: #ffffff;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        /* TEMA AMARELO */
-        body.theme-yellow {
-            --primary: #ffc107;
-            --secondary: #d39e00;
-            --btn-text: #000000;
-        }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding-bottom: 90px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-        /* TEMA VERMELHO */
-        body.theme-red {
-            --primary: #dc3545;
-            --secondary: #bd2130;
-            --btn-text: #ffffff;
-        }
+    /* Header Mobile */
+    .header {
+      padding: 18px 20px;
+      background: rgba(16, 18, 26, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        /* MODO ESCURO SIMPLES */
-        body.dark-mode {
-            --bg-color: #121212;
-            --text-color: #f4f4f9;
-            --card-bg: #1e1e1e;
-            --nav-bg: #1e1e1e;
-            --border: #333;
-        }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            transition: background-color 0.3s, color 0.3s; 
-            padding-bottom: calc(85px + env(safe-area-inset-bottom)); 
-        }
+    .brand-icon {
+      font-size: 1.5rem;
+      background: var(--accent-green-dim);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 230, 118, 0.3);
+    }
 
-        /* CABEÇALHO OCULTÁVEL NA ROLAGEM */
-        header {
-            background: var(--card-bg);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        
-        header.header-hidden {
-            transform: translateY(-100%);
-            opacity: 0;
-            pointer-events: none;
-        }
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-green) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .header-title-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-green);
+      background: rgba(0, 230, 118, 0.1);
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 230, 118, 0.25);
+    }
 
-        .profile-info h1 { 
-            font-size: 1.5rem; 
-            font-weight: 900; 
-            color: var(--primary); 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-        .profile-info p { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
-        
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .theme-toggle, .color-toggle { 
-            background: var(--bg-color); 
-            border: 1px solid var(--border); 
-            font-size: 1.1rem; 
-            cursor: pointer; 
-            color: var(--text-color); 
-            padding: 6px 8px;
-            border-radius: 6px;
-        }
+    .pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-green);
+      animation: pulse 1.8s infinite;
+    }
 
-        /* CONTAINER PRINCIPAL E EFEITO BLUR */
-        #app-wrapper { transition: filter 0.3s; padding: 15px; }
-        .blur-active { filter: blur(5px); pointer-events: none; }
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.7; }
+    }
 
-        /* ABAS */
-        .tab-content { display: none; animation: fadeIn 0.3s; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* Container Principal */
+    .container {
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-        /* CARDS E FORMULÁRIOS */
-        .card { background: var(--card-bg); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid var(--border); }
-        .card h2 { font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        
-        input, select, textarea {
-            width: 100%; padding: 10px; margin-bottom: 10px;
-            border: 1px solid var(--border); border-radius: 5px;
-            background: var(--bg-color); color: var(--text-color);
-        }
-        textarea { resize: vertical; min-height: 60px; }
-        button {
-            width: 100%; padding: 12px; background: var(--primary); color: var(--btn-text);
-            border: none; border-radius: 5px; font-weight: bold; cursor: pointer;
-            margin-bottom: 10px; transition: 0.2s;
-        }
-        button:active { transform: scale(0.98); }
-        .btn-success { background: var(--secondary); color: #fff; }
-        .btn-danger { background: #dc3545; color: #fff; }
-        .btn-warning { background: #ffc107; color: #000; }
-        .btn-info { background: #17a2b8; color: #fff; }
-        .btn-sm { padding: 6px 10px; font-size: 0.8rem; margin-bottom: 0; width: auto; }
+    /* Fita de Indicadores em Tempo Real */
+    .ticker-bar {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .ticker-bar::-webkit-scrollbar { display: none; }
 
-        /* DISPLAY IMC E TIMER */
-        .highlight-box { text-align: center; padding: 20px; background: rgba(0, 123, 255, 0.1); border-radius: 10px; margin-bottom: 15px; }
-        .highlight-box h3 { font-size: 2.5rem; color: var(--primary); margin: 10px 0; }
-        
-        .timer-box { text-align: center; font-size: 1.2rem; font-weight: bold; color: var(--secondary); padding: 10px; }
+    .ticker-item {
+      flex: 0 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      padding: 10px 14px;
+      border-radius: 12px;
+      min-width: 110px;
+    }
 
-        /* TIMER DE DESCANSO */
-        .rest-timer-display {
-            font-size: 2.8rem;
-            font-weight: bold;
-            text-align: center;
-            color: var(--primary);
-            font-family: monospace;
-            margin: 10px 0;
-        }
-        .timer-presets { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
-        .timer-presets button { flex: 1; padding: 8px 4px; font-size: 0.75rem; min-width: 50px; }
+    .ticker-name {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
 
-        /* HISTÓRICO DE MEDIDAS E METAS */
-        .history-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--primary);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            cursor: pointer;
-        }
-        .history-card header {
-            background: none; padding: 0; border: none; margin-bottom: 8px;
-            font-size: 0.85rem; opacity: 0.8; font-weight: bold;
-        }
+    .ticker-val {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-top: 2px;
+      color: #fff;
+    }
 
-        /* BARRA DE PROGRESSO DE METAS */
-        .progress-bar-bg {
-            background: var(--bg-color);
-            border-radius: 10px;
-            height: 12px;
-            width: 100%;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            margin-top: 8px;
-        }
-        .progress-bar-fill {
-            background: var(--primary);
-            height: 100%;
-            width: 0%;
-            transition: width 0.4s ease;
-        }
+    /* Cartões Visuais */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
 
-        /* CARD DO TREINO DO DIA E LISTA DE EXERCÍCIOS */
-        .today-workout-card {
-            background: rgba(40, 167, 69, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .today-workout-card.all-done {
-            background: rgba(40, 167, 69, 0.25);
-            border: 2px solid #28a745;
-        }
-        .today-workout-card:active { transform: scale(0.99); }
-        .exercise-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid var(--border);
-            background: var(--bg-color);
-            border-radius: 6px;
-            margin-bottom: 6px;
-        }
-        .exercise-item.completed {
-            opacity: 0.5;
-            text-decoration: line-through;
-        }
-        .exercise-item input[type="checkbox"] {
-            width: 22px; height: 22px; margin: 0; cursor: pointer;
-        }
+    .card-title {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        /* HISTÓRICO DE FOTOS */
-        .history-item { margin-bottom: 20px; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; }
-        .history-item img { width: 100%; height: auto; display: block; }
-        .history-item .details { padding: 10px; background: var(--card-bg); font-size: 0.9rem; }
+    .patrimonio-destaque {
+      font-size: 2.1rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #ffffff;
+      margin: 4px 0 10px;
+    }
 
-        /* LISTAS CATEGORIZADAS DE EXERCÍCIOS NO MODAL */
-        .cat-title {
-            background: var(--primary);
-            color: var(--btn-text);
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            margin: 10px 0 5px;
-            font-weight: bold;
-        }
-        .ex-option-btn {
-            background: var(--bg-color);
-            color: var(--text-color);
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            text-align: left;
-            margin-bottom: 4px;
-            border-radius: 5px;
-            font-weight: normal;
-        }
+    .renda-box {
+      background: linear-gradient(135deg, rgba(0, 230, 118, 0.1), rgba(41, 121, 255, 0.08));
+      border: 1px solid rgba(0, 230, 118, 0.25);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        /* NAVEGAÇÃO INFERIOR ADAPTADA PARA BARRA DE NAVEGAÇÃO DO CELULAR */
-        nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--nav-bg); display: flex; justify-content: space-around;
-            padding-top: 10px;
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
-            border-top: 1px solid var(--border); z-index: 10;
-        }
-        nav button { background: none; color: var(--text-color); font-size: 0.75rem; padding: 5px; margin: 0; display: flex; flex-direction: column; align-items: center; border: none; }
-        nav button.active { color: var(--primary); font-weight: bold; }
+    .renda-label {
+      font-size: 0.8rem;
+      color: var(--accent-green);
+      font-weight: 600;
+    }
 
-        /* MODAL */
-        .modal {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--card-bg); padding: 20px; border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100;
-            width: 90%; max-width: 420px; display: none; border: 1px solid var(--border);
-            max-height: 85vh; overflow-y: auto;
-        }
-        .modal.active { display: block; }
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 99; display: none;
-        }
-        .overlay.active { display: block; }
-    </style>
+    .renda-valor {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Seções e Formulários */
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 20px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-group {
+      margin-bottom: 14px;
+    }
+
+    .input-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .input-field-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-currency {
+      position: absolute;
+      left: 14px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    input[type="number"] {
+      width: 100%;
+      background: var(--surface-elevated);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 14px 12px 42px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 3px var(--accent-green-dim);
+    }
+
+    /* Gráficos */
+    .chart-box {
+      width: 100%;
+      position: relative;
+      height: 250px;
+      margin-top: 10px;
+    }
+
+    /* Dicas Inteligentes / Sugestão Certeira */
+    .smart-tip {
+      background: linear-gradient(135deg, rgba(255, 214, 0, 0.08), rgba(255, 82, 82, 0.04));
+      border: 1px solid rgba(255, 214, 0, 0.3);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .smart-tip-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+
+    .smart-tip-text {
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: #d1d5db;
+    }
+
+    /* Botão de Aporte Rápido */
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent-green), #00c853);
+      color: #000;
+      font-weight: 800;
+      font-size: 1rem;
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px rgba(0, 230, 118, 0.35);
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: var(--surface-elevated);
+      color: #fff;
+      border: 1px solid var(--card-border);
+      box-shadow: none;
+      margin-top: 8px;
+    }
+
+    /* Abas de Navegação Inferior (Estilo App) */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: rgba(16, 18, 26, 0.94);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 200;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 12px;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active {
+      color: var(--accent-green);
+    }
+
+    .nav-icon {
+      font-size: 1.35rem;
+    }
+
+    /* Conteúdo das Páginas */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tabela de Projeções */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .proj-item {
+      background: var(--surface-elevated);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .proj-year {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .proj-value {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 4px 0;
+    }
+
+    .proj-renda {
+      font-size: 0.72rem;
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    .badge-pill {
+      font-size: 0.68rem;
+      background: var(--surface-elevated);
+      padding: 3px 8px;
+      border-radius: 8px;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
 <body>
 
-    <header id="main-header">
-        <div class="header-title-wrapper" onclick="openModal('modal-perfil')">
-            <div class="profile-info">
-                <h1>ROCHA PERSONAL</h1>
-                <p><span id="display-name">Configurar Perfil</span> | <span id="display-age">--</span> anos</p>
-            </div>
-        </div>
-        <div class="header-controls">
-            <button class="color-toggle" onclick="cycleThemeColor()" title="Mudar Cor de Destaque">🎨</button>
-            <button class="theme-toggle" onclick="toggleTheme()" title="Modo Claro/Escuro">🌓</button>
-        </div>
-    </header>
+  <!-- TOPO MOBILE -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">OmniInvest Pro</div>
+        <div style="font-size: 0.65rem; color: var(--text-muted);">Estratégia Certeira 10-30 Anos</div>
+      </div>
+    </div>
+    <div class="live-badge" id="liveBadge" onclick="fetchLiveRates()">
+      <div class="pulse"></div>
+      <span id="liveStatus">Taxas Online</span>
+    </div>
+  </header>
 
-    <div id="app-wrapper">
+  <div class="container">
+    <!-- FITINHA DE TAXAS ATUALIZADAS ONLINE -->
+    <div class="ticker-bar">
+      <div class="ticker-item">
+        <div class="ticker-name">📊 CDI (a.a.)</div>
+        <div class="ticker-val" id="taxaCDI">10.65%</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-name">🎯 Selic Meta</div>
+        <div class="ticker-val" id="taxaSelic">10.75%</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-name">📈 IPCA (Inflação)</div>
+        <div class="ticker-val" id="taxaIPCA">4.20%</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-name">💵 Dólar Comercial</div>
+        <div class="ticker-val" id="taxaDolar">R$ 5.42</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-name">🛡️ Juro Real Médio</div>
+        <div class="ticker-val" id="juroReal">6.25%</div>
+      </div>
+    </div>
+
+    <!-- ==================== PÁGINA 1: VISÃO GERAL & CARTEIRA ==================== -->
+    <div id="page-carteira" class="tab-content active">
+      
+      <!-- Cartão Principal -->
+      <div class="card">
+        <div class="card-title">💰 Patrimônio Total Alocado</div>
+        <div class="patrimonio-destaque" id="displayPatrimonio">R$ 0,00</div>
         
-        <!-- ABA: INÍCIO (TREINO DO DIA, TIMER DE DESCANSO, EVOLUÇÃO MEDIDAS, IMC E TIMER AVALIAÇÃO) -->
-        <section id="tab-inicio" class="tab-content active">
-            <!-- CARD RESUMO DO TREINO DE HOJE -->
-            <div id="container-treino-hoje">
-                <!-- Injetado via JS -->
-            </div>
+        <div class="renda-box">
+          <div>
+            <div class="renda-label">💵 Renda Passiva Estimada</div>
+            <div style="font-size: 0.65rem; color: var(--text-muted);">Rendimento médio mensal líquido</div>
+          </div>
+          <div class="renda-valor" id="displayRendaMensal">R$ 0,00</div>
+        </div>
+      </div>
 
-            <!-- TIMER DE DESCANSO ENTRE SÉRIES NA TELA INICIAL -->
-            <div class="card">
-                <h2>⏱️ Timer de Descanso entre Séries</h2>
-                <div class="rest-timer-display" id="rest-timer-display">00:00</div>
-                
-                <div class="grid-2" style="margin-bottom: 5px;">
-                    <input type="number" id="manual-timer-sec" placeholder="Tempo em Segundos (Ex: 90)" style="margin-bottom: 0;">
-                    <button type="button" class="btn-info" onclick="setRestTimerManual()">Definir Tempo</button>
-                </div>
+      <!-- Gráfico de Alocação -->
+      <div class="card">
+        <div class="card-title">📊 Sua Diversificação Atual</div>
+        <div class="chart-box">
+          <canvas id="allocationChart"></canvas>
+        </div>
+      </div>
 
-                <div class="timer-presets">
-                    <button type="button" onclick="setRestTimer(30)">30s</button>
-                    <button type="button" onclick="setRestTimer(45)">45s</button>
-                    <button type="button" onclick="setRestTimer(60)">60s</button>
-                    <button type="button" onclick="setRestTimer(90)">90s</button>
-                    <button type="button" onclick="setRestTimer(120)">120s</button>
-                </div>
-                <div class="grid-2">
-                    <button type="button" id="btn-start-timer" onclick="toggleRestTimer()">Iniciar</button>
-                    <button type="button" style="background:#6c757d; color:#fff;" onclick="resetRestTimer()">Resetar</button>
-                </div>
-            </div>
+      <!-- Caixa de Recomendação Certeira de Decisão -->
+      <div class="smart-tip">
+        <div class="smart-tip-header">
+          <span>👑</span> Recomendação Estratégica Certeira
+        </div>
+        <div class="smart-tip-text" id="smartTipText">
+          Preencha ou adicione seus valores nas classes de ativos abaixo para calibrar seu rebalanceamento ideal.
+        </div>
+      </div>
 
-            <!-- EVOLUÇÃO DAS MEDIDAS NA TELA INICIAL (CÁLCULO AUTOMÁTICO) -->
-            <div class="card">
-                <h2>📈 Evolução de Medidas (Semanal & Mensal)</h2>
-                <div id="display-evolucao-medidas-home">
-                    <!-- Calculado e injetado pelo JS -->
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>Seu IMC Atual</h2>
-                <div class="highlight-box">
-                    <p>Índice de Massa Corporal</p>
-                    <h3 id="display-imc">0.00</h3>
-                    <p id="display-imc-status">--</p>
-                </div>
-                <div class="grid-2">
-                    <div><small>Peso (kg)</small><h4 id="display-peso">0</h4></div>
-                    <div><small>Gordura (%)</small><h4 id="display-bf">0</h4></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>Próxima Avaliação</h2>
-                <div class="timer-box" id="countdown">-- dias --:--:--</div>
-                <button class="btn-success" onclick="openModal('modal-atualizar')">Configurar Cronômetro</button>
-            </div>
-        </section>
-
-        <!-- ABA: TREINOS (MONTAGEM, CALENDÁRIO E HISTÓRICO DETALHADO) -->
-        <section id="tab-treino" class="tab-content">
-            <div class="card">
-                <h2>🏋️ Montar / Cadastrar Treino</h2>
-                <input type="hidden" id="treino-edit-id">
-                <input type="text" id="treino-nome" placeholder="Nome do Treino (Ex: Treino A - Peito e Tríceps)">
-                
-                <select id="treino-dia">
-                    <option value="Segunda-feira">Segunda-feira</option>
-                    <option value="Terça-feira">Terça-feira</option>
-                    <option value="Quarta-feira">Quarta-feira</option>
-                    <option value="Quinta-feira">Quinta-feira</option>
-                    <option value="Sexta-feira">Sexta-feira</option>
-                    <option value="Sábado">Sábado</option>
-                    <option value="Domingo">Domingo</option>
-                </select>
-
-                <textarea id="treino-obs" placeholder="Observações (Ex: Descanso de 60s, focar no pico de contração)"></textarea>
-
-                <h3 style="font-size: 0.95rem; margin: 10px 0 5px; color: var(--primary);">Exercícios do Treino</h3>
-                <div id="lista-exercicios-form">
-                    <!-- Dynamic Rows -->
-                </div>
-                <button type="button" class="btn-info" onclick="openSelectExerciciosModal()">+ Selecionar Exercício da Lista</button>
-                
-                <button type="button" class="btn-success" onclick="saveTreino()">Salvar Treino Completo</button>
-            </div>
-
-            <div class="card">
-                <h2>📅 Quadro Semanal de Treinos (Clique para Expandir)</h2>
-                <div id="lista-treinos-cadastrados">
-                    <!-- Injetado pelo JS -->
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>📊 Relatório e Histórico de Treinos Concluídos</h2>
-                <div id="lista-historico-treinos-concluidos">
-                    <!-- Injetado via JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: MEDIDAS -->
-        <section id="tab-medidas" class="tab-content">
-            <div class="card">
-                <h2>Anatomia Muscular (cm)</h2>
-                <div class="grid-2">
-                    <input type="number" id="med-braco" placeholder="Braço">
-                    <input type="number" id="med-antebraco" placeholder="Antebraço">
-                    <input type="number" id="med-peito" placeholder="Peitoral">
-                    <input type="number" id="med-barriga" placeholder="Abdômen">
-                    <input type="number" id="med-coxa" placeholder="Coxa">
-                    <input type="number" id="med-panturrilha" placeholder="Panturrilha">
-                </div>
-                <button onclick="saveMedidas()">Salvar Medidas</button>
-            </div>
-
-            <div class="card">
-                <h2>Histórico de Medidas</h2>
-                <div id="lista-historico-medidas">
-                    <!-- Histórico injetado via JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: METAS -->
-        <section id="tab-metas" class="tab-content">
-            <div class="card">
-                <h2>Registrar ou Atualizar Meta</h2>
-                <input type="text" id="meta-exercicio" placeholder="Exercício / Foco (Ex: Supino, Bíceps)">
-                <div class="grid-2">
-                    <input type="number" id="meta-carga-atual" placeholder="Carga Atual (kg)">
-                    <input type="number" id="meta-carga-alvo" placeholder="Carga Meta (kg)">
-                </div>
-                <button class="btn-success" onclick="saveMetas()">Atualizar Evolução</button>
-            </div>
-
-            <div class="card">
-                <h2>Evolução das Metas (Clique para Expandir / Editar)</h2>
-                <div id="lista-metas">
-                    <!-- Lista de Metas injetada via JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: HISTÓRICO (FOTOS) -->
-        <section id="tab-historico" class="tab-content">
-            <div class="card">
-                <h2>Adicionar Lembrança</h2>
-                <input type="file" id="foto-upload" accept="image/*">
-                <button onclick="saveHistorico()">Salvar Foto e Dados de Hoje</button>
-            </div>
-            <div id="galeria-historico">
-                <!-- Fotos injetadas pelo JS -->
-            </div>
-        </section>
-
-    </div>
-
-    <!-- NAVEGAÇÃO INFERIOR -->
-    <nav>
-        <button class="nav-btn active" onclick="switchTab('tab-inicio', this)">🏠<br>Início</button>
-        <button class="nav-btn" onclick="switchTab('tab-treino', this)">💪<br>Treino</button>
-        <button class="nav-btn" onclick="switchTab('tab-medidas', this)">📏<br>Medidas</button>
-        <button class="nav-btn" onclick="switchTab('tab-metas', this)">🎯<br>Metas</button>
-        <button class="nav-btn" onclick="switchTab('tab-historico', this)">📸<br>Histórico</button>
-    </nav>
-
-    <!-- MODAIS -->
-    <div class="overlay" id="overlay" onclick="closeModals()"></div>
-
-    <!-- Modal Perfil -->
-    <div class="modal" id="modal-perfil">
-        <h2>Seu Perfil</h2>
-        <input type="text" id="input-nome" placeholder="Seu Nome">
-        <input type="number" id="input-idade" placeholder="Sua Idade">
-        <button onclick="savePerfil()">Salvar Perfil</button>
-        <button class="btn-danger" onclick="closeModals()">Cancelar</button>
-    </div>
-
-    <!-- Modal Atualizar Dados Corporais -->
-    <div class="modal" id="modal-atualizar">
-        <h2>Atualizar Dados Corporais</h2>
-        <input type="number" step="0.01" id="input-peso" placeholder="Peso Atual (kg)">
-        <input type="number" step="0.01" id="input-altura" placeholder="Altura (m)">
-        <input type="number" step="0.1" id="input-bf" placeholder="Taxa de Gordura (%)">
+      <!-- Seção de Aporte Rápido -->
+      <div class="card">
+        <div class="card-title">➕ Injetar Novo Aporte ou Alterar Valores</div>
         
-        <h3 style="margin: 15px 0 5px; font-size: 1rem;">Nova Avaliação em:</h3>
-        <select id="select-timer">
-            <option value="14">2 Semanas</option>
-            <option value="30">1 Mês</option>
-            <option value="45">45 Dias</option>
-            <option value="60">2 Meses</option>
-            <option value="90">3 Meses</option>
-        </select>
-
-        <button onclick="saveDadosCorporais()">Atualizar e Iniciar Timer</button>
-        <button class="btn-danger" onclick="closeModals()">Cancelar</button>
-    </div>
-
-    <!-- Modal Execução do Treino do Dia -->
-    <div class="modal" id="modal-execucao-treino">
-        <h2 id="modal-treino-titulo">Treino de Hoje</h2>
-        <p id="modal-treino-obs" style="font-size:0.85rem; opacity:0.8; margin-bottom: 12px;"></p>
-        
-        <div id="modal-treino-exercicios-list">
-            <!-- Exercícios com Checkbox -->
+        <div class="input-group">
+          <label class="input-label">
+            <span>🛡️ Renda Fixa Pós-fixada (CDI/Selic Reserva)</span>
+            <span class="badge-pill" id="pct-rfpos">0%</span>
+          </label>
+          <div class="input-field-wrapper">
+            <span class="input-currency">R$</span>
+            <input type="number" id="inp-rfpos" placeholder="0" oninput="calcularTudo()" />
+          </div>
         </div>
 
-        <button type="button" class="btn-success" style="margin-top:15px;" onclick="concluirSessaoTreino()">Registrar Treino Concluído</button>
-        <button type="button" class="btn-danger" onclick="closeModals()">Fechar</button>
-    </div>
-
-    <!-- Modal Visualização Expandida de Treino Cadastrado -->
-    <div class="modal" id="modal-ver-treino-cadastrado">
-        <h2 id="ver-treino-titulo">Treino Cadastrado</h2>
-        <p id="ver-treino-obs" style="font-size:0.85rem; opacity:0.8; margin-bottom: 12px;"></p>
-
-        <div id="ver-treino-exercicios-list">
-            <!-- Lista de exercícios -->
+        <div class="input-group">
+          <label class="input-label">
+            <span>📈 Renda Fixa Inflação (Tesouro IPCA+ longo)</span>
+            <span class="badge-pill" id="pct-rfipca">0%</span>
+          </label>
+          <div class="input-field-wrapper">
+            <span class="input-currency">R$</span>
+            <input type="number" id="inp-rfipca" placeholder="0" oninput="calcularTudo()" />
+          </div>
         </div>
 
-        <button type="button" class="btn-danger" style="margin-top:15px;" onclick="closeModals()">Fechar</button>
-    </div>
-
-    <!-- Modal Pop-up Detalhado do Treino Concluído -->
-    <div class="modal" id="modal-detalhe-treino-concluido">
-        <h2 id="detalhe-treino-titulo">Detalhes do Treino</h2>
-        <p id="detalhe-treino-data-hora" style="font-size:0.85rem; opacity:0.8; margin-bottom: 12px;"></p>
-
-        <div id="detalhe-treino-exercicios-list">
-            <!-- Exercícios com horário exato registrado -->
+        <div class="input-group">
+          <label class="input-label">
+            <span>🏢 FIIs & Renda Imobiliária</span>
+            <span class="badge-pill" id="pct-fiis">0%</span>
+          </label>
+          <div class="input-field-wrapper">
+            <span class="input-currency">R$</span>
+            <input type="number" id="inp-fiis" placeholder="0" oninput="calcularTudo()" />
+          </div>
         </div>
 
-        <button type="button" class="btn-danger" style="margin-top:15px;" onclick="closeModals()">Fechar Relatório</button>
-    </div>
-
-    <!-- Modal Seleção de Exercícios por Categoria -->
-    <div class="modal" id="modal-selecao-exercicio">
-        <h2>Selecione o Exercício</h2>
-        <div id="container-categorias-exercicios">
-            <!-- Categorias e Botões Injetados via JS -->
+        <div class="input-group">
+          <label class="input-label">
+            <span>🇧🇷 Ações Brasil (Dividendos / Valor)</span>
+            <span class="badge-pill" id="pct-acoes">0%</span>
+          </label>
+          <div class="input-field-wrapper">
+            <span class="input-currency">R$</span>
+            <input type="number" id="inp-acoes" placeholder="0" oninput="calcularTudo()" />
+          </div>
         </div>
-        <button type="button" class="btn-danger" style="margin-top:10px;" onclick="closeModalExSelecao()">Cancelar</button>
-    </div>
 
-    <!-- Modal Configuração da Série/Repetição do Exercício Selecionado -->
-    <div class="modal" id="modal-config-exercicio">
-        <h2 id="config-ex-nome-titulo">Configurar Exercício</h2>
-        
-        <label style="font-size: 0.85rem;">Séries x Repetições:</label>
-        <select id="config-ex-reps">
-            <option value="4x10-12 reps">4 Séries x 10 a 12 Repetições</option>
-            <option value="3x8-10 reps">3 Séries x 8 a 10 Repetições</option>
-            <option value="4x Falha 🔥">4 Séries até a Falha 🔥</option>
-            <option value="3x Falha 🔥">3 Séries até a Falha 🔥</option>
-            <option value="Pirâmide Crescente 📈">Pirâmide Crescente (Carga ↑ / Reps ↓) 📈</option>
-            <option value="Pirâmide Decrescente / Drop 📉">Pirâmide Decrescente / Drop Set 📉</option>
-            <option value="5x5 (Força) 💪">5 Séries x 5 Reps (Força Máxima) 💪</option>
-        </select>
-
-        <label style="font-size: 0.85rem;">Carga Inicial (kg):</label>
-        <input type="number" id="config-ex-carga" placeholder="Ex: 20">
-
-        <button type="button" class="btn-success" onclick="confirmarAddExerciciosRow()">Adicionar ao Treino</button>
-        <button type="button" class="btn-danger" onclick="closeModalExConfig()">Voltar</button>
-    </div>
-
-    <!-- Modal Edição de Meta -->
-    <div class="modal" id="modal-editar-meta">
-        <h2>Editar Meta</h2>
-        <input type="hidden" id="edit-meta-key">
-        <input type="text" id="edit-meta-nome" placeholder="Exercício / Foco">
-        <div class="grid-2">
-            <input type="number" id="edit-meta-atual" placeholder="Carga Atual (kg)">
-            <input type="number" id="edit-meta-alvo" placeholder="Carga Meta (kg)">
+        <div class="input-group">
+          <label class="input-label">
+            <span>🌍 Ativos Globais / Dólar (S&P500 / ETFs)</span>
+            <span class="badge-pill" id="pct-global">0%</span>
+          </label>
+          <div class="input-field-wrapper">
+            <span class="input-currency">R$</span>
+            <input type="number" id="inp-global" placeholder="0" oninput="calcularTudo()" />
+          </div>
         </div>
-        <button type="button" class="btn-success" onclick="salvarEdicaoMeta()">Salvar Alterações</button>
-        <button type="button" class="btn-danger" onclick="deleteMetaFromModal()">Excluir Meta</button>
-        <button type="button" style="background:#6c757d; color:#fff;" onclick="closeModals()">Cancelar</button>
+
+        <div class="input-group">
+          <label class="input-label">
+            <span>🪙 Alternativos (Ouro & Criptoativos)</span>
+            <span class="badge-pill" id="pct-alt">0%</span>
+          </label>
+          <div class="input-field-wrapper">
+            <span class="input-currency">R$</span>
+            <input type="number" id="inp-alt" placeholder="0" oninput="calcularTudo()" />
+          </div>
+        </div>
+
+        <button class="btn" onclick="salvarLocal()">
+          <span>💾</span> Salvar Carteira no Celular
+        </button>
+      </div>
+
     </div>
 
-    <!-- Modal Alteração de Foto do Histórico -->
-    <div class="modal" id="modal-editar-foto">
-        <h2>Alterar Foto da Lembrança</h2>
-        <input type="hidden" id="edit-foto-index">
-        <input type="file" id="edit-foto-upload" accept="image/*">
-        <button type="button" class="btn-success" onclick="salvarAlteracaoFoto()">Salvar Nova Foto</button>
-        <button type="button" class="btn-danger" onclick="closeModals()">Cancelar</button>
+    <!-- ==================== PÁGINA 2: PROJEÇÃO 10, 20 E 30 ANOS ==================== -->
+    <div id="page-projecoes" class="tab-content">
+      <div class="card">
+        <div class="card-title">⏳ Projeção de Riqueza Futura (10, 20 e 30 Anos)</div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
+          Calculado com a taxa composta média ponderada dos seus ativos atuais, considerando reinvestimento de proventos e inflação controlada.
+        </p>
+
+        <div class="input-group">
+          <label class="input-label">
+            <span>Aporte Mensal Planejado Futuro</span>
+          </label>
+          <div class="input-field-wrapper">
+            <span class="input-currency">R$</span>
+            <input type="number" id="inp-aporte-mensal" value="1000" placeholder="1000" oninput="calcularTudo()" />
+          </div>
+        </div>
+
+        <div class="proj-grid">
+          <div class="proj-item">
+            <div class="proj-year">Em 10 Anos</div>
+            <div class="proj-value" id="val10">R$ 0</div>
+            <div class="proj-renda" id="renda10">+R$ 0/mês</div>
+          </div>
+          <div class="proj-item" style="border-color: rgba(41, 121, 255, 0.4);">
+            <div class="proj-year">Em 20 Anos</div>
+            <div class="proj-value" id="val20">R$ 0</div>
+            <div class="proj-renda" id="renda20">+R$ 0/mês</div>
+          </div>
+          <div class="proj-item" style="border-color: rgba(0, 230, 118, 0.4);">
+            <div class="proj-year">Em 30 Anos</div>
+            <div class="proj-value" id="val30">R$ 0</div>
+            <div class="proj-renda" id="renda30">+R$ 0/mês</div>
+          </div>
+        </div>
+
+        <div class="chart-box" style="height: 280px; margin-top: 20px;">
+          <canvas id="projectionChart"></canvas>
+        </div>
+      </div>
+
+      <div class="smart-tip">
+        <div class="smart-tip-header">💡 O Efeito dos Juros Compostos</div>
+        <div class="smart-tip-text">
+          Nos primeiros 10 anos, seu esforço de aporte representa a maior parte do patrimônio. Entre o 20º e o 30º ano, a rentabilidade composta passa a trabalhar por mais de **80% do ganho total**.
+        </div>
+      </div>
     </div>
 
-    <script>
-        // BANCO COMPLETO E DIVERSIFICADO DE EXERCÍCIOS DE ACADEMIA POR CATEGORIA
-        const exerciciosDB = {
-            "Peitoral 🛡️": [
-                "Supino Reto com Barra", "Supino Reto com Halteres", "Supino Reto Articulado / Máquina",
-                "Supino Inclinado com Barra", "Supino Inclinado com Halteres", "Supino Inclinado Articulado",
-                "Supino Declinado com Barra / Halteres", "Crucifixo Reto com Halteres", "Crucifixo Inclinado com Halteres",
-                "Crossover na Polia Alta", "Crossover na Polia Média", "Crossover na Polia Baixa",
-                "Peck Deck / Voador", "Flexão de Braços (Solo)", "Paralelas para Peitoral"
-            ],
-            "Costas & Trapézio 🦅": [
-                "Puxada Alta Frontal (Pegada Aberta)", "Puxada Alta Supinada (Pegada Fechada)", "Puxada Alta com Triângulo",
-                "Remada Curvada com Barra", "Remada Curvada com Halteres", "Remada Cavalo / Barra T",
-                "Remada Baixa na Triângulo", "Remada Unilateral com Halter (Serrote)", "Remada Articulada",
-                "Levantamento Terra", "Pulldown na Polia com Corda / Barra", "Encolhimento de Ombros com Barra / Halter"
-            ],
-            "Quadríceps & Pernas 🦵": [
-                "Agachamento Livre com Barra", "Agachamento Smith (Barra Guiada)", "Agachamento Hack",
-                "Agachamento Búlgaro com Halteres", "Agachamento Sissy", "Leg Press 45°", "Leg Press Horizontal",
-                "Cadeira Extensora", "Afundo / Passada com Halteres"
-            ],
-            "Posterior & Glúteos 🍑": [
-                "Mesa Flexora", "Cadeira Flexora", "Stiff com Barra", "Stiff com Halteres",
-                "Elevação Pélvica com Barra", "Elevação Pélvica na Máquina", "Cadeira Abdutora",
-                "Glúteo Quatro Apoios / Polia"
-            ],
-            "Ombros 🏛️": [
-                "Desenvolvimento com Halteres", "Desenvolvimento Militar com Barra", "Desenvolvimento no Smith",
-                "Elevação Lateral com Halteres", "Elevação Lateral na Polia", "Elevação Frontal com Halter / Barra",
-                "Crucifixo Invertido com Halteres", "Crucifixo Invertido no Peck Deck", "Remada Alta com Barra W / Polia"
-            ],
-            "Bíceps & Antebraço 💪": [
-                "Rosca Direta com Barra Reta", "Rosca Direta com Barra W", "Rosca Alternada com Halteres",
-                "Rosca Martelo com Halteres", "Rosca Martelo na Polia com Corda", "Rosca Scott com Barra W",
-                "Rosca Scott na Máquina", "Rosca Concentrada com Halter", "Rosca 21", "Rosca Inversa (Antebraço)"
-            ],
-            "Tríceps ⚡": [
-                "Tríceps Pulley na Corda", "Tríceps Pulley na Barra Reta / V", "Tríceps Testa com Barra W",
-                "Tríceps Testa com Halteres", "Tríceps Francês Unilateral com Halter", "Tríceps Francês na Polia",
-                "Tríceps Mergulho no Banco", "Paralelas para Tríceps"
-            ],
-            "Panturrilha & Core / Abdômen 👟": [
-                "Gêmeos em Pé na Máquina / Smith", "Panturrilha Sentado (Soleira)", "Panturrilha no Leg Press",
-                "Abdominal Supra no Solo", "Abdominal Supra na Polia com Corda", "Abdominal Infra na Barra Fixa",
-                "Abdominal Remador", "Prancha Isométrica", "Roda Abdominal (Ab Wheel)"
-            ]
-        };
+    <!-- ==================== PÁGINA 3: DECISÃO & REBALANCEAMENTO ==================== -->
+    <div id="page-decisao" class="tab-content">
+      <div class="card">
+        <div class="card-title">🎯 Motor de Alocação Ótima (Portfólio Certeiro)</div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">
+          Comparação direta entre onde seu dinheiro está agora versus o portfólio defensivo-ofensivo calibrado para o ciclo macroeconômico atual:
+        </p>
 
-        let tempSelectedExNome = "";
-        let idTreinoExecucaoAtual = null;
-        let lastScrollTop = 0;
+        <div style="font-size: 0.85rem; line-height: 1.6;">
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--card-border);">
+            <span>🛡️ Reserva & Pós-fixados (Liquidez)</span>
+            <strong style="color: var(--accent-green);">Alvo: 20%</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--card-border);">
+            <span>📈 Tesouro IPCA+ (Proteção Real)</span>
+            <strong style="color: var(--accent-green);">Alvo: 25%</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--card-border);">
+            <span>🏢 FIIs (Renda Mensal Isenta)</span>
+            <strong style="color: var(--accent-green);">Alvo: 15%</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--card-border);">
+            <span>🇧🇷 Ações Brasil (Crescimento/Dividendos)</span>
+            <strong style="color: var(--accent-green);">Alvo: 15%</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--card-border);">
+            <span>🌍 Ativos Internacionais / Dólar</span>
+            <strong style="color: var(--accent-green);">Alvo: 20%</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+            <span>🪙 Cripto / Ouro (Assimetria)</span>
+            <strong style="color: var(--accent-green);">Alvo: 5%</strong>
+          </div>
+        </div>
+      </div>
 
-        // CORE: Gerenciamento de LocalStorage
-        const db = {
-            get: (key) => JSON.parse(localStorage.getItem(key)) || null,
-            set: (key, value) => localStorage.setItem(key, JSON.stringify(value))
-        };
+      <div class="card">
+        <div class="card-title">⚖️ Qual a Sua Próxima Decisão de Compra?</div>
+        <div id="decisaoAporteBox" style="font-size: 0.85rem; color: #d1d5db; line-height: 1.5;">
+          Carregando análise da sua carteira...
+        </div>
+        <button class="btn btn-secondary" onclick="aplicarAlocacaoIdeal()">
+          ✨ Calibrar Automaticamente com Base na Alocação Ideal
+        </button>
+      </div>
+    </div>
 
-        // INICIALIZAÇÃO
-        document.addEventListener("DOMContentLoaded", () => {
-            loadTheme();
-            loadThemeColor();
-            loadPerfil();
-            loadDadosCorporais();
-            loadMedidas();
-            loadHistMedidas();
-            loadEvolucaoMedidasHome();
-            loadMetas();
-            loadHistorico();
-            
-            // Inicializar Treinos
-            renderCategoriasExerciciosModal();
-            loadTreinos();
-            loadTreinoHoje();
-            loadHistoricoTreinosConcluidos();
+  </div>
 
-            // ROLAGEM INTELIGENTE DO CABEÇALHO (Oculta ao rolar para baixo, volta SOMENTE no topo)
-            window.addEventListener('scroll', () => {
-                const header = document.getElementById('main-header');
-                const st = window.pageYOffset || document.documentElement.scrollTop;
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR ESTILO APP -->
+  <nav class="nav-bar">
+    <button class="nav-item active" onclick="mudarAba('carteira', this)">
+      <span class="nav-icon">💼</span>
+      <span>Carteira</span>
+    </button>
+    <button class="nav-item" onclick="mudarAba('projecoes', this)">
+      <span class="nav-icon">📈</span>
+      <span>10/20/30 Anos</span>
+    </button>
+    <button class="nav-item" onclick="mudarAba('decisao', this)">
+      <span class="nav-icon">🎯</span>
+      <span>Decisão</span>
+    </button>
+  </nav>
 
-                if (st === 0) {
-                    header.classList.remove('header-hidden');
-                } else if (st > lastScrollTop && st > 40) {
-                    header.classList.add('header-hidden');
-                }
+  <script>
+    // --- ESTADO GLOBAL ---
+    let marketData = {
+      cdi: 10.65,
+      selic: 10.75,
+      ipca: 4.20,
+      dolar: 5.42
+    };
 
-                lastScrollTop = st <= 0 ? 0 : st;
-            });
+    let allocationChartInstance = null;
+    let projectionChartInstance = null;
 
-            setInterval(updateCountdown, 1000);
+    // Alvos recomendados (Estratégia Certeira Macroeconômica)
+    const TARGETS = {
+      rfpos: 0.20,
+      rfipca: 0.25,
+      fiis: 0.15,
+      acoes: 0.15,
+      global: 0.20,
+      alt: 0.05
+    };
+
+    // --- CARREGAMENTO DE TAXAS ONLINE (BANCO CENTRAL DO BRASIL SGS + AWESOMEAPI) ---
+    async function fetchLiveRates() {
+      const badge = document.getElementById('liveStatus');
+      badge.innerText = 'Atualizando...';
+      
+      try {
+        // Cotação Dólar Comercial (AwesomeAPI)
+        const resDolar = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
+        if (resDolar.ok) {
+          const dataDolar = await resDolar.json();
+          if (dataDolar.USDBRL) {
+            marketData.dolar = parseFloat(dataDolar.USDBRL.bid);
+            document.getElementById('taxaDolar').innerText = `R$ ${marketData.dolar.toFixed(2)}`;
+          }
+        }
+
+        // Taxa Selic Diária Anualizada (Banco Central SGS Série 1178)
+        const resSelic = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados/ultimos/1?formato=json');
+        if (resSelic.ok) {
+          const dataSelic = await resSelic.json();
+          if (dataSelic && dataSelic[0]) {
+            marketData.selic = parseFloat(dataSelic[0].valor);
+            marketData.cdi = marketData.selic - 0.10; // Spread padrão CDI/Selic
+            document.getElementById('taxaSelic').innerText = `${marketData.selic.toFixed(2)}%`;
+            document.getElementById('taxaCDI').innerText = `${marketData.cdi.toFixed(2)}%`;
+          }
+        }
+
+        // Inflação IPCA Acumulado 12 meses (BCB SGS Série 13522)
+        const resIpca = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json');
+        if (resIpca.ok) {
+          const dataIpca = await resIpca.json();
+          if (dataIpca && dataIpca[0]) {
+            marketData.ipca = parseFloat(dataIpca[0].valor);
+            document.getElementById('taxaIPCA').innerText = `${marketData.ipca.toFixed(2)}%`;
+          }
+        }
+
+        const juroReal = marketData.cdi - marketData.ipca;
+        document.getElementById('juroReal').innerText = `${juroReal.toFixed(2)}%`;
+
+        badge.innerText = 'Online (BCB/Mkt)';
+      } catch (err) {
+        console.warn('Usando valores de referência offline para indicadores.', err);
+        badge.innerText = 'Online (Fallback)';
+      }
+
+      calcularTudo();
+    }
+
+    // --- CÁLCULO GERAL DA CARTEIRA ---
+    function getValores() {
+      return {
+        rfpos: parseFloat(document.getElementById('inp-rfpos').value) || 0,
+        rfipca: parseFloat(document.getElementById('inp-rfipca').value) || 0,
+        fiis: parseFloat(document.getElementById('inp-fiis').value) || 0,
+        acoes: parseFloat(document.getElementById('inp-acoes').value) || 0,
+        global: parseFloat(document.getElementById('inp-global').value) || 0,
+        alt: parseFloat(document.getElementById('inp-alt').value) || 0,
+        aporteMensal: parseFloat(document.getElementById('inp-aporte-mensal').value) || 0
+      };
+    }
+
+    function formataBRL(val) {
+      return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function calcularTudo() {
+      const vals = getValores();
+      const total = vals.rfpos + vals.rfipca + vals.fiis + vals.acoes + vals.global + vals.alt;
+
+      document.getElementById('displayPatrimonio').innerText = formataBRL(total);
+
+      // Atualiza percentuais nas tags
+      const safeTotal = total > 0 ? total : 1;
+      document.getElementById('pct-rfpos').innerText = ((vals.rfpos / safeTotal) * 100).toFixed(1) + '%';
+      document.getElementById('pct-rfipca').innerText = ((vals.rfipca / safeTotal) * 100).toFixed(1) + '%';
+      document.getElementById('pct-fiis').innerText = ((vals.fiis / safeTotal) * 100).toFixed(1) + '%';
+      document.getElementById('pct-acoes').innerText = ((vals.acoes / safeTotal) * 100).toFixed(1) + '%';
+      document.getElementById('pct-global').innerText = ((vals.global / safeTotal) * 100).toFixed(1) + '%';
+      document.getElementById('pct-alt').innerText = ((vals.alt / safeTotal) * 100).toFixed(1) + '%';
+
+      // Renda Passiva Estimada Mensal:
+      // Pós-fixado (~85% do CDI líquido): cdi*0.85
+      // IPCA+: juro real ~6% a.a. líquido
+      // FIIs: ~0.80% ao mês isento de IR
+      // Ações: ~0.60% ao mês em dividendos
+      // Global: ~0.40% ao mês
+      const rendaMensal = 
+        (vals.rfpos * (marketData.cdi * 0.85 / 100 / 12)) +
+        (vals.rfipca * (0.06 / 12)) +
+        (vals.fiis * 0.008) +
+        (vals.acoes * 0.006) +
+        (vals.global * 0.004) +
+        (vals.alt * 0);
+
+      document.getElementById('displayRendaMensal').innerText = formataBRL(rendaMensal);
+
+      atualizarGraficoPizza(vals, total);
+      atualizarProjecao(total, vals.aporteMensal);
+      gerarDicasDecisao(vals, total);
+    }
+
+    // --- GRÁFICO DE PIZZA ---
+    function atualizarGraficoPizza(vals, total) {
+      const ctx = document.getElementById('allocationChart').getContext('2d');
+      const dataVals = total > 0 
+        ? [vals.rfpos, vals.rfipca, vals.fiis, vals.acoes, vals.global, vals.alt]
+        : [1, 1, 1, 1, 1, 1];
+
+      const labels = ['Pós-fixada', 'Inflação', 'FIIs', 'Ações BR', 'Internacional', 'Alternativos'];
+      const bgColors = ['#2979ff', '#00e676', '#ffd600', '#00e5ff', '#b388ff', '#ff5252'];
+
+      if (allocationChartInstance) {
+        allocationChartInstance.data.datasets[0].data = dataVals;
+        allocationChartInstance.update();
+      } else {
+        allocationChartInstance = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: dataVals,
+              backgroundColor: bgColors,
+              borderColor: '#10121a',
+              borderWidth: 3,
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: '#8b95a8', boxWidth: 10, font: { size: 10, weight: '600' } }
+              }
+            },
+            cutout: '72%'
+          }
         });
+      }
+    }
 
-        // NAVEGAÇÃO DE ABAS
-        function switchTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-        }
+    // --- PROJEÇÕES 10, 20 E 30 ANOS ---
+    function atualizarProjecao(patrimonioInicial, aporteMensal) {
+      // Taxa real anual ponderada conservadora (acima da inflação) ~ 7.5% a.a.
+      const taxaAnual = 0.075;
+      const taxaMensal = Math.pow(1 + taxaAnual, 1 / 12) - 1;
 
-        // GERENCIAMENTO DE MODO CLARO/ESCURO E CORES DE DESTAQUE
-        function toggleTheme() {
-            const isDark = document.body.classList.toggle('dark-mode');
-            db.set('theme', isDark ? 'dark' : 'light');
+      function futuro(meses) {
+        let montante = patrimonioInicial * Math.pow(1 + taxaMensal, meses);
+        if (aporteMensal > 0) {
+          montante += aporteMensal * ((Math.pow(1 + taxaMensal, meses) - 1) / taxaMensal);
         }
-        
-        function loadTheme() {
-            if (db.get('theme') === 'dark') document.body.classList.add('dark-mode');
-        }
+        return montante;
+      }
 
-        function cycleThemeColor() {
-            const themes = ['theme-green', 'theme-yellow', 'theme-red'];
-            let current = db.get('themeColor') || 'theme-green';
-            let nextIndex = (themes.indexOf(current) + 1) % themes.length;
-            let nextTheme = themes[nextIndex];
+      const val10 = futuro(120);
+      const val20 = futuro(240);
+      const val30 = futuro(360);
 
-            document.body.classList.remove('theme-green', 'theme-yellow', 'theme-red');
-            document.body.classList.add(nextTheme);
-            db.set('themeColor', nextTheme);
-        }
+      document.getElementById('val10').innerText = formataBRL(val10);
+      document.getElementById('renda10').innerText = `+${formataBRL(val10 * 0.006)}/mês`;
 
-        function loadThemeColor() {
-            const color = db.get('themeColor') || 'theme-green';
-            document.body.classList.remove('theme-green', 'theme-yellow', 'theme-red');
-            document.body.classList.add(color);
-        }
+      document.getElementById('val20').innerText = formataBRL(val20);
+      document.getElementById('renda20').innerText = `+${formataBRL(val20 * 0.006)}/mês`;
 
-        // MODAIS E EFEITO BLUR
-        function openModal(modalId) {
-            document.getElementById('app-wrapper').classList.add('blur-active');
-            document.getElementById('overlay').classList.add('active');
-            document.getElementById(modalId).classList.add('active');
-        }
-        
-        function closeModals() {
-            document.getElementById('app-wrapper').classList.remove('blur-active');
-            document.getElementById('overlay').classList.remove('active');
-            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
-        }
+      document.getElementById('val30').innerText = formataBRL(val30);
+      document.getElementById('renda30').innerText = `+${formataBRL(val30 * 0.006)}/mês`;
 
-        // PERFIL
-        function savePerfil() {
-            const nome = document.getElementById('input-nome').value || "Atleta";
-            const idade = document.getElementById('input-idade').value || "--";
-            db.set('perfil', { nome, idade });
-            loadPerfil();
-            closeModals();
-        }
-        
-        function loadPerfil() {
-            const perfil = db.get('perfil');
-            if (perfil) {
-                document.getElementById('display-name').innerText = perfil.nome;
-                document.getElementById('display-age').innerText = perfil.idade;
-                document.getElementById('input-nome').value = perfil.nome;
-                document.getElementById('input-idade').value = perfil.idade;
+      // Atualiza Gráfico de Linhas da Projeção
+      const anosLabels = [0, 5, 10, 15, 20, 25, 30];
+      const pontos = anosLabels.map(ano => Math.round(futuro(ano * 12)));
+
+      const ctxProj = document.getElementById('projectionChart').getContext('2d');
+      if (projectionChartInstance) {
+        projectionChartInstance.data.datasets[0].data = pontos;
+        projectionChartInstance.update();
+      } else {
+        projectionChartInstance = new Chart(ctxProj, {
+          type: 'line',
+          data: {
+            labels: anosLabels.map(a => `${a} anos`),
+            datasets: [{
+              label: 'Patrimônio Estimado (R$)',
+              data: pontos,
+              borderColor: '#00e676',
+              backgroundColor: 'rgba(0, 230, 118, 0.1)',
+              fill: true,
+              tension: 0.35,
+              borderWidth: 3,
+              pointBackgroundColor: '#00e676',
+              pointRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b95a8', font: { size: 10 } } },
+              y: { 
+                grid: { color: 'rgba(255,255,255,0.05)' }, 
+                ticks: { 
+                  color: '#8b95a8', 
+                  font: { size: 10 },
+                  callback: v => 'R$' + (v >= 1000000 ? (v/1000000).toFixed(1) + 'M' : (v/1000).toFixed(0) + 'k')
+                } 
+              }
             }
+          }
+        });
+      }
+    }
+
+    // --- MOTOR INTELIGENTE DE DECISÃO E DICAS ---
+    function gerarDicasDecisao(vals, total) {
+      const tipHeader = document.getElementById('smartTipText');
+      const decisaoBox = document.getElementById('decisaoAporteBox');
+
+      if (total <= 0) {
+        tipHeader.innerText = 'Cadastre seus investimentos para receber a recomendação da melhor decisão.';
+        decisaoBox.innerHTML = '<p>Preencha os valores para o motor apontar onde está o melhor custo-oportunidade.</p>';
+        return;
+      }
+
+      // Procura a classe com maior defasagem em relação à meta
+      let maiorDefasagemNome = '';
+      let maiorDefasagemDiferenca = -Infinity;
+      let sugestaoAtivo = '';
+
+      const categorias = [
+        { chave: 'rfpos', nome: 'Reserva / Pós-fixado', alvo: TARGETS.rfpos, val: vals.rfpos, dica: 'Tesouro Selic ou CDB 100% CDI com liquidez imediata.' },
+        { chave: 'rfipca', nome: 'Tesouro IPCA+ / Inflação', alvo: TARGETS.rfipca, val: vals.rfipca, dica: 'Tesouro IPCA+ com vencimento entre 2035 e 2045 para travar juro real elevado.' },
+        { chave: 'fiis', nome: 'Fundos Imobiliários (FIIs)', alvo: TARGETS.fiis, val: vals.fiis, dica: 'FIIs de papel defensivos e galpões logísticos de alto padrão.' },
+        { chave: 'acoes', nome: 'Ações Nacionais (Bolsa BR)', alvo: TARGETS.acoes, val: vals.acoes, dica: 'Empresas perenes geradoras de caixa (energia elétrica, saneamento e bancos).' },
+        { chave: 'global', nome: 'Investimento Internacional / Dólar', alvo: TARGETS.global, val: vals.global, dica: 'ETFs globais (como S&P 500 / WRLD11 / IVVB11) para blindar seu patrimônio contra o risco-país.' },
+        { chave: 'alt', nome: 'Ativos Alternativos (Ouro/Cripto)', alvo: TARGETS.alt, val: vals.alt, dica: 'Bitcoin e ouro como reserva assimétrica anticrise (máximo de 3% a 5%).' }
+      ];
+
+      categorias.forEach(cat => {
+        const proporcaoAtual = cat.val / total;
+        const diferenca = cat.alvo - proporcaoAtual;
+        if (diferenca > maiorDefasagemDiferenca) {
+          maiorDefasagemDiferenca = diferenca;
+          maiorDefasagemNome = cat.nome;
+          sugestaoAtivo = cat.dica;
         }
+      });
 
-        // DADOS CORPORAIS, IMC COM LÓGICA DE BF E TIMER
-        function saveDadosCorporais() {
-            const peso = parseFloat(document.getElementById('input-peso').value);
-            const altura = parseFloat(document.getElementById('input-altura').value);
-            const bf = parseFloat(document.getElementById('input-bf').value) || 0;
-            const dias = parseInt(document.getElementById('select-timer').value);
+      // Texto de destaque na página inicial
+      tipHeader.innerHTML = `
+        <strong>Melhor decisão agora:</strong> Direcionar os próximos aportes para <u>${maiorDefasagemNome}</u>. 
+        Essa classe está abaixo do equilíbrio ótimo para os próximos 10 a 30 anos. <em>Opção recomendada:</em> ${sugestaoAtivo}
+      `;
 
-            if (peso && altura) {
-                const imc = (peso / (altura * altura)).toFixed(2);
-                const dataAlvo = new Date().getTime() + (dias * 24 * 60 * 60 * 1000);
-                
-                db.set('dados', { peso, altura, bf, imc, dataAlvo });
-                loadDadosCorporais();
-                closeModals();
-            } else {
-                alert("Preencha peso e altura!");
-            }
+      // Texto detalhado na aba Decisão
+      decisaoBox.innerHTML = `
+        <div style="background: rgba(0, 230, 118, 0.08); padding: 12px; border-radius: 10px; border-left: 4px solid var(--accent-green); margin-bottom: 10px;">
+          <strong style="color: var(--accent-green);">Aporte Prioritário Imediato:</strong><br>
+          Seu portfólio necessita de mais peso em <strong>${maiorDefasagemNome}</strong> para manter a curva exponencial de retorno e proteção patrimonial.
+        </div>
+        <p><strong>Por que essa é a melhor opção?</strong></p>
+        <p style="margin-top: 4px; color: #9ca3af;">${sugestaoAtivo}</p>
+        <p style="margin-top: 10px; font-size: 0.78rem; color: #6b7280;">
+          *Rebalancear aportando sempre no ativo que ficou para trás compra ativos na baixa e vende na alta sem gerar incidência antecipada de impostos.
+        </p>
+      `;
+    }
+
+    // --- CALIBRAÇÃO AUTOMÁTICA DE EXEMPLO ---
+    function aplicarAlocacaoIdeal() {
+      const vals = getValores();
+      let total = vals.rfpos + vals.rfipca + vals.fiis + vals.acoes + vals.global + vals.alt;
+      if (total === 0) total = 100000; // Valor de partida padrão se estiver vazio
+
+      document.getElementById('inp-rfpos').value = Math.round(total * TARGETS.rfpos);
+      document.getElementById('inp-rfipca').value = Math.round(total * TARGETS.rfipca);
+      document.getElementById('inp-fiis').value = Math.round(total * TARGETS.fiis);
+      document.getElementById('inp-acoes').value = Math.round(total * TARGETS.acoes);
+      document.getElementById('inp-global').value = Math.round(total * TARGETS.global);
+      document.getElementById('inp-alt').value = Math.round(total * TARGETS.alt);
+
+      calcularTudo();
+      salvarLocal();
+      alert('Alocação balanceada ideal aplicada com sucesso!');
+    }
+
+    // --- NAVEGAÇÃO DE ABAS ---
+    function mudarAba(aba, elemento) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(`page-${aba}`).classList.add('active');
+      elemento.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- SALVAMENTO LOCAL (OFFLINE FIRST NO CELULAR) ---
+    function salvarLocal() {
+      const dados = getValores();
+      localStorage.setItem('omni_invest_data', JSON.stringify(dados));
+      const btn = document.querySelector('.btn span');
+      if (btn) {
+        const textoOriginal = btn.parentElement.innerHTML;
+        btn.parentElement.innerHTML = '<span>✅</span> Salvo com Sucesso!';
+        setTimeout(() => {
+          btn.parentElement.innerHTML = textoOriginal;
+        }, 1500);
+      }
+    }
+
+    function carregarLocal() {
+      const salvo = localStorage.getItem('omni_invest_data');
+      if (salvo) {
+        try {
+          const d = JSON.parse(salvo);
+          document.getElementById('inp-rfpos').value = d.rfpos || '';
+          document.getElementById('inp-rfipca').value = d.rfipca || '';
+          document.getElementById('inp-fiis').value = d.fiis || '';
+          document.getElementById('inp-acoes').value = d.acoes || '';
+          document.getElementById('inp-global').value = d.global || '';
+          document.getElementById('inp-alt').value = d.alt || '';
+          if (d.aporteMensal) document.getElementById('inp-aporte-mensal').value = d.aporteMensal;
+        } catch(e) {
+          console.error(e);
         }
-
-        function loadDadosCorporais() {
-            const dados = db.get('dados');
-            if (dados) {
-                document.getElementById('display-imc').innerText = dados.imc;
-                document.getElementById('display-peso').innerText = dados.peso;
-                document.getElementById('display-bf').innerText = dados.bf;
-                
-                let status = "Normal";
-                const imcVal = parseFloat(dados.imc);
-                const bfVal = parseFloat(dados.bf);
-
-                if (imcVal < 18.5) {
-                    status = "Abaixo do peso";
-                } else if (imcVal >= 25) {
-                    if (bfVal > 0 && bfVal < 15) {
-                        status = "Massa Muscular / Atleta 🏋️‍♂️";
-                    } else if (imcVal < 30) {
-                        status = "Sobrepeso";
-                    } else {
-                        status = "Obesidade";
-                    }
-                } else {
-                    status = "Peso Normal";
-                }
-
-                document.getElementById('display-imc-status').innerText = status;
-
-                document.getElementById('input-peso').value = dados.peso;
-                document.getElementById('input-altura').value = dados.altura;
-                document.getElementById('input-bf').value = dados.bf;
-            }
-        }
-
-        // CRONÔMETRO DE AVALIAÇÃO
-        function updateCountdown() {
-            const dados = db.get('dados');
-            if (!dados || !dados.dataAlvo) return;
-
-            const agora = new Date().getTime();
-            const diferenca = dados.dataAlvo - agora;
-
-            if (diferenca < 0) {
-                document.getElementById('countdown').innerText = "AVALIAÇÃO HOJE!";
-                return;
-            }
-
-            const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const min = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
-            const seg = Math.floor((diferenca % (1000 * 60)) / 1000);
-
-            document.getElementById('countdown').innerText = 
-                `${dias} dias, ${String(horas).padStart(2,'0')}:${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}`;
-        }
-
-        /* -------------------------------------------------------------
-           SISTEMA DE TIMER DE DESCANSO COM ALARME SONORO E INPUT MANUAL
-        ------------------------------------------------------------- */
-        let restTimerInterval = null;
-        let restTimeSeconds = 0;
-        let restTimeInitial = 0;
-
-        function playBeepSound() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = 880;
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1.2);
-                setTimeout(() => osc.stop(), 1200);
-            } catch(e) {
-                console.log("Audio API não suportada ou bloqueada.");
-            }
-        }
-
-        function setRestTimerManual() {
-            const val = parseInt(document.getElementById('manual-timer-sec').value);
-            if (val > 0) {
-                setRestTimer(val);
-                document.getElementById('manual-timer-sec').value = '';
-            } else {
-                alert("Digite um tempo válido em segundos!");
-            }
-        }
-
-        function setRestTimer(sec) {
-            clearInterval(restTimerInterval);
-            restTimerInterval = null;
-            restTimeSeconds = sec;
-            restTimeInitial = sec;
-            updateRestTimerDisplay();
-            document.getElementById('btn-start-timer').innerText = "Iniciar";
-        }
-
-        function toggleRestTimer() {
-            const btn = document.getElementById('btn-start-timer');
-            if (restTimerInterval) {
-                clearInterval(restTimerInterval);
-                restTimerInterval = null;
-                btn.innerText = "Continuar";
-            } else {
-                if (restTimeSeconds <= 0) return;
-                btn.innerText = "Pausar";
-                restTimerInterval = setInterval(() => {
-                    restTimeSeconds--;
-                    updateRestTimerDisplay();
-                    if (restTimeSeconds <= 0) {
-                        clearInterval(restTimerInterval);
-                        restTimerInterval = null;
-                        btn.innerText = "Iniciar";
-                        playBeepSound();
-                        alert("⏰ Fim do descanso! Hora da próxima série!");
-                    }
-                }, 1000);
-            }
-        }
-
-        function resetRestTimer() {
-            clearInterval(restTimerInterval);
-            restTimerInterval = null;
-            restTimeSeconds = restTimeInitial;
-            updateRestTimerDisplay();
-            document.getElementById('btn-start-timer').innerText = "Iniciar";
-        }
-
-        function updateRestTimerDisplay() {
-            const m = String(Math.floor(restTimeSeconds / 60)).padStart(2, '0');
-            const s = String(restTimeSeconds % 60).padStart(2, '0');
-            document.getElementById('rest-timer-display').innerText = `${m}:${s}`;
-        }
-
-        /* -------------------------------------------------------------
-           SELEÇÃO DE EXERCÍCIOS E POP-UP DE CONFIGURAÇÃO DE REPETIÇÕES
-        ------------------------------------------------------------- */
-        function renderCategoriasExerciciosModal() {
-            const container = document.getElementById('container-categorias-exercicios');
-            container.innerHTML = '';
-            
-            for (let cat in exerciciosDB) {
-                container.innerHTML += `<div class="cat-title">${cat}</div>`;
-                exerciciosDB[cat].forEach(ex => {
-                    container.innerHTML += `
-                        <button type="button" class="ex-option-btn" onclick="selectExercicioFromModal('${ex.replace(/'/g, "\\'")}')">
-                            🔹 ${ex}
-                        </button>
-                    `;
-                });
-            }
-        }
-
-        function openSelectExerciciosModal() {
-            openModal('modal-selecao-exercicio');
-        }
-
-        function closeModalExSelecao() {
-            document.getElementById('modal-selecao-exercicio').classList.remove('active');
-            if (!document.querySelector('.modal.active')) {
-                document.getElementById('app-wrapper').classList.remove('blur-active');
-                document.getElementById('overlay').classList.remove('active');
-            }
-        }
-
-        function selectExercicioFromModal(nomeEx) {
-            tempSelectedExNome = nomeEx;
-            closeModalExSelecao();
-            document.getElementById('config-ex-nome-titulo').innerText = nomeEx;
-            openModal('modal-config-exercicio');
-        }
-
-        function closeModalExConfig() {
-            document.getElementById('modal-config-exercicio').classList.remove('active');
-            openModal('modal-selecao-exercicio');
-        }
-
-        function confirmarAddExerciciosRow() {
-            const repsDet = document.getElementById('config-ex-reps').value;
-            const cargaVal = document.getElementById('config-ex-carga').value || '0';
-
-            addExerciciosRow(tempSelectedExNome, repsDet, cargaVal);
-
-            document.getElementById('config-ex-carga').value = '';
-            document.getElementById('modal-config-exercicio').classList.remove('active');
-            document.getElementById('app-wrapper').classList.remove('blur-active');
-            document.getElementById('overlay').classList.remove('active');
-        }
-
-        function addExerciciosRow(nome = '', det = '', carga = '') {
-            const container = document.getElementById('lista-exercicios-form');
-            const row = document.createElement('div');
-            row.className = 'grid-2 ex-row';
-            row.style.marginBottom = '8px';
-            row.innerHTML = `
-                <input type="text" class="ex-nome" placeholder="Exercício" value="${nome}" readonly style="grid-column: span 2; margin-bottom: 4px; background: rgba(0,123,255,0.05); font-weight:bold;">
-                <input type="text" class="ex-det" placeholder="Séries / Reps" value="${det}">
-                <div style="display:flex; gap: 4px;">
-                    <input type="number" class="ex-carga" placeholder="Carga (kg)" value="${carga}">
-                    <button type="button" class="btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()" style="height:38px;">X</button>
-                </div>
-            `;
-            container.appendChild(row);
-        }
-
-        function saveTreino() {
-            const idEdit = document.getElementById('treino-edit-id').value;
-            const nome = document.getElementById('treino-nome').value.trim();
-            const dia = document.getElementById('treino-dia').value;
-            const obs = document.getElementById('treino-obs').value.trim();
-
-            if (!nome) {
-                alert("Por favor, digite o nome do treino!");
-                return;
-            }
-
-            const exRows = document.querySelectorAll('.ex-row');
-            const exercicios = [];
-
-            exRows.forEach(row => {
-                const exNome = row.querySelector('.ex-nome').value.trim();
-                const exDet = row.querySelector('.ex-det').value.trim();
-                const exCarga = row.querySelector('.ex-carga').value;
-
-                if (exNome) {
-                    exercicios.push({
-                        nome: exNome,
-                        detalhe: exDet || '4x10-12',
-                        carga: exCarga || '0',
-                        concluido: false,
-                        horaConclusao: null
-                    });
-                }
-            });
-
-            if (exercicios.length === 0) {
-                alert("Adicione pelo menos 1 exercício ao treino!");
-                return;
-            }
-
-            const treinos = db.get('treinos') || [];
-
-            if (idEdit) {
-                const index = treinos.findIndex(t => t.id === idEdit);
-                if (index !== -1) {
-                    treinos[index] = { ...treinos[index], nome, dia, obs, exercicios };
-                }
-            } else {
-                treinos.push({
-                    id: 'tr_' + new Date().getTime(),
-                    nome,
-                    dia,
-                    obs,
-                    exercicios
-                });
-            }
-
-            db.set('treinos', treinos);
-            resetTreinoForm();
-            loadTreinos();
-            loadTreinoHoje();
-            alert("Treino salvo com sucesso!");
-        }
-
-        function resetTreinoForm() {
-            document.getElementById('treino-edit-id').value = '';
-            document.getElementById('treino-nome').value = '';
-            document.getElementById('treino-obs').value = '';
-            document.getElementById('lista-exercicios-form').innerHTML = '';
-        }
-
-        function loadTreinos() {
-            const treinos = db.get('treinos') || [];
-            const container = document.getElementById('lista-treinos-cadastrados');
-
-            if (treinos.length === 0) {
-                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Nenhum treino cadastrado.</p>';
-                return;
-            }
-
-            container.innerHTML = '';
-            treinos.forEach(t => {
-                let exHtml = '';
-                t.exercicios.forEach(ex => {
-                    exHtml += `• ${ex.nome} (${ex.detalhe} - ${ex.carga}kg)<br>`;
-                });
-
-                container.innerHTML += `
-                    <div class="history-card" onclick="openVerTreinoCadastradoModal('${t.id}')">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <strong>${t.nome}</strong>
-                            <span style="font-size:0.75rem; background:var(--primary); color:var(--btn-text); padding:2px 8px; border-radius:10px;">${t.dia}</span>
-                        </div>
-                        ${t.obs ? `<p style="font-size:0.8rem; opacity:0.8; margin:5px 0;"><em>${t.obs}</em></p>` : ''}
-                        <div style="font-size:0.85rem; margin:8px 0; background:var(--bg-color); padding:8px; border-radius:5px;">
-                            ${exHtml || 'Nenhum exercício detalhado.'}
-                        </div>
-                        <div style="display:flex; gap:10px;" onclick="event.stopPropagation();">
-                            <button class="btn-warning btn-sm" onclick="editTreino('${t.id}')">✏️ Editar</button>
-                            <button class="btn-danger btn-sm" onclick="deleteTreino('${t.id}')">🗑️ Excluir</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function openVerTreinoCadastradoModal(id) {
-            const treinos = db.get('treinos') || [];
-            const t = treinos.find(item => item.id === id);
-            if (!t) return;
-
-            document.getElementById('ver-treino-titulo').innerText = `${t.dia} - ${t.nome}`;
-            document.getElementById('ver-treino-obs').innerText = t.obs ? `Observação: ${t.obs}` : '';
-
-            const listContainer = document.getElementById('ver-treino-exercicios-list');
-            listContainer.innerHTML = '';
-
-            t.exercicios.forEach(ex => {
-                listContainer.innerHTML += `
-                    <div class="exercise-item">
-                        <div>
-                            <strong>${ex.nome}</strong><br>
-                            <small>${ex.detalhe} | Carga Inicial: ${ex.carga}kg</small>
-                        </div>
-                    </div>
-                `;
-            });
-
-            openModal('modal-ver-treino-cadastrado');
-        }
-
-        function editTreino(id) {
-            const treinos = db.get('treinos') || [];
-            const t = treinos.find(item => item.id === id);
-            if (!t) return;
-
-            document.getElementById('treino-edit-id').value = t.id;
-            document.getElementById('treino-nome').value = t.nome;
-            document.getElementById('treino-dia').value = t.dia;
-            document.getElementById('treino-obs').value = t.obs || '';
-
-            const container = document.getElementById('lista-exercicios-form');
-            container.innerHTML = '';
-
-            if (t.exercicios && t.exercicios.length > 0) {
-                t.exercicios.forEach(ex => {
-                    addExerciciosRow(ex.nome, ex.detalhe, ex.carga);
-                });
-            }
-
-            document.getElementById('treino-nome').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function deleteTreino(id) {
-            if (!confirm("Tem certeza que deseja excluir este treino?")) return;
-            let treinos = db.get('treinos') || [];
-            treinos = treinos.filter(t => t.id !== id);
-            db.set('treinos', treinos);
-            loadTreinos();
-            loadTreinoHoje();
-        }
-
-        // TREINO DO DIA NA TELA INICIAL
-        function getDiaSemanaAtual() {
-            const dias = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-            return dias[new Date().getDay()];
-        }
-
-        function loadTreinoHoje() {
-            const diaHoje = getDiaSemanaAtual();
-            const treinos = db.get('treinos') || [];
-            const treinoHoje = treinos.find(t => t.dia === diaHoje);
-            const container = document.getElementById('container-treino-hoje');
-
-            if (!treinoHoje) {
-                container.innerHTML = `
-                    <div class="card" style="text-align: center; opacity: 0.8;">
-                        <h2>🏋️ Treino de Hoje (${diaHoje})</h2>
-                        <p style="font-size: 0.9rem;">Dia de descanso ou nenhum treino agendado para hoje.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const totalEx = treinoHoje.exercicios.length;
-            const concluidos = treinoHoje.exercicios.filter(e => e.concluido).length;
-            const allDone = totalEx > 0 && concluidos === totalEx;
-
-            container.innerHTML = `
-                <div class="today-workout-card ${allDone ? 'all-done' : ''}" onclick="openExecucaoTreinoModal('${treinoHoje.id}')">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h2>🏋️ Treino de Hoje (${diaHoje})</h2>
-                        <span style="font-size:0.8rem; font-weight:bold; color:${allDone ? '#28a745' : 'var(--primary)'};">
-                            ${allDone ? '✅ 100% Concluído' : concluidos + '/' + totalEx + ' Concluídos'}
-                        </span>
-                    </div>
-                    <h3 style="color:var(--primary); font-size:1.2rem; margin:5px 0;">${treinoHoje.nome}</h3>
-                    <p style="font-size:0.85rem; opacity:0.9; font-weight:${allDone ? 'bold' : 'normal'};">
-                        ${allDone ? '🎉 Todos os treinos concluídos por hoje! Clique para rever.' : (treinoHoje.obs ? '📌 ' + treinoHoje.obs : 'Clique para ver os exercícios e marcar concluídos.')}
-                    </p>
-                </div>
-            `;
-        }
-
-        function openExecucaoTreinoModal(idTreino) {
-            idTreinoExecucaoAtual = idTreino;
-            const treinos = db.get('treinos') || [];
-            const t = treinos.find(item => item.id === idTreino);
-            if (!t) return;
-
-            document.getElementById('modal-treino-titulo').innerText = `${t.dia} - ${t.nome}`;
-            document.getElementById('modal-treino-obs').innerText = t.obs ? `Observação: ${t.obs}` : '';
-
-            const listContainer = document.getElementById('modal-treino-exercicios-list');
-            listContainer.innerHTML = '';
-
-            t.exercicios.forEach((ex, idx) => {
-                listContainer.innerHTML += `
-                    <div class="exercise-item ${ex.concluido ? 'completed' : ''}">
-                        <div>
-                            <strong>${ex.nome}</strong><br>
-                            <small>${ex.detalhe} | Carga: ${ex.carga}kg</small>
-                            ${ex.horaConclusao ? `<br><small style="color:var(--primary); font-weight:bold;">🕒 Concluído às: ${ex.horaConclusao}</small>` : ''}
-                        </div>
-                        <input type="checkbox" ${ex.concluido ? 'checked' : ''} onchange="toggleExConcluido('${t.id}', ${idx})">
-                    </div>
-                `;
-            });
-
-            openModal('modal-execucao-treino');
-        }
-
-        function toggleExConcluido(idTreino, exIdx) {
-            const treinos = db.get('treinos') || [];
-            const index = treinos.findIndex(t => t.id === idTreino);
-            if (index !== -1) {
-                const ex = treinos[index].exercicios[exIdx];
-                ex.concluido = !ex.concluido;
-                if (ex.concluido) {
-                    const agora = new Date();
-                    ex.horaConclusao = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                } else {
-                    ex.horaConclusao = null;
-                }
-
-                db.set('treinos', treinos);
-                openExecucaoTreinoModal(idTreino);
-                loadTreinoHoje();
-            }
-        }
-
-        // SALVAR SESSÃO CONCLUÍDA NO HISTÓRICO DETALHADO DE TREINOS COM EXPANSÃO POP-UP
-        function concluirSessaoTreino() {
-            if (!idTreinoExecucaoAtual) return;
-            const treinos = db.get('treinos') || [];
-            const t = treinos.find(item => item.id === idTreinoExecucaoAtual);
-            if (!t) return;
-
-            const agora = new Date();
-            const dataStr = agora.toLocaleDateString('pt-BR');
-            const horaStr = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
-            const histTreinos = db.get('histTreinosConcluidos') || [];
-            histTreinos.unshift({
-                id: 'hist_' + new Date().getTime(),
-                nome: t.nome,
-                dia: t.dia,
-                data: dataStr,
-                hora: horaStr,
-                exercicios: JSON.parse(JSON.stringify(t.exercicios))
-            });
-
-            db.set('histTreinosConcluidos', histTreinos);
-            loadHistoricoTreinosConcluidos();
-            closeModals();
-            alert(`Sessão de treino "${t.nome}" registrada com sucesso!`);
-        }
-
-        function loadHistoricoTreinosConcluidos() {
-            const histTreinos = db.get('histTreinosConcluidos') || [];
-            const container = document.getElementById('lista-historico-treinos-concluidos');
-
-            if (histTreinos.length === 0) {
-                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Nenhum treino concluído no histórico ainda.</p>';
-                return;
-            }
-
-            container.innerHTML = '';
-            histTreinos.forEach(item => {
-                const concluidosCount = item.exercicios.filter(e => e.concluido).length;
-                container.innerHTML += `
-                    <div class="history-card" style="border-left-color: var(--primary);" onclick="openDetalhesTreinoConcluidoModal('${item.id}')">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <strong>🏋️ ${item.nome}</strong>
-                            <span style="font-size:0.75rem; opacity:0.8;">📅 ${item.data} às ${item.hora}</span>
-                        </div>
-                        <div style="font-size:0.85rem; margin-top:5px; color:var(--primary); font-weight:bold;">
-                            ${concluidosCount}/${item.exercicios.length} Exercícios Registrados (Clique para Expandir 🔍)
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function openDetalhesTreinoConcluidoModal(histId) {
-            const histTreinos = db.get('histTreinosConcluidos') || [];
-            const item = histTreinos.find(h => h.id === histId);
-            if (!item) return;
-
-            document.getElementById('detalhe-treino-titulo').innerText = `${item.dia} - ${item.nome}`;
-            document.getElementById('detalhe-treino-data-hora').innerText = `Sessão Finalizada em: ${item.data} às ${item.hora}`;
-
-            const listContainer = document.getElementById('detalhe-treino-exercicios-list');
-            listContainer.innerHTML = '';
-
-            item.exercicios.forEach(ex => {
-                listContainer.innerHTML += `
-                    <div class="exercise-item ${ex.concluido ? 'completed' : ''}">
-                        <div>
-                            <strong>${ex.nome}</strong><br>
-                            <small>${ex.detalhe} | Carga: ${ex.carga}kg</small>
-                            ${ex.horaConclusao ? `<br><small style="color:var(--primary); font-weight:bold;">🕒 Concluído exatamente às: ${ex.horaConclusao}</small>` : '<br><small style="opacity:0.6;">Não marcado como concluído</small>'}
-                        </div>
-                        <span style="font-size:1.2rem;">${ex.concluido ? '✅' : '⚪'}</span>
-                    </div>
-                `;
-            });
-
-            openModal('modal-detalhe-treino-concluido');
-        }
-
-        /* -------------------------------------------------------------
-           CÁLCULO DE EVOLUÇÃO DE MEDIDAS (SEMANAL E MENSAL) NA TELA INICIAL
-        ------------------------------------------------------------- */
-        function loadEvolucaoMedidasHome() {
-            const histMedidas = db.get('histMedidas') || [];
-            const container = document.getElementById('display-evolucao-medidas-home');
-
-            if (histMedidas.length < 2) {
-                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Cadastre pelo menos 2 registros de medidas para o sistema calcular a evolução semanal e mensal.</p>';
-                return;
-            }
-
-            const rec = histMedidas[0].dataObj;
-            const ant = histMedidas[histMedidas.length - 1].dataObj;
-
-            function diff(a, b) {
-                const valA = parseFloat(a) || 0;
-                const valB = parseFloat(b) || 0;
-                const d = (valA - valB).toFixed(1);
-                return d > 0 ? `+${d} cm 📈` : d < 0 ? `${d} cm 📉` : `0 cm (Inalterado)`;
-            }
-
-            container.innerHTML = `
-                <div style="font-size: 0.85rem; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                    <div>💪 Braço: <strong>${diff(rec.braco, ant.braco)}</strong></div>
-                    <div>🥖 Antebraço: <strong>${diff(rec.antebraco, ant.antebraco)}</strong></div>
-                    <div>🛡️ Peitoral: <strong>${diff(rec.peito, ant.peito)}</strong></div>
-                    <div>🎯 Abdômen: <strong>${diff(rec.barriga, ant.barriga)}</strong></div>
-                    <div>🦵 Coxa: <strong>${diff(rec.coxa, ant.coxa)}</strong></div>
-                    <div>👟 Panturrilha: <strong>${diff(rec.panturrilha, ant.panturrilha)}</strong></div>
-                </div>
-            `;
-        }
-
-        // MEDIDAS MUSCULARES E HISTÓRICO DE MEDIDAS
-        function saveMedidas() {
-            const medidas = {
-                braco: document.getElementById('med-braco').value || '--',
-                antebraco: document.getElementById('med-antebraco').value || '--',
-                peito: document.getElementById('med-peito').value || '--',
-                barriga: document.getElementById('med-barriga').value || '--',
-                coxa: document.getElementById('med-coxa').value || '--',
-                panturrilha: document.getElementById('med-panturrilha').value || '--'
-            };
-            
-            db.set('medidas', medidas);
-
-            const histMedidas = db.get('histMedidas') || [];
-            histMedidas.unshift({
-                data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
-                dataObj: medidas
-            });
-            db.set('histMedidas', histMedidas);
-
-            loadHistMedidas();
-            loadEvolucaoMedidasHome();
-            alert("Medidas salvas e adicionadas ao histórico!");
-        }
-
-        function loadMedidas() {
-            const medidas = db.get('medidas');
-            if (medidas) {
-                document.getElementById('med-braco').value = medidas.braco !== '--' ? medidas.braco : '';
-                document.getElementById('med-antebraco').value = medidas.antebraco !== '--' ? medidas.antebraco : '';
-                document.getElementById('med-peito').value = medidas.peito !== '--' ? medidas.peito : '';
-                document.getElementById('med-barriga').value = medidas.barriga !== '--' ? medidas.barriga : '';
-                document.getElementById('med-coxa').value = medidas.coxa !== '--' ? medidas.coxa : '';
-                document.getElementById('med-panturrilha').value = medidas.panturrilha !== '--' ? medidas.panturrilha : '';
-            }
-        }
-
-        function loadHistMedidas() {
-            const histMedidas = db.get('histMedidas') || [];
-            const container = document.getElementById('lista-historico-medidas');
-            
-            if (histMedidas.length === 0) {
-                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Nenhum registro no histórico ainda.</p>';
-                return;
-            }
-
-            container.innerHTML = '';
-            histMedidas.forEach(item => {
-                const m = item.dataObj;
-                container.innerHTML += `
-                    <div class="history-card">
-                        <header>📅 Registrado em: ${item.data}</header>
-                        <div class="grid-2" style="font-size: 0.85rem;">
-                            <span>💪 Braço: <strong>${m.braco} cm</strong></span>
-                            <span>🥖 Antebraço: <strong>${m.antebraco} cm</strong></span>
-                            <span>🛡️ Peitoral: <strong>${m.peito} cm</strong></span>
-                            <span>🎯 Abdômen: <strong>${m.barriga} cm</strong></span>
-                            <span>🦵 Coxa: <strong>${m.coxa} cm</strong></span>
-                            <span>👟 Panturrilha: <strong>${m.panturrilha} cm</strong></span>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        /* -------------------------------------------------------------
-           GERENCIAMENTO E EDIÇÃO EXPANSÍVEL DE METAS
-        ------------------------------------------------------------- */
-        function saveMetas() {
-            const metas = db.get('metas') || {};
-            const exercicio = document.getElementById('meta-exercicio').value.trim();
-            const cargaAtual = parseFloat(document.getElementById('meta-carga-atual').value);
-            const cargaAlvo = parseFloat(document.getElementById('meta-carga-alvo').value);
-
-            if (exercicio && !isNaN(cargaAtual) && !isNaN(cargaAlvo)) {
-                metas[exercicio.toLowerCase()] = {
-                    nome: exercicio,
-                    atual: cargaAtual,
-                    alvo: cargaAlvo,
-                    data: new Date().toLocaleDateString('pt-BR')
-                };
-
-                db.set('metas', metas);
-                loadMetas();
-
-                document.getElementById('meta-exercicio').value = '';
-                document.getElementById('meta-carga-atual').value = '';
-                document.getElementById('meta-carga-alvo').value = '';
-            } else {
-                alert("Preencha o nome do exercício, a carga atual e a carga meta!");
-            }
-        }
-
-        function loadMetas() {
-            const metas = db.get('metas') || {};
-            const container = document.getElementById('lista-metas');
-            
-            const keys = Object.keys(metas);
-            if (keys.length === 0) {
-                container.innerHTML = '<p style="font-size: 0.85rem; opacity: 0.7;">Nenhuma meta cadastrada ainda.</p>';
-                return;
-            }
-
-            container.innerHTML = '';
-            keys.forEach(key => {
-                const m = metas[key];
-                let pct = Math.min(Math.round((m.atual / m.alvo) * 100), 100);
-                if (isNaN(pct)) pct = 0;
-
-                container.innerHTML += `
-                    <div class="history-card" style="border-left-color: var(--primary);" onclick="openEditarMetaModal('${key}')">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                            <strong>🏋️ ${m.nome}</strong>
-                            <span style="font-size: 0.8rem; opacity: 0.8;">${m.data}</span>
-                        </div>
-                        <div style="font-size: 0.85rem; margin-bottom: 5px;">
-                            Carga Atual: <strong>${m.atual} kg</strong> | Meta: <strong>${m.alvo} kg</strong> (${pct}%)
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
-                        </div>
-                        <div style="font-size:0.75rem; text-align:right; margin-top:4px; opacity:0.7;">Clique para editar ✏️</div>
-                    </div>
-                `;
-            });
-        }
-
-        function openEditarMetaModal(key) {
-            const metas = db.get('metas') || {};
-            const m = metas[key];
-            if (!m) return;
-
-            document.getElementById('edit-meta-key').value = key;
-            document.getElementById('edit-meta-nome').value = m.nome;
-            document.getElementById('edit-meta-atual').value = m.atual;
-            document.getElementById('edit-meta-alvo').value = m.alvo;
-
-            openModal('modal-editar-meta');
-        }
-
-        function salvarEdicaoMeta() {
-            const oldKey = document.getElementById('edit-meta-key').value;
-            const nome = document.getElementById('edit-meta-nome').value.trim();
-            const atual = parseFloat(document.getElementById('edit-meta-atual').value);
-            const alvo = parseFloat(document.getElementById('edit-meta-alvo').value);
-
-            if (!nome || isNaN(atual) || isNaN(alvo)) {
-                alert("Preencha todos os campos da meta!");
-                return;
-            }
-
-            const metas = db.get('metas') || {};
-            delete metas[oldKey];
-
-            metas[nome.toLowerCase()] = {
-                nome,
-                atual,
-                alvo,
-                data: new Date().toLocaleDateString('pt-BR')
-            };
-
-            db.set('metas', metas);
-            loadMetas();
-            closeModals();
-            alert("Meta atualizada com sucesso!");
-        }
-
-        function deleteMetaFromModal() {
-            const key = document.getElementById('edit-meta-key').value;
-            if (!confirm("Tem certeza que deseja excluir esta meta?")) return;
-
-            const metas = db.get('metas') || {};
-            delete metas[key];
-            db.set('metas', metas);
-            loadMetas();
-            closeModals();
-        }
-
-        // HISTÓRICO DE FOTOS COM EDIÇÃO E EXCLUSÃO MANTENDO OS DADOS ORIGINAIS
-        function saveHistorico() {
-            const inputFoto = document.getElementById('foto-upload');
-            if (!inputFoto.files[0]) {
-                alert("Selecione uma foto primeiro!");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imagemBase64 = e.target.result;
-                const historico = db.get('historico') || [];
-                const dados = db.get('dados') || { peso: '--', bf: '--' };
-                const medidas = db.get('medidas') || { braco: '--', peito: '--', coxa: '--' };
-
-                historico.unshift({
-                    img: imagemBase64,
-                    data: new Date().toLocaleDateString('pt-BR'),
-                    peso: dados.peso,
-                    bf: dados.bf,
-                    braco: medidas.braco,
-                    peito: medidas.peito,
-                    coxa: medidas.coxa
-                });
-
-                if(historico.length > 10) historico.pop();
-
-                db.set('historico', historico);
-                loadHistorico();
-                alert("Lembrança salva!");
-            };
-            reader.readAsDataURL(inputFoto.files[0]);
-        }
-
-        function loadHistorico() {
-            const historico = db.get('historico') || [];
-            const container = document.getElementById('galeria-historico');
-            container.innerHTML = '';
-            
-            historico.forEach((item, index) => {
-                container.innerHTML += `
-                    <div class="history-item">
-                        <img src="${item.img}" alt="Histórico do corpo">
-                        <div class="details">
-                            <strong>📅 ${item.data}</strong><br>
-                            ⚖️ Peso: ${item.peso}kg | 🔥 BF: ${item.bf}%<br>
-                            💪 Braço: ${item.braco}cm | Peito: ${item.peito}cm | Coxa: ${item.coxa}cm
-                            <div style="display:flex; gap:10px; margin-top:8px;">
-                                <button class="btn-warning btn-sm" onclick="openEditarFotoModal(${index})">✏️ Alterar Foto</button>
-                                <button class="btn-danger btn-sm" onclick="deleteHistoricoFoto(${index})">🗑️ Excluir</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function openEditarFotoModal(index) {
-            document.getElementById('edit-foto-index').value = index;
-            openModal('modal-editar-foto');
-        }
-
-        function salvarAlteracaoFoto() {
-            const index = parseInt(document.getElementById('edit-foto-index').value);
-            const input = document.getElementById('edit-foto-upload');
-
-            if (!input.files[0]) {
-                alert("Selecione a nova imagem para substituir!");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const historico = db.get('historico') || [];
-                if (historico[index]) {
-                    historico[index].img = e.target.result;
-                    db.set('historico', historico);
-                    loadHistorico();
-                    closeModals();
-                    alert("Foto atualizada com sucesso!");
-                }
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-
-        function deleteHistoricoFoto(index) {
-            if (!confirm("Tem certeza que deseja excluir esta foto do histórico?")) return;
-            const historico = db.get('historico') || [];
-            historico.splice(index, 1);
-            db.set('historico', historico);
-            loadHistorico();
-        }
-    </script>
+      } else {
+        // Exemplo padrão para visualização imediata
+        document.getElementById('inp-rfpos').value = 30000;
+        document.getElementById('inp-rfipca').value = 25000;
+        document.getElementById('inp-fiis').value = 15000;
+        document.getElementById('inp-acoes').value = 15000;
+        document.getElementById('inp-global').value = 10000;
+        document.getElementById('inp-alt').value = 5000;
+      }
+      calcularTudo();
+    }
+
+    // Inicialização
+    window.addEventListener('DOMContentLoaded', () => {
+      carregarLocal();
+      fetchLiveRates();
+    });
+  </script>
 </body>
 </html>
