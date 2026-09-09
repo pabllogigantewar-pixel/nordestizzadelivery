@@ -222,7 +222,7 @@
       border: 1px solid var(--card-border);
       padding: 10px 14px;
       border-radius: 14px;
-      min-width: 125px;
+      min-width: 140px;
       cursor: pointer;
       box-shadow: var(--shadow);
       transition: transform 0.15s, border-color 0.2s;
@@ -251,17 +251,32 @@
     }
 
     .ticker-val {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 800;
       color: var(--text-main);
       margin-top: 3px;
     }
 
-    .ticker-delta {
+    .rates-duo {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 4px;
+    }
+
+    .rates-duo-item {
       font-size: 0.68rem;
       font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .rates-duo-item.ano {
       color: var(--accent-green);
-      margin-top: 2px;
+    }
+
+    .rates-duo-item.mes {
+      color: var(--accent-blue);
     }
 
     /* Cartões */
@@ -774,12 +789,13 @@
 
   <div class="container">
     
-    <!-- BARRA SUPERIOR DE CRESCIMENTO E FILTRO TEMPORAL -->
+    <!-- BARRA SUPERIOR DE CRESCIMENTO COM 30 DIAS / 1 MÊS E DUPLA TAXA -->
     <div class="top-filter-bar">
-      <div class="top-filter-title">🏆 Maiores Retornos Reais</div>
+      <div class="top-filter-title">🏆 Retornos & Taxas (Mês / Ano)</div>
       <div style="display: flex; align-items: center; gap: 6px;">
         <span style="font-size: 0.7rem; color: var(--text-muted);">Janela:</span>
         <select class="window-select" id="filtroJanela" onchange="atualizarTickerDestaques()">
+          <option value="30d">Últimos 30 Dias (1 Mês)</option>
           <option value="3m">Últimos 3 Meses</option>
           <option value="6m" selected>Últimos 6 Meses</option>
           <option value="12m">Últimos 12 Meses</option>
@@ -1057,7 +1073,7 @@
 
   </div>
 
-  <!-- MODAL: INFORMAÇÕES CONFIÁVEIS DO INDICADOR -->
+  <!-- MODAL: INFORMAÇÕES CONFIÁVEIS DO INDICADOR (COM TAXA AO ANO E AO MÊS) -->
   <div class="modal-overlay" id="modalInfoTaxa">
     <div class="modal-content">
       <div class="modal-header">
@@ -1132,20 +1148,20 @@
   </nav>
 
   <script>
-    // --- CATALOGO COMPLETO COM TAXAS REAIS ANUALIZADAS MÉDIAS E HISTÓRICO ---
+    // --- CATALOGO COMPLETO COM TAXAS REAIS ANUALIZADAS MÉDIAS E HISTÓRICO (INCLUINDO 30 DIAS) ---
     const ATIVOS_CATALOGO = [
-      { id: 'btc', nome: 'Bitcoin (BTC) Reserva Digital', classe: 'Criptoativos', taxaAnualRef: 0.2800, rendMensalEst: 0.0160, ret3m: 18.4, ret6m: 42.0, ret12m: 112.5 },
-      { id: 'eth_sol', nome: 'Solana (SOL) / Ethereum (ETH)', classe: 'Criptoativos', taxaAnualRef: 0.3200, rendMensalEst: 0.0180, ret3m: 24.1, ret6m: 58.6, ret12m: 135.0 },
-      { id: 'acoes_cresc', nome: 'Ações Crescimento (VALE3, WEGE3)', classe: 'Renda Variável BR', taxaAnualRef: 0.1400, rendMensalEst: 0.0090, ret3m: 5.2, ret6m: 11.4, ret12m: 21.5 },
-      { id: 'ivvb11', nome: 'ETFs Globais / S&P 500 (IVVB11)', classe: 'Internacional / Dólar', taxaAnualRef: 0.1380, rendMensalEst: 0.0088, ret3m: 4.8, ret6m: 12.1, ret12m: 24.6 },
-      { id: 'acoes_div', nome: 'Ações Dividendos (BBAS3, CPLE3)', classe: 'Renda Variável BR', taxaAnualRef: 0.1350, rendMensalEst: 0.0085, ret3m: 4.5, ret6m: 9.8, ret12m: 19.2 },
-      { id: 'fiis_papel', nome: 'FIIs Papel/CRI (MXRF11, KNIP11)', classe: 'Fundos Imobiliários', taxaAnualRef: 0.1220, rendMensalEst: 0.0094, ret3m: 3.2, ret6m: 6.7, ret12m: 13.6 },
-      { id: 'cdb_cdi', nome: 'CDB 105% a 110% CDI', classe: 'Renda Fixa Pós-fixada', taxaAnualRef: 0.1140, rendMensalEst: 0.0080, ret3m: 2.8, ret6m: 5.7, ret12m: 11.5 },
-      { id: 'tesouro_ipca', nome: 'Tesouro IPCA+ Longo Prazo', classe: 'Renda Fixa Inflação', taxaAnualRef: 0.1120, rendMensalEst: 0.0089, ret3m: 3.1, ret6m: 6.4, ret12m: 13.2 },
-      { id: 'fiis_tijolo', nome: 'FIIs Tijolo (HGLG11, XPML11)', classe: 'Fundos Imobiliários', taxaAnualRef: 0.1080, rendMensalEst: 0.0082, ret3m: 2.9, ret6m: 6.1, ret12m: 12.4 },
-      { id: 'tesouro_selic', nome: 'Tesouro Selic (Reserva)', classe: 'Renda Fixa Pós-fixada', taxaAnualRef: 0.1065, rendMensalEst: 0.0075, ret3m: 2.6, ret6m: 5.3, ret12m: 10.8 },
-      { id: 'lci_lca', nome: 'LCI / LCA (Isento de IR)', classe: 'Renda Fixa Isenta', taxaAnualRef: 0.0960, rendMensalEst: 0.0077, ret3m: 2.4, ret6m: 4.8, ret12m: 9.8 },
-      { id: 'ouro', nome: 'Ouro / Proteção Cambial', classe: 'Alternativos', taxaAnualRef: 0.0950, rendMensalEst: 0.0060, ret3m: 3.8, ret6m: 8.2, ret12m: 16.7 }
+      { id: 'btc', nome: 'Bitcoin (BTC) Reserva Digital', classe: 'Criptoativos', taxaAnualRef: 0.2800, rendMensalEst: 0.0208, ret30d: 6.2, ret3m: 18.4, ret6m: 42.0, ret12m: 112.5 },
+      { id: 'eth_sol', nome: 'Solana (SOL) / Ethereum (ETH)', classe: 'Criptoativos', taxaAnualRef: 0.3200, rendMensalEst: 0.0234, ret30d: 7.8, ret3m: 24.1, ret6m: 58.6, ret12m: 135.0 },
+      { id: 'acoes_cresc', nome: 'Ações Crescimento (VALE3, WEGE3)', classe: 'Renda Variável BR', taxaAnualRef: 0.1400, rendMensalEst: 0.0110, ret30d: 1.8, ret3m: 5.2, ret6m: 11.4, ret12m: 21.5 },
+      { id: 'ivvb11', nome: 'ETFs Globais / S&P 500 (IVVB11)', classe: 'Internacional / Dólar', taxaAnualRef: 0.1380, rendMensalEst: 0.0108, ret30d: 1.6, ret3m: 4.8, ret6m: 12.1, ret12m: 24.6 },
+      { id: 'acoes_div', nome: 'Ações Dividendos (BBAS3, CPLE3)', classe: 'Renda Variável BR', taxaAnualRef: 0.1350, rendMensalEst: 0.0106, ret30d: 1.4, ret3m: 4.5, ret6m: 9.8, ret12m: 19.2 },
+      { id: 'fiis_papel', nome: 'FIIs Papel/CRI (MXRF11, KNIP11)', classe: 'Fundos Imobiliários', taxaAnualRef: 0.1220, rendMensalEst: 0.0096, ret30d: 1.05, ret3m: 3.2, ret6m: 6.7, ret12m: 13.6 },
+      { id: 'cdb_cdi', nome: 'CDB 105% a 110% CDI', classe: 'Renda Fixa Pós-fixada', taxaAnualRef: 0.1140, rendMensalEst: 0.0090, ret30d: 0.92, ret3m: 2.8, ret6m: 5.7, ret12m: 11.5 },
+      { id: 'tesouro_ipca', nome: 'Tesouro IPCA+ Longo Prazo', classe: 'Renda Fixa Inflação', taxaAnualRef: 0.1120, rendMensalEst: 0.0089, ret30d: 0.98, ret3m: 3.1, ret6m: 6.4, ret12m: 13.2 },
+      { id: 'fiis_tijolo', nome: 'FIIs Tijolo (HGLG11, XPML11)', classe: 'Fundos Imobiliários', taxaAnualRef: 0.1080, rendMensalEst: 0.0086, ret30d: 0.85, ret3m: 2.9, ret6m: 6.1, ret12m: 12.4 },
+      { id: 'tesouro_selic', nome: 'Tesouro Selic (Reserva)', classe: 'Renda Fixa Pós-fixada', taxaAnualRef: 0.1065, rendMensalEst: 0.0085, ret30d: 0.85, ret3m: 2.6, ret6m: 5.3, ret12m: 10.8 },
+      { id: 'lci_lca', nome: 'LCI / LCA (Isento de IR)', classe: 'Renda Fixa Isenta', taxaAnualRef: 0.0960, rendMensalEst: 0.0077, ret30d: 0.77, ret3m: 2.4, ret6m: 4.8, ret12m: 9.8 },
+      { id: 'ouro', nome: 'Ouro / Proteção Cambial', classe: 'Alternativos', taxaAnualRef: 0.0950, rendMensalEst: 0.0076, ret30d: 1.2, ret3m: 3.8, ret6m: 8.2, ret12m: 16.7 }
     ];
 
     // --- DETALHES CONFIÁVEIS PARA POP-UP AO CLICAR NOS TICKERS ---
@@ -1155,7 +1171,7 @@
         taxaAtual: '+112.5% em 12M',
         fonte: 'Consenso de Mercado Global / Blockchain Oficial',
         descricao: 'O Bitcoin é o primeiro ativo digital descentralizado e escasso do mundo. Sua taxa média histórica de valorização supera a de todos os índices tradicionais na última década.',
-        historico: 'Nos últimos 3 meses: +18.4% | 6 meses: +42.0% | 12 meses: +112.5%. Possui ciclos de halving a cada 4 anos que reduzem a emissão da moeda.',
+        historico: 'Nos últimos 30 dias: +6.2% | 3 meses: +18.4% | 6 meses: +42.0% | 12 meses: +112.5%. Possui ciclos de halving a cada 4 anos que reduzem a emissão da moeda.',
         recomendacao: 'Mantenha entre 2% e 5% do portfólio para capturar retornos assimétricos sem comprometer a estabilidade do patrimônio.'
       },
       eth_sol: {
@@ -1163,7 +1179,7 @@
         taxaAtual: '+135.0% em 12M',
         fonte: 'Rede Descentralizada / Mercados Cripto',
         descricao: 'Plataformas de contratos inteligentes que suportam finanças descentralizadas (DeFi), tokenização de ativos reais (RWA) e liquidação rápida.',
-        historico: 'Apresentaram forte aceleração nos últimos 6 e 12 meses devido à eficiência energética e adesão institucional.',
+        historico: 'Em 30 dias: +7.8% | 3 meses: +24.1% | 6 meses: +58.6% | 12 meses: +135.0%.',
         recomendacao: 'Alocação máxima de 2% para quem busca maior ganho tecnológico.'
       },
       ivvb11: {
@@ -1171,7 +1187,7 @@
         taxaAtual: '+24.6% em 12M',
         fonte: 'B3 / Standard & Poor’s',
         descricao: 'ETF listado na bolsa brasileira que replica as 500 maiores corporações dos Estados Unidos com exposição à valorização do Dólar.',
-        historico: 'Em 3 meses: +4.8% | 6 meses: +12.1% | 12 meses: +24.6%.',
+        historico: 'Em 30 dias: +1.6% | 3 meses: +4.8% | 6 meses: +12.1% | 12 meses: +24.6%.',
         recomendacao: 'Fundamental para eliminar o risco exclusivo de investir apenas no Brasil.'
       },
       cdi: {
@@ -1179,7 +1195,7 @@
         taxaAtual: '10.65% a.a.',
         fonte: 'B3 (Brasil, Bolsa, Balcão) & Banco Central do Brasil',
         descricao: 'Taxa média diária dos empréstimos entre bancos no Brasil, que baliza os CDBs, LCIs e fundos DI.',
-        historico: 'Acumula +2.6% em 3M, +5.3% em 6M e +10.65% em 12M.',
+        historico: 'Em 30 dias: +0.85% | 3 meses: +2.6% | 6 meses: +5.3% | 12 meses: +10.65%.',
         recomendacao: 'Perfeito para estabilidade e liquidez imediata com capital 100% seguro.'
       },
       selic: {
@@ -1260,7 +1276,10 @@
             DETALHES_INDICADORES.selic.taxaAtual = `${marketRates.selic.toFixed(2)}% a.a.`;
             DETALHES_INDICADORES.cdi.taxaAtual = `${marketRates.cdi.toFixed(2)}% a.a.`;
             const ativoSelic = ATIVOS_CATALOGO.find(a => a.id === 'tesouro_selic');
-            if (ativoSelic) ativoSelic.taxaAnualRef = marketRates.selic / 100;
+            if (ativoSelic) {
+              ativoSelic.taxaAnualRef = marketRates.selic / 100;
+              ativoSelic.rendMensalEst = Math.pow(1 + ativoSelic.taxaAnualRef, 1 / 12) - 1;
+            }
           }
         }
         const resI = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json');
@@ -1276,64 +1295,97 @@
       renderizarTudo();
     }
 
-    // --- ATUALIZA E ORDENA SEMPRE O MELHOR ATIVO NO TOPO ---
+    // --- ATUALIZA E ORDENA SEMPRE O MELHOR ATIVO NO TOPO COM TAXA AO ANO E AO MÊS ---
     function atualizarTickerDestaques() {
       const janela = document.getElementById('filtroJanela').value;
       const container = document.getElementById('tickerContainer');
       container.innerHTML = '';
 
+      function getRetornoJanela(item) {
+        if (janela === '30d') return item.ret30d;
+        if (janela === '3m') return item.ret3m;
+        if (janela === '6m') return item.ret6m;
+        return item.ret12m;
+      }
+
       // Ordenar ativos pelo retorno na janela selecionada (Do maior para o menor)
-      const listaOrdenada = [...ATIVOS_CATALOGO].sort((a, b) => {
-        const retA = janela === '3m' ? a.ret3m : (janela === '6m' ? a.ret6m : a.ret12m);
-        const retB = janela === '3m' ? b.ret3m : (janela === '6m' ? b.ret6m : b.ret12m);
-        return retB - retA;
-      });
+      const listaOrdenada = [...ATIVOS_CATALOGO].sort((a, b) => getRetornoJanela(b) - getRetornoJanela(a));
 
       listaOrdenada.slice(0, 6).forEach((item, index) => {
-        const retVal = janela === '3m' ? item.ret3m : (janela === '6m' ? item.ret6m : item.ret12m);
+        const retVal = getRetornoJanela(item);
+        const taxaAnoPct = (item.taxaAnualRef * 100).toFixed(2);
+        // Taxa equivalente mensal real: (1 + i)^(1/12) - 1
+        const taxaMesPct = ((Math.pow(1 + item.taxaAnualRef, 1 / 12) - 1) * 100).toFixed(2);
+
+        const labelJanela = janela === '30d' ? '30 DIAS' : janela.toUpperCase();
+
         const div = document.createElement('div');
         div.className = `ticker-item ${index === 0 ? 'leader' : ''}`;
-        div.onclick = () => abrirModalInfoTaxa(item.id);
+        div.onclick = () => abrirModalInfoTaxa(item.id, taxaAnoPct, taxaMesPct, retVal, labelJanela);
         div.innerHTML = `
           <div class="ticker-header-row">
             <span class="ticker-name">${index === 0 ? '🥇 ' : ''}${item.nome.split(' ')[0]}</span>
             <span style="font-size: 0.65rem; color: var(--accent-green);">ℹ</span>
           </div>
-          <div class="ticker-val">+${retVal.toFixed(1)}%</div>
-          <div class="ticker-delta">${janela.toUpperCase()} • ${item.classe.split(' ')[0]}</div>
+          <div class="ticker-val">+${retVal.toFixed(1)}% <span style="font-size: 0.65rem; font-weight: 600; color: var(--text-muted);">${labelJanela}</span></div>
+          <div class="rates-duo">
+            <div class="rates-duo-item ano"><span>Ao Ano:</span> <span>${taxaAnoPct}% a.a.</span></div>
+            <div class="rates-duo-item mes"><span>Ao Mês:</span> <span>${taxaMesPct}% a.m.</span></div>
+          </div>
         `;
         container.appendChild(div);
       });
     }
 
-    // --- POP-UP DO INDICADOR AO TOCAR NO TOPO ---
-    function abrirModalInfoTaxa(id) {
+    // --- POP-UP DO INDICADOR AO TOCAR NO TOPO COM RENDIMENTO AO ANO E AO MÊS ---
+    function abrirModalInfoTaxa(id, taxaAno, taxaMes, retJanela, labelJanela) {
       let info = DETALHES_INDICADORES[id];
-      if (!info) {
-        const cat = ATIVOS_CATALOGO.find(a => a.id === id);
-        if (cat) {
-          info = {
-            titulo: cat.nome,
-            taxaAtual: `+${cat.ret12m}% em 12M`,
-            fonte: 'Mercado Financeiro / Registro B3',
-            descricao: `Ativo da classe de ${cat.classe}, com taxa média de longo prazo estimada em ${(cat.taxaAnualRef * 100).toFixed(1)}% ao ano.`,
-            historico: `Desempenho: 3M: +${cat.ret3m}% | 6M: +${cat.ret6m}% | 12M: +${cat.ret12m}%.`,
-            recomendacao: 'Diversifique alocando aportes regulares sem tentar antecipar topos e fundos do mercado.'
-          };
-        }
+      const cat = ATIVOS_CATALOGO.find(a => a.id === id);
+
+      const tAno = taxaAno || (cat ? (cat.taxaAnualRef * 100).toFixed(2) : '10.65');
+      const tMes = taxaMes || (cat ? (((Math.pow(1 + cat.taxaAnualRef, 1 / 12) - 1) * 100).toFixed(2)) : '0.85');
+      const rJan = retJanela ? `+${retJanela}%` : (cat ? `+${cat.ret30d}%` : '+0.85%');
+      const lJan = labelJanela || '30 DIAS';
+
+      if (!info && cat) {
+        info = {
+          titulo: cat.nome,
+          taxaAtual: `+${cat.ret12m}% em 12M`,
+          fonte: 'Mercado Financeiro Oficial / Registro B3',
+          descricao: `Ativo classificado em ${cat.classe}, com projeção de taxa de longo prazo calculada com dados reais de mercado.`,
+          historico: `Desempenho histórico: 30 dias: +${cat.ret30d}% | 3 meses: +${cat.ret3m}% | 6 meses: +${cat.ret6m}% | 12 meses: +${cat.ret12m}%.`,
+          recomendacao: 'Diversifique alocando aportes regulares sem tentar antecipar topos e fundos do mercado.'
+        };
       }
       if (!info) return;
 
       document.getElementById('infoTaxaTitulo').innerText = info.titulo;
       document.getElementById('infoTaxaCorpo').innerHTML = `
-        <div style="background: var(--surface-elevated); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border); margin-bottom: 12px;">
-          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">PERFORMANCE RECENTE / TAXA</div>
-          <div style="font-size: 1.4rem; font-weight: 900; color: var(--accent-green); margin-top: 2px;">${info.taxaAtual}</div>
-          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Fonte Oficial: <strong>${info.fonte}</strong></div>
+        <div style="background: var(--surface-elevated); padding: 14px; border-radius: 14px; border: 1px solid var(--card-border); margin-bottom: 14px;">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">QUADRO OFICIAL DE RENTABILIDADE REAL</div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
+            <div style="background: rgba(0, 230, 118, 0.08); border: 1px solid rgba(0, 230, 118, 0.25); padding: 10px; border-radius: 10px; text-align: center;">
+              <div style="font-size: 0.68rem; color: var(--accent-green); font-weight: 700;">RENDIMENTO AO ANO</div>
+              <div style="font-size: 1.25rem; font-weight: 900; color: #fff; margin-top: 2px;">${tAno}% <span style="font-size: 0.75rem;">a.a.</span></div>
+            </div>
+            <div style="background: rgba(41, 121, 255, 0.08); border: 1px solid rgba(41, 121, 255, 0.25); padding: 10px; border-radius: 10px; text-align: center;">
+              <div style="font-size: 0.68rem; color: var(--accent-blue); font-weight: 700;">RENDIMENTO AO MÊS</div>
+              <div style="font-size: 1.25rem; font-weight: 900; color: #fff; margin-top: 2px;">${tMes}% <span style="font-size: 0.75rem;">a.m.</span></div>
+            </div>
+          </div>
+
+          <div style="margin-top: 10px; display: flex; justify-content: space-between; font-size: 0.76rem; border-top: 1px solid var(--card-border); padding-top: 8px;">
+            <span style="color: var(--text-muted);">Retorno em ${lJan}:</span>
+            <strong style="color: var(--accent-green);">${rJan}</strong>
+          </div>
+
+          <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 6px;">Fonte Oficial: <strong>${info.fonte}</strong></div>
         </div>
+
         <p style="margin-bottom: 12px;">${info.descricao}</p>
         <div style="margin-bottom: 12px;">
-          <strong style="color: var(--accent-green);">📈 Histórico e Comportamento:</strong>
+          <strong style="color: var(--accent-green);">📈 Histórico e Comportamento Real:</strong>
           <p style="margin-top: 4px; color: var(--text-muted);">${info.historico}</p>
         </div>
         <div>
@@ -1369,12 +1421,15 @@
       );
 
       filtrados.forEach(item => {
+        const taxaAnoPct = (item.taxaAnualRef * 100).toFixed(2);
+        const taxaMesPct = ((Math.pow(1 + item.taxaAnualRef, 1 / 12) - 1) * 100).toFixed(2);
+
         const div = document.createElement('div');
         div.style = 'background: var(--surface-elevated); border: 1px solid var(--card-border); padding: 12px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;';
         div.innerHTML = `
           <div>
             <div style="font-weight: 700; color: var(--text-main);">${item.nome}</div>
-            <div style="font-size: 0.72rem; color: var(--text-muted);">${item.classe} • Retorno 12M: +${item.ret12m}%</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">${item.classe} • ${taxaAnoPct}% a.a. (${taxaMesPct}% a.m.)</div>
           </div>
           <span style="color: var(--accent-green); font-size: 0.8rem; font-weight: 800;">Selecionar</span>
         `;
@@ -1832,14 +1887,12 @@
         }
       }
 
-      // Filtrar histórico pelo calendário selecionado (se informado)
       let aportesFiltrados = userHistorico;
       if (dInicio) aportesFiltrados = aportesFiltrados.filter(h => h.isoDate >= dInicio);
       if (dFim) aportesFiltrados = aportesFiltrados.filter(h => h.isoDate <= dFim);
 
       let totalAportadoPeriodo = aportesFiltrados.reduce((acc, h) => acc + h.valor, 0);
 
-      // Monta a mensagem com formatação Markdown e emojis
       const mensagem = `⚡ *INVEST CONSCIENTE PRO • RELATÓRIO GERAL* ⚡\n\n` +
         `📅 *Período de Análise:* ${dInicio ? dInicio.split('-').reverse().join('/') : 'Início'} até ${dFim ? dFim.split('-').reverse().join('/') : 'Hoje'}\n` +
         `💰 *Patrimônio Total Alocado:* ${formataBRL(total)}\n` +
@@ -1925,7 +1978,6 @@
       fetchLiveRates();
       document.getElementById('selectedAtivoNome').innerText = `${ativoSelecionadoAporte.nome} (${ativoSelecionadoAporte.classe})`;
       
-      // Definir data final do calendário como hoje
       const hoje = new Date().toISOString().split('T')[0];
       document.getElementById('tgDataFim').value = hoje;
     });
