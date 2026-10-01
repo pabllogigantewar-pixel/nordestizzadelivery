@@ -31,7 +31,7 @@
 
     [data-theme="light"] {
       --bg: #f5f7fb;
-      --bg-overlay: radial-gradient(circle at 50% 10%, rgba(0, 180, 90, 0.08) 0%, rgba(245, 247, 251, 0.98) 80%);
+      --bg-overlay: radial-gradient(circle at 50% 10%, rgba(0, 168, 84, 0.08) 0%, rgba(245, 247, 251, 0.98) 80%);
       --surface: #ffffff;
       --surface-elevated: #ebf0f7;
       --card-border: rgba(0, 0, 0, 0.08);
@@ -76,7 +76,6 @@
       justify-content: space-between;
       align-items: center;
       z-index: 500;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .brand {
@@ -218,15 +217,12 @@
       min-width: 140px;
       cursor: pointer;
       box-shadow: var(--shadow);
-      transition: transform 0.15s, border-color 0.2s;
     }
 
     .ticker-item.leader {
       border-color: rgba(0, 230, 118, 0.45);
       background: linear-gradient(180deg, var(--surface), var(--accent-green-dim));
     }
-
-    .ticker-item:active { transform: scale(0.96); }
 
     .ticker-header-row {
       display: flex;
@@ -276,12 +272,6 @@
 
     .card-clickable {
       cursor: pointer;
-      transition: transform 0.15s, border-color 0.2s;
-    }
-
-    .card-clickable:active {
-      transform: scale(0.98);
-      border-color: var(--accent-green);
     }
 
     .card-title {
@@ -376,7 +366,7 @@
       color: var(--text-muted);
     }
 
-    input[type="number"], input[type="text"], input[type="date"], select, textarea {
+    input[type="number"], input[type="text"], input[type="date"], select {
       width: 100%;
       background: var(--surface-elevated);
       border: 1px solid var(--card-border);
@@ -389,7 +379,7 @@
     }
 
     input[type="number"] { padding-left: 42px; }
-    input:focus, select:focus, textarea:focus { border-color: var(--accent-green); }
+    input:focus, select:focus { border-color: var(--accent-green); }
 
     .search-box {
       margin-bottom: 12px;
@@ -441,8 +431,6 @@
       gap: 8px;
       box-shadow: 0 4px 18px var(--accent-green-dim);
     }
-
-    .btn:active { transform: scale(0.98); }
 
     .btn-danger {
       background: rgba(255, 82, 82, 0.15);
@@ -693,12 +681,13 @@
     }
 
     .preset-item {
-      padding: 10px;
+      padding: 12px;
       border-bottom: 1px solid var(--card-border);
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: background 0.15s;
     }
     .preset-item:hover {
       background: var(--surface-elevated);
@@ -887,7 +876,7 @@
 
       <!-- Formulário de Aporte Cumulativo -->
       <div class="card">
-        <div class="card-title" style="margin-bottom: 12px;">➕ Novo Aporte (Soma ao Atual)</div>
+        <div class="card-title" style="margin-bottom: 12px;">➕ Novo Aporte (Soma ao Atual ou Adiciona Novo)</div>
 
         <div class="input-group">
           <label class="input-label">Valor do Aporte</label>
@@ -898,15 +887,15 @@
         </div>
 
         <div class="input-group">
-          <label class="input-label">Selecione o Ativo de Destino</label>
+          <label class="input-label">Selecione o Ativo do Mercado</label>
           <div class="select-button" onclick="abrirModalSeletorAtivo()">
-            <span id="selectedAtivoNome">🔍 Toque para selecionar/pesquisar ativo...</span>
+            <span id="selectedAtivoNome">🔍 Escolher Ativo na Lista do Mercado...</span>
             <span style="font-size: 0.8rem; color: var(--text-muted);">Alterar ▾</span>
           </div>
         </div>
 
         <button class="btn" onclick="executarAporte()">
-          <span>💾</span> Salvar & Somar à Carteira
+          <span>💾</span> Salvar & Efetuar Aporte
         </button>
       </div>
 
@@ -914,7 +903,7 @@
       <div class="card">
         <div class="card-title" style="margin-bottom: 12px;">
           <span>📋 Seus Ativos Alocados</span>
-          <button class="btn-edit" onclick="abrirModalNovoAtivoPersonalizado()">+ Adicionar Ativo</button>
+          <button class="btn-edit" onclick="abrirModalNovoAtivoPersonalizado()">+ Criar Personalizado</button>
         </div>
         <div id="listaAtivos"></div>
       </div>
@@ -922,7 +911,7 @@
       <!-- Histórico de Aportes -->
       <div class="card">
         <div class="card-title" style="margin-bottom: 8px;">
-          <span>⏱️ Histórico de Movimentações</span>
+          <span>⏱️️ Histórico de Movimentações</span>
           <button class="btn-danger" onclick="limparTodoHistorico()">Limpar Todo</button>
         </div>
         <div id="listaHistorico" style="max-height: 180px; overflow-y: auto;"></div>
@@ -1067,7 +1056,7 @@
       </div>
     </div>
 
-    <!-- ABA 4: NOTÍCIAS COM IMAGENS (EXCLUSIVA) -->
+    <!-- ABA 4: NOTÍCIAS COM IMAGENS -->
     <div id="page-noticias" class="tab-content">
       <div class="card" style="border-color: rgba(41, 121, 255, 0.3);">
         <div class="card-title" style="color: var(--accent-blue); margin-bottom: 12px;">
@@ -1122,16 +1111,16 @@
     </div>
   </div>
 
-  <!-- MODAL SELETOR E PESQUISA DE ATIVO PARA APORTE -->
+  <!-- MODAL SELETOR DE ATIVO DO MERCADO COM PESQUISA E TAXAS COMPLETA -->
   <div class="modal-overlay" id="modalSeletorAtivo">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title">Selecione o Ativo</div>
+        <div class="modal-title">Escolha o Ativo do Mercado</div>
         <button class="modal-close" onclick="fecharModal('modalSeletorAtivo')">✕</button>
       </div>
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="buscAtivoAporte" placeholder="Pesquisar por nome ou categoria..." oninput="filtrarAtivosAporte()" />
+        <input type="text" class="search-input" id="buscAtivoAporte" placeholder="Pesquisar por FIIs, Tesouro, CDB, Ações..." oninput="filtrarAtivosAporte()" />
       </div>
       <div class="modal-list" id="listaSelecaoAtivos"></div>
     </div>
@@ -1175,27 +1164,21 @@
     </div>
   </div>
 
-  <!-- MODAL ADICIONAR NOVO ATIVO COM PESQUISA E LISTA PRÉ-CADASTRADA DE 40+ ATIVOS -->
+  <!-- MODAL CRIAR NOVO ATIVO PERSONALIZADO -->
   <div class="modal-overlay" id="modalNovoAtivo">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title">Adicionar Novo Ativo à Carteira</div>
+        <div class="modal-title">Criar Ativo Personalizado</div>
         <button class="modal-close" onclick="fecharModal('modalNovoAtivo')">✕</button>
       </div>
       <div class="modal-list">
-        <div class="search-box">
-          <span class="search-icon">🔎</span>
-          <input type="text" class="search-input" id="buscaPresetAtivo" placeholder="Pesquisar ativos do mercado (Ex: PETR4, IPCA, Selic, BTC)..." oninput="filtrarPresetsMercado()" />
-        </div>
-        <div id="listaPresetsAtivos" style="max-height: 140px; overflow-y: auto; margin-bottom: 12px; border: 1px solid var(--card-border); border-radius: 10px;"></div>
-
         <div class="input-group">
-          <label class="input-label">Nome do Ativo / Título Selecionado</label>
-          <input type="text" id="novoAtivoNome" placeholder="Ex: Tesouro IPCA+ 2035, CDB 120% CDI" />
+          <label class="input-label">Nome do Ativo</label>
+          <input type="text" id="novoAtivoNome" placeholder="Ex: CDB Meu Banco 130% CDI" />
         </div>
         <div class="input-group">
-          <label class="input-label">Tipo / Categoria (Onde foi investido)</label>
-          <input type="text" id="novoAtivoCat" placeholder="Ex: Tesouro Direto, CDB, Ações Brasil, FIIs" />
+          <label class="input-label">Tipo / Categoria</label>
+          <input type="text" id="novoAtivoCat" placeholder="Ex: Tesouro Direto, CDB, Ações, FIIs" />
         </div>
         <div class="input-group">
           <label class="input-label">Valor Inicial Alocado (R$)</label>
@@ -1205,12 +1188,12 @@
           </div>
         </div>
         <div class="input-group">
-          <label class="input-label">Rendimento Contratado no Banco (% a.a.)</label>
-          <input type="number" step="0.01" id="novoAtivoTaxa" placeholder="Ex: 11.75" oninput="calcularEquivalenteMensalNovo()" />
+          <label class="input-label">Rendimento (% a.a.)</label>
+          <input type="number" step="0.01" id="novoAtivoTaxa" placeholder="Ex: 12.5" oninput="calcularEquivalenteMensalNovo()" />
           <div id="novoTaxaMensalCalc" style="font-size: 0.72rem; color: var(--accent-green); margin-top: 4px; font-weight: 700;"></div>
         </div>
         <div class="input-group">
-          <label class="input-label">Data de Vencimento (Opcional - Ativa Timer)</label>
+          <label class="input-label">Data de Vencimento (Opcional)</label>
           <input type="date" id="novoAtivoVencimento" />
         </div>
         <button class="btn" onclick="salvarNovoAtivo()">Criar e Adicionar à Carteira</button>
@@ -1253,42 +1236,42 @@
   </nav>
 
   <script>
-    // BASE DE DADOS EXPANDIDA COM MAIS DE 40 OPÇÕES DE MERCADO
+    // LISTA GIGANTE E COMPLETA DE ATIVOS DE MERCADO COM RENDIMENTOS ANO/MÊS
     const bancoPresetsMercado = [
-      { nome: 'Tesouro Selic 2027', cat: 'Tesouro Direto', taxaAno: 10.75, vencimento: '2027-03-01' },
-      { nome: 'Tesouro IPCA+ 2029', cat: 'Tesouro Direto', taxaAno: 11.90, vencimento: '2029-05-15' },
-      { nome: 'Tesouro IPCA+ 2035', cat: 'Tesouro Direto', taxaAno: 12.20, vencimento: '2035-05-15' },
-      { nome: 'Tesouro IPCA+ 2045', cat: 'Tesouro Direto', taxaAno: 12.50, vencimento: '2045-05-15' },
-      { nome: 'Tesouro Prefixado 2027', cat: 'Tesouro Direto', taxaAno: 11.30, vencimento: '2027-01-01' },
-      { nome: 'CDB 100% CDI Liquidez Diária', cat: 'Renda Fixa', taxaAno: 10.75, vencimento: '' },
-      { nome: 'CDB 110% CDI Banco Sofisa', cat: 'Renda Fixa', taxaAno: 11.82, vencimento: '2026-12-31' },
-      { nome: 'CDB 120% CDI Banco Daycoval', cat: 'Renda Fixa', taxaAno: 12.90, vencimento: '2027-06-30' },
-      { nome: 'LCI Banco Inter 90% CDI', cat: 'Renda Fixa Isenta', taxaAno: 9.67, vencimento: '2026-09-15' },
-      { nome: 'LCA Banco do Brasil IPCA+ 5.5%', cat: 'Renda Fixa Isenta', taxaAno: 10.80, vencimento: '2027-11-20' },
-      { nome: 'BBAS3 - Banco do Brasil', cat: 'Ações Brasil', taxaAno: 14.50, vencimento: '' },
-      { nome: 'PETR4 - Petrobras PN', cat: 'Ações Brasil', taxaAno: 17.20, vencimento: '' },
-      { nome: 'ITUB4 - Itaú Unibanco', cat: 'Ações Brasil', taxaAno: 11.50, vencimento: '' },
-      { nome: 'VALE3 - Vale S.A.', cat: 'Ações Brasil', taxaAno: 12.80, vencimento: '' },
-      { nome: 'CPLE3 - Copel Geração', cat: 'Ações Brasil', taxaAno: 13.10, vencimento: '' },
-      { nome: 'BBSE3 - BB Seguridade', cat: 'Ações Brasil', taxaAno: 12.40, vencimento: '' },
-      { nome: 'WEGE3 - WEG S.A.', cat: 'Ações Brasil', taxaAno: 9.50, vencimento: '' },
-      { nome: 'MXRF11 - Maxi Renda FII', cat: 'FIIs', taxaAno: 11.80, vencimento: '' },
-      { nome: 'HGLG11 - CSHG Logística', cat: 'FIIs', taxaAno: 9.80, vencimento: '' },
-      { nome: 'KNIP11 - Kinea Rendimentos', cat: 'FIIs', taxaAno: 11.20, vencimento: '' },
-      { nome: 'XPML11 - XP Malls', cat: 'FIIs', taxaAno: 10.10, vencimento: '' },
-      { nome: 'BTLG11 - BTG Logística', cat: 'FIIs', taxaAno: 9.90, vencimento: '' },
-      { nome: 'Bitcoin (BTC)', cat: 'Criptoativos', taxaAno: 35.00, vencimento: '' },
-      { nome: 'Ethereum (ETH)', cat: 'Criptoativos', taxaAno: 28.00, vencimento: '' },
-      { nome: 'Solana (SOL)', cat: 'Criptoativos', taxaAno: 42.00, vencimento: '' },
-      { nome: 'IVVB11 - S&P 500 ETF', cat: 'Internacional', taxaAno: 13.50, vencimento: '' },
-      { nome: 'NASD11 - Nasdaq ETF', cat: 'Internacional', taxaAno: 16.00, vencimento: '' }
+      { id: 'm_tesouro_selic_2027', nome: 'Tesouro Selic 2027', cat: 'Tesouro Direto', taxaAno: 10.75, vencimento: '2027-03-01' },
+      { id: 'm_tesouro_ipca_2029', nome: 'Tesouro IPCA+ 2029', cat: 'Tesouro Direto', taxaAno: 11.90, vencimento: '2029-05-15' },
+      { id: 'm_tesouro_ipca_2035', nome: 'Tesouro IPCA+ 2035', cat: 'Tesouro Direto', taxaAno: 12.20, vencimento: '2035-05-15' },
+      { id: 'm_tesouro_ipca_2045', nome: 'Tesouro IPCA+ 2045', cat: 'Tesouro Direto', taxaAno: 12.50, vencimento: '2045-05-15' },
+      { id: 'm_tesouro_pref_2027', nome: 'Tesouro Prefixado 2027', cat: 'Tesouro Direto', taxaAno: 11.30, vencimento: '2027-01-01' },
+      { id: 'm_cdb_100_cdi', nome: 'CDB 100% CDI Liquidez Diária', cat: 'Renda Fixa', taxaAno: 10.75, vencimento: '' },
+      { id: 'm_cdb_110_cdi', nome: 'CDB 110% CDI Banco Sofisa', cat: 'Renda Fixa', taxaAno: 11.82, vencimento: '2026-12-31' },
+      { id: 'm_cdb_120_cdi', nome: 'CDB 120% CDI Banco Daycoval', cat: 'Renda Fixa', taxaAno: 12.90, vencimento: '2027-06-30' },
+      { id: 'm_lci_inter', nome: 'LCI Banco Inter 90% CDI', cat: 'Renda Fixa Isenta', taxaAno: 9.67, vencimento: '2026-09-15' },
+      { id: 'm_lca_bb', nome: 'LCA Banco do Brasil IPCA+ 5.5%', cat: 'Renda Fixa Isenta', taxaAno: 10.80, vencimento: '2027-11-20' },
+      { id: 'm_bbas3', nome: 'BBAS3 - Banco do Brasil', cat: 'Ações Brasil', taxaAno: 14.50, vencimento: '' },
+      { id: 'm_petr4', nome: 'PETR4 - Petrobras PN', cat: 'Ações Brasil', taxaAno: 17.20, vencimento: '' },
+      { id: 'm_itub4', nome: 'ITUB4 - Itaú Unibanco', cat: 'Ações Brasil', taxaAno: 11.50, vencimento: '' },
+      { id: 'm_vale3', nome: 'VALE3 - Vale S.A.', cat: 'Ações Brasil', taxaAno: 12.80, vencimento: '' },
+      { id: 'm_cple3', nome: 'CPLE3 - Copel Geração', cat: 'Ações Brasil', taxaAno: 13.10, vencimento: '' },
+      { id: 'm_bbse3', nome: 'BBSE3 - BB Seguridade', cat: 'Ações Brasil', taxaAno: 12.40, vencimento: '' },
+      { id: 'm_wege3', nome: 'WEGE3 - WEG S.A.', cat: 'Ações Brasil', taxaAno: 9.50, vencimento: '' },
+      { id: 'm_mxrf11', nome: 'MXRF11 - Maxi Renda FII', cat: 'Fundos Imobiliários', taxaAno: 11.80, vencimento: '' },
+      { id: 'm_hglg11', nome: 'HGLG11 - CSHG Logística', cat: 'Fundos Imobiliários', taxaAno: 9.80, vencimento: '' },
+      { id: 'm_knip11', nome: 'KNIP11 - Kinea Rendimentos', cat: 'Fundos Imobiliários', taxaAno: 11.20, vencimento: '' },
+      { id: 'm_xpml11', nome: 'XPML11 - XP Malls FII', cat: 'Fundos Imobiliários', taxaAno: 10.10, vencimento: '' },
+      { id: 'm_btlg11', nome: 'BTLG11 - BTG Logística FII', cat: 'Fundos Imobiliários', taxaAno: 9.90, vencimento: '' },
+      { id: 'm_btc', nome: 'Bitcoin (BTC)', cat: 'Criptoativos', taxaAno: 35.00, vencimento: '' },
+      { id: 'm_eth', nome: 'Ethereum (ETH)', cat: 'Criptoativos', taxaAno: 28.00, vencimento: '' },
+      { id: 'm_sol', nome: 'Solana (SOL)', cat: 'Criptoativos', taxaAno: 42.00, vencimento: '' },
+      { id: 'm_ivvb11', nome: 'IVVB11 - S&P 500 ETF', cat: 'Internacional', taxaAno: 13.50, vencimento: '' },
+      { id: 'm_nasd11', nome: 'NASD11 - Nasdaq ETF', cat: 'Internacional', taxaAno: 16.00, vencimento: '' }
     ];
 
     let ativosPadrao = [
-      { id: 'cdb_cdi', nome: 'CDB 110% CDI', cat: 'Renda Fixa', valor: 15000, taxaAno: 11.82, vencimento: '2026-12-31' },
+      { id: 'cdb_cdi', nome: 'CDB 110% CDI Banco Sofisa', cat: 'Renda Fixa', valor: 15000, taxaAno: 11.82, vencimento: '2026-12-31' },
       { id: 'tesouro_selic', nome: 'Tesouro Selic 2027', cat: 'Tesouro Direto', valor: 10000, taxaAno: 10.75, vencimento: '2027-03-01' },
       { id: 'tesouro_ipca', nome: 'Tesouro IPCA+ 2035', cat: 'Tesouro Direto', valor: 8000, taxaAno: 12.20, vencimento: '2035-05-15' },
-      { id: 'fii_mxrf', nome: 'MXRF11 - Maxi Renda FII', cat: 'FIIs', valor: 12000, taxaAno: 11.80, vencimento: '' },
+      { id: 'fii_mxrf', nome: 'MXRF11 - Maxi Renda FII', cat: 'Fundos Imobiliários', valor: 12000, taxaAno: 11.80, vencimento: '' },
       { id: 'acoes_div', nome: 'BBAS3 - Banco do Brasil', cat: 'Ações Brasil', valor: 18000, taxaAno: 14.50, vencimento: '' },
       { id: 'btc', nome: 'Bitcoin (BTC)', cat: 'Criptoativos', valor: 5000, taxaAno: 35.00, vencimento: '' }
     ];
@@ -1309,7 +1292,7 @@
       historico = [];
     }
 
-    let ativoSelecionadoId = ativos[0] ? ativos[0].id : null;
+    let ativoObjetoAporte = null;
     let tipoGraficoCarteira = 'pie';
     let chartCarteira = null;
     let chartProjecao = null;
@@ -1322,7 +1305,6 @@
       atualizarGraficos();
       carregarNoticias();
       iniciarTimerRegressivo();
-      filtrarPresetsMercado();
 
       const hoje = new Date().toISOString().split('T')[0];
       const elFim = document.getElementById('tgDataFim');
@@ -1375,7 +1357,7 @@
       document.getElementById('novoTaxaMensalCalc').innerText = `Equivale a ~${m.toFixed(2)}% ao mês`;
     }
 
-    // MODAL DE APORTE COM BARRA DE PESQUISA
+    // MODAL DE APORTE COM A LISTA REAL DE ATIVOS DO MERCADO
     function abrirModalSeletorAtivo() {
       document.getElementById('buscAtivoAporte').value = '';
       filtrarAtivosAporte();
@@ -1385,30 +1367,33 @@
     function filtrarAtivosAporte() {
       const termo = (document.getElementById('buscAtivoAporte').value || '').toLowerCase();
       const container = document.getElementById('listaSelecaoAtivos');
-      const filtrados = ativos.filter(a => a.nome.toLowerCase().includes(termo) || a.cat.toLowerCase().includes(termo));
+      const filtrados = bancoPresetsMercado.filter(a => a.nome.toLowerCase().includes(termo) || a.cat.toLowerCase().includes(termo));
 
       if(!filtrados.length) {
-        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); padding:10px; text-align:center;">Nenhum ativo encontrado na pesquisa.</div>';
+        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); padding:10px; text-align:center;">Nenhum ativo de mercado encontrado na pesquisa.</div>';
         return;
       }
 
-      container.innerHTML = filtrados.map(a => `
-        <div class="ativo-item" onclick="selecionarAtivoParaAporte('${a.id}')" style="cursor:pointer;">
-          <div class="ativo-main-row">
-            <div>
-              <div class="ativo-info-title">${a.nome}</div>
-              <div class="ativo-info-sub">${a.cat}</div>
-            </div>
-            <div class="ativo-val">R$ ${a.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>
+      container.innerHTML = filtrados.map(a => {
+        const taxaM = taxaAnualParaMensal(a.taxaAno);
+        return `
+        <div class="preset-item" onclick="selecionarAtivoDoMercado('${a.nome}', '${a.cat}', ${a.taxaAno}, '${a.vencimento||''}')">
+          <div>
+            <strong style="font-size:0.9rem; color:var(--text-main);">${a.nome}</strong>
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">${a.cat}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.88rem; color:var(--accent-green); font-weight:800;">${a.taxaAno.toFixed(2)}% a.a.</div>
+            <div style="font-size:0.7rem; color:var(--accent-blue); font-weight:700;">~${taxaM.toFixed(2)}%/mês</div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
-    function selecionarAtivoParaAporte(id) {
-      ativoSelecionadoId = id;
-      const atv = ativos.find(a => a.id === id);
-      document.getElementById('selectedAtivoNome').innerText = atv ? atv.nome : 'Selecione';
+    function selecionarAtivoDoMercado(nome, cat, taxaAno, vencimento) {
+      ativoObjetoAporte = { nome, cat, taxaAno, vencimento };
+      document.getElementById('selectedAtivoNome').innerHTML = `<strong>${nome}</strong> (${taxaAno}% a.a.)`;
       fecharModal('modalSeletorAtivo');
     }
 
@@ -1417,44 +1402,33 @@
       const val = parseFloat(valInput.value);
       if(!val || val <= 0) return alert('Insira um valor de aporte válido.');
 
-      let atv = ativos.find(a => a.id === ativoSelecionadoId);
-      if(!atv) atv = ativos[0];
+      if(!ativoObjetoAporte) return alert('Por favor, clique em "Escolher Ativo" e selecione um ativo da lista do mercado.');
 
-      atv.valor += val;
+      let existente = ativos.find(a => a.nome.toLowerCase() === ativoObjetoAporte.nome.toLowerCase());
+
+      if(existente) {
+        existente.valor += val;
+      } else {
+        const novo = {
+          id: 'atv_' + Date.now(),
+          nome: ativoObjetoAporte.nome,
+          cat: ativoObjetoAporte.cat,
+          valor: val,
+          taxaAno: ativoObjetoAporte.taxaAno,
+          vencimento: ativoObjetoAporte.vencimento
+        };
+        ativos.push(novo);
+      }
+
       const dataHora = new Date().toLocaleString('pt-BR');
-      historico.unshift({ id: Date.now(), ativoNome: atv.nome, valor: val, dataHora: dataHora });
+      historico.unshift({ id: Date.now(), ativoNome: ativoObjetoAporte.nome, valor: val, dataHora: dataHora });
 
       salvarDados();
       valInput.value = '';
       renderizarAtivos();
       renderizarHistorico();
       atualizarGraficos();
-      alert(`Aporte de R$ ${val.toFixed(2)} somado com sucesso ao ativo: ${atv.nome}`);
-    }
-
-    // PESQUISA E PREENCHIMENTO AUTOMÁTICO DE ATIVOS DO MERCADO
-    function filtrarPresetsMercado() {
-      const termo = (document.getElementById('buscaPresetAtivo').value || '').toLowerCase();
-      const container = document.getElementById('listaPresetsAtivos');
-      const filtrados = bancoPresetsMercado.filter(p => p.nome.toLowerCase().includes(termo) || p.cat.toLowerCase().includes(termo));
-
-      container.innerHTML = filtrados.slice(0, 8).map(p => `
-        <div class="preset-item" onclick="selecionarPreset('${p.nome}', '${p.cat}', ${p.taxaAno}, '${p.vencimento}')">
-          <div>
-            <strong style="font-size:0.8rem; color:var(--text-main);">${p.nome}</strong>
-            <div style="font-size:0.68rem; color:var(--text-muted);">${p.cat}</div>
-          </div>
-          <span style="font-size:0.75rem; color:var(--accent-green); font-weight:700;">${p.taxaAno}% a.a.</span>
-        </div>
-      `).join('');
-    }
-
-    function selecionarPreset(nome, cat, taxa, vencimento) {
-      document.getElementById('novoAtivoNome').value = nome;
-      document.getElementById('novoAtivoCat').value = cat;
-      document.getElementById('novoAtivoTaxa').value = taxa;
-      document.getElementById('novoAtivoVencimento').value = vencimento || '';
-      calcularEquivalenteMensalNovo();
+      alert(`Aporte de R$ ${val.toFixed(2)} efetuado com sucesso em: ${ativoObjetoAporte.nome}`);
     }
 
     // EDIÇÃO COMPLETA
@@ -1539,7 +1513,7 @@
       if(!container) return;
 
       if(!ativos.length) {
-        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:10px;">Nenhum ativo alocado. Clique no botão acima para adicionar.</div>';
+        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:10px;">Nenhum ativo alocado. Faça um novo aporte acima selecionando um ativo de mercado.</div>';
         return;
       }
 
@@ -1566,11 +1540,6 @@
         </div>
       `;
       }).join('');
-
-      if(ativos.length && !ativoSelecionadoId) ativoSelecionadoId = ativos[0].id;
-      const selecionado = ativos.find(a => a.id === ativoSelecionadoId);
-      const labelSel = document.getElementById('selectedAtivoNome');
-      if(labelSel) labelSel.innerText = selecionado ? selecionado.nome : '🔍 Toque para selecionar/pesquisar ativo...';
     }
 
     function renderizarHistorico() {
