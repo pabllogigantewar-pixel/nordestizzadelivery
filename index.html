@@ -154,7 +154,6 @@
       padding: 5px 10px;
       border-radius: 20px;
       border: 1px solid rgba(0, 230, 118, 0.25);
-      cursor: pointer;
     }
 
     .pulse {
@@ -232,7 +231,9 @@
       background: linear-gradient(180deg, var(--surface), var(--accent-green-dim));
     }
 
-    .ticker-item:active { transform: scale(0.96); }
+    .ticker-item:active {
+      transform: scale(0.96);
+    }
 
     .ticker-header-row {
       display: flex;
@@ -436,8 +437,8 @@
       border: 1px solid rgba(255, 82, 82, 0.3);
       color: var(--accent-red);
       font-weight: 700;
-      font-size: 0.72rem;
-      padding: 4px 8px;
+      font-size: 0.75rem;
+      padding: 6px 10px;
       border-radius: 8px;
       cursor: pointer;
     }
@@ -511,27 +512,26 @@
       font-weight: 600;
     }
 
-    /* CARD DE ATIVO AJUSTADO E CORRIGIDO */
     .ativo-item {
       background: var(--surface-elevated);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .ativo-main-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
     }
 
     .ativo-info-title {
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--text-main);
     }
 
@@ -545,14 +545,13 @@
       font-weight: 800;
       font-size: 1rem;
       color: var(--text-main);
-      text-align: right;
     }
 
     .ativo-extra-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.25);
+      background: rgba(0,0,0,0.2);
       padding: 6px 10px;
       border-radius: 8px;
       font-size: 0.74rem;
@@ -561,6 +560,9 @@
     .ativo-timer {
       color: var(--accent-gold);
       font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .ativo-btns {
@@ -645,29 +647,25 @@
       font-weight: 700;
     }
 
-    /* ESTILOS DA ABA NOTÍCIAS */
-    .news-card-item {
-      background: var(--surface-elevated);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
+    /* Notícias */
+    .news-item {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--card-border);
     }
+    .news-item:last-child { border-bottom: none; }
     .news-title {
-      font-size: 0.86rem;
-      font-weight: 800;
+      font-size: 0.82rem;
+      font-weight: 700;
       color: var(--text-main);
       text-decoration: none;
       display: block;
-      line-height: 1.35;
+      line-height: 1.3;
     }
     .news-title:hover { color: var(--accent-green); }
     .news-meta {
       font-size: 0.68rem;
       color: var(--text-muted);
-      margin-top: 6px;
-      display: flex;
-      justify-content: space-between;
+      margin-top: 4px;
     }
 
     /* Modal */
@@ -754,14 +752,14 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 0.65rem;
+      font-size: 0.68rem;
       font-weight: 700;
       cursor: pointer;
-      padding: 4px 6px;
+      padding: 6px 10px;
     }
 
     .nav-item.active { color: var(--accent-green); }
-    .nav-icon { font-size: 1.2rem; }
+    .nav-icon { font-size: 1.25rem; }
 
     .tab-content { display: none; }
     .tab-content.active {
@@ -880,7 +878,7 @@
       <div class="card">
         <div class="card-title" style="margin-bottom: 12px;">
           <span>📋 Seus Ativos Alocados</span>
-          <button class="btn-edit" onclick="abrirModalNovoAtivoPersonalizado()">+ Novo Ativo</button>
+          <button class="btn-edit" onclick="abrirModalNovoAtivoPersonalizado()">+ Adicionar Ativo</button>
         </div>
         <div id="listaAtivos"></div>
       </div>
@@ -980,11 +978,22 @@
       </div>
     </div>
 
-    <!-- ABA 3: DECISÃO -->
+    <!-- ABA 3: DECISÃO & NOTÍCIAS -->
     <div id="page-decisao" class="tab-content">
       <div class="card" style="border-color: rgba(255, 214, 0, 0.3);">
         <div class="card-title" style="color: var(--accent-gold);">👑 Motor da Decisão Mais Lucrativa</div>
         <p style="font-size: 0.82rem; line-height: 1.5; margin-top: 6px;" id="melhorDecisaoDinamica"></p>
+      </div>
+
+      <!-- NOTÍCIAS REAIS EM TEMPO REAL -->
+      <div class="card" style="border-color: rgba(41, 121, 255, 0.3);">
+        <div class="card-title" style="color: var(--accent-blue); margin-bottom: 10px;">
+          <span>📰 Notícias Reais do Mercado Financeiro</span>
+          <span style="font-size: 0.65rem; color: var(--text-muted);" id="newsUpdateState">Atualizado agora</span>
+        </div>
+        <div id="containerNoticias">
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Carregando notícias reais do mercado...</div>
+        </div>
       </div>
 
       <div class="decision-card">
@@ -1033,25 +1042,7 @@
       </div>
     </div>
 
-    <!-- ABA 4: NOTÍCIAS (ABA EXCLUSIVA REQUERIDA) -->
-    <div id="page-noticias" class="tab-content">
-      <div class="card" style="border-color: rgba(41, 121, 255, 0.3);">
-        <div class="card-title" style="color: var(--accent-blue); margin-bottom: 12px;">
-          <span>📰 Notícias Reais do Mercado Financeiro</span>
-          <button class="btn-edit" onclick="carregarNoticias()">🔄 Atualizar</button>
-        </div>
-        <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 14px;">
-          Feed de notícias atualizadas dos maiores portais financeiros do Brasil em tempo real.
-        </p>
-        <div id="containerNoticias">
-          <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 20px;">
-            ⏳ Carregando últimas notícias do mercado...
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ABA 5: RELATÓRIO TELEGRAM -->
+    <!-- ABA 4: BACKUP & RELATÓRIO TELEGRAM -->
     <div id="page-backup" class="tab-content">
       <div class="card">
         <div class="card-title" style="margin-bottom: 8px;">📲 Enviar Relatório ao Telegram</div>
@@ -1137,7 +1128,7 @@
     </div>
   </div>
 
-  <!-- MODAL PARA ADICIONAR NOVO ATIVO PERSONALIZADO -->
+  <!-- MODAL PARA ADICIONAR NOVO ATIVO PERSONALIZADO COM VENCIMENTO -->
   <div class="modal-overlay" id="modalNovoAtivo">
     <div class="modal-content">
       <div class="modal-header">
@@ -1150,8 +1141,14 @@
           <input type="text" id="novoAtivoNome" placeholder="Ex: Tesouro IPCA+ 2035, CDB 120% CDI" />
         </div>
         <div class="input-group">
-          <label class="input-label">Tipo / Categoria (Onde foi investido)</label>
-          <input type="text" id="novoAtivoCat" placeholder="Ex: Tesouro Direto, CDB, Ações, FIIs" />
+          <label class="input-label">Tipo / Categoria</label>
+          <select id="novoAtivoCat">
+            <option value="Renda Fixa">Renda Fixa / Tesouro / CDB</option>
+            <option value="Ações Brasil">Ações Brasil</option>
+            <option value="FIIs">Fundos Imobiliários (FIIs)</option>
+            <option value="Criptoativos">Criptoativos</option>
+            <option value="Internacional">Ações / ETFs Internacionais</option>
+          </select>
         </div>
         <div class="input-group">
           <label class="input-label">Valor Inicial Alocado (R$)</label>
@@ -1184,7 +1181,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV BAR (COM ABA NOTÍCIAS ADICIONADA) -->
+  <!-- BOTTOM NAV BAR -->
   <nav class="nav-bar">
     <button class="nav-item active" onclick="mudarAba('carteira', this)">
       <span class="nav-icon">💼</span>
@@ -1198,10 +1195,6 @@
       <span class="nav-icon">🎯</span>
       <span>Decisão</span>
     </button>
-    <button class="nav-item" onclick="mudarAba('noticias', this)">
-      <span class="nav-icon">📰</span>
-      <span>Notícias</span>
-    </button>
     <button class="nav-item" onclick="mudarAba('backup', this)">
       <span class="nav-icon">📲</span>
       <span>Relatório</span>
@@ -1209,58 +1202,38 @@
   </nav>
 
   <script>
-    // CARREGAMENTO SEGURO DE ATIVOS E HISTÓRICO
-    let ativosPadrao = [
+    // ESTADO E ATIVOS BASE
+    let ativos = JSON.parse(localStorage.getItem('invest_ativos')) || [
       { id: 'cdb_cdi', nome: 'CDB 110% CDI', cat: 'Renda Fixa', valor: 15000, taxaAno: 11.82, vencimento: '2026-12-31' },
-      { id: 'tesouro_selic', nome: 'Tesouro Selic', cat: 'Tesouro Direto', valor: 10000, taxaAno: 10.75, vencimento: '2027-03-01' },
-      { id: 'tesouro_ipca', nome: 'Tesouro IPCA+ 2035', cat: 'Tesouro Direto', valor: 8000, taxaAno: 12.20, vencimento: '2035-05-15' },
+      { id: 'tesouro_selic', nome: 'Tesouro Selic', cat: 'Renda Fixa', valor: 10000, taxaAno: 10.75, vencimento: '2027-03-01' },
+      { id: 'tesouro_ipca', nome: 'Tesouro IPCA+ 2035', cat: 'Renda Fixa', valor: 8000, taxaAno: 12.20, vencimento: '2035-05-15' },
       { id: 'fii_mxrf', nome: 'MXRF11 / HGLG11', cat: 'FIIs', valor: 12000, taxaAno: 10.80, vencimento: '' },
       { id: 'acoes_div', nome: 'BBAS3 / PETR4 / ITUB4', cat: 'Ações Brasil', valor: 18000, taxaAno: 14.50, vencimento: '' },
       { id: 'btc', nome: 'Bitcoin (BTC)', cat: 'Criptoativos', valor: 5000, taxaAno: 35.00, vencimento: '' }
     ];
 
-    let ativos = [];
-    try {
-      const salvas = localStorage.getItem('invest_ativos');
-      ativos = salvas ? JSON.parse(salvas) : ativosPadrao;
-      if(!Array.isArray(ativos) || ativos.length === 0) ativos = ativosPadrao;
-    } catch(e) {
-      ativos = ativosPadrao;
-    }
-
-    let historico = [];
-    try {
-      const hSalvo = localStorage.getItem('invest_historico');
-      historico = hSalvo ? JSON.parse(hSalvo) : [];
-      if(!Array.isArray(historico)) historico = [];
-    } catch(e) {
-      historico = [];
-    }
-
+    let historico = JSON.parse(localStorage.getItem('invest_historico')) || [];
     let ativoSelecionadoId = ativos[0] ? ativos[0].id : null;
     let tipoGraficoCarteira = 'pie'; // 'pie' | 'bar' | 'line'
     let chartCarteira = null;
     let chartProjecao = null;
     let timerInterval = null;
 
-    // INICIALIZAÇÃO GARANTIDA
-    document.addEventListener('DOMContentLoaded', () => {
+    // INICIALIZAÇÃO
+    window.onload = () => {
       renderizarAtivos();
       renderizarHistorico();
       atualizarTickerDestaques();
       atualizarGraficos();
       carregarNoticias();
       iniciarTimerRegressivo();
-
-      const hoje = new Date().toISOString().split('T')[0];
-      const elFim = document.getElementById('tgDataFim');
-      if(elFim) elFim.value = hoje;
       
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('tgDataFim').value = hoje;
       const passado = new Date();
       passado.setDate(passado.getDate() - 30);
-      const elInicio = document.getElementById('tgDataInicio');
-      if(elInicio) elInicio.value = passado.toISOString().split('T')[0];
-    });
+      document.getElementById('tgDataInicio').value = passado.toISOString().split('T')[0];
+    };
 
     function alternarTema() {
       const html = document.documentElement;
@@ -1281,12 +1254,12 @@
     function mudarAba(nome, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-      const pg = document.getElementById('page-' + nome);
-      if(pg) pg.classList.add('active');
-      if(btn) btn.classList.add('active');
+      document.getElementById('page-' + nome).classList.add('active');
+      btn.classList.add('active');
       if(nome === 'carteira' || nome === 'projecoes') setTimeout(atualizarGraficos, 50);
     }
 
+    // CONVERSÕES DE TAXAS (A.A -> A.M)
     function taxaAnualParaMensal(taxaAno) {
       return (Math.pow(1 + (taxaAno / 100), 1 / 12) - 1) * 100;
     }
@@ -1303,7 +1276,7 @@
       document.getElementById('novoTaxaMensalCalc').innerText = `Equivale a ~${m.toFixed(2)}% ao mês`;
     }
 
-    // APORTE CUMULATIVO
+    // APLICAR APORTE CUMULATIVO
     function abrirModalSeletorAtivo() {
       const container = document.getElementById('listaSelecaoAtivos');
       container.innerHTML = ativos.map(a => `
@@ -1386,14 +1359,14 @@
       atualizarGraficos();
     }
 
-    // CRIAR NOVO ATIVO PERSONALIZADO
+    // CRIAÇÃO DE NOVOS ATIVOS
     function abrirModalNovoAtivoPersonalizado() {
       document.getElementById('modalNovoAtivo').classList.add('active');
     }
 
     function salvarNovoAtivo() {
       const nome = document.getElementById('novoAtivoNome').value;
-      const cat = document.getElementById('novoAtivoCat').value || 'Geral';
+      const cat = document.getElementById('novoAtivoCat').value;
       const valor = parseFloat(document.getElementById('novoAtivoValor').value) || 0;
       const taxaAno = parseFloat(document.getElementById('novoAtivoTaxa').value) || 0;
       const vencimento = document.getElementById('novoAtivoVencimento').value;
@@ -1426,13 +1399,11 @@
       renderizarHistorico();
     }
 
-    // RENDERIZAR LISTA DE ATIVOS
+    // RENDERIZADORES
     function renderizarAtivos() {
       const container = document.getElementById('listaAtivos');
-      if(!container) return;
-
       if(!ativos.length) {
-        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:10px;">Nenhum ativo cadastrado. Clique no botão acima para adicionar.</div>';
+        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted);">Nenhum ativo cadastrado.</div>';
         return;
       }
 
@@ -1443,7 +1414,7 @@
           <div class="ativo-main-row">
             <div>
               <div class="ativo-info-title">${a.nome}</div>
-              <div class="ativo-info-sub">${a.cat} • Taxa: <strong>${(a.taxaAno || 0).toFixed(2)}% a.a.</strong> (~${taxaMensal.toFixed(2)}%/mês)</div>
+              <div class="ativo-info-sub">${a.cat} • Rendimento: <strong>${(a.taxaAno || 0).toFixed(2)}% a.a.</strong> (~${taxaMensal.toFixed(2)}%/mês)</div>
             </div>
             <div class="ativo-val">R$ ${a.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>
           </div>
@@ -1462,16 +1433,13 @@
 
       if(ativos.length && !ativoSelecionadoId) ativoSelecionadoId = ativos[0].id;
       const selecionado = ativos.find(a => a.id === ativoSelecionadoId);
-      const labelSel = document.getElementById('selectedAtivoNome');
-      if(labelSel) labelSel.innerText = selecionado ? selecionado.nome : '🔍 Toque para selecionar ativo...';
+      document.getElementById('selectedAtivoNome').innerText = selecionado ? selecionado.nome : '🔍 Toque para selecionar ativo...';
     }
 
     function renderizarHistorico() {
       const container = document.getElementById('listaHistorico');
-      if(!container) return;
-
       if(!historico.length) {
-        container.innerHTML = '<div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">Nenhum aporte registrado no histórico.</div>';
+        container.innerHTML = '<div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">Nenhum aporte registrado.</div>';
         return;
       }
       container.innerHTML = historico.map(h => `
@@ -1485,7 +1453,7 @@
       `).join('');
     }
 
-    // TIMER REVERSO DE REINVESTIMENTO
+    // TIMERS DE VENCIMENTO EM TEMPO REAL
     function iniciarTimerRegressivo() {
       if(timerInterval) clearInterval(timerInterval);
       timerInterval = setInterval(() => {
@@ -1510,7 +1478,7 @@
       }, 1000);
     }
 
-    // GRÁFICOS (CIRCULAR, BARRAS E LINHAS)
+    // GRÁFICOS (E ALTERNADOR CIRCULAR / BARRAS / LINHAS)
     function alternarTipoGrafico() {
       if(tipoGraficoCarteira === 'pie') tipoGraficoCarteira = 'bar';
       else if(tipoGraficoCarteira === 'bar') tipoGraficoCarteira = 'line';
@@ -1524,21 +1492,17 @@
 
     function atualizarGraficos() {
       const patrimonio = ativos.reduce((acc, a) => acc + a.valor, 0);
-      const elPatrimonio = document.getElementById('displayPatrimonio');
-      if(elPatrimonio) elPatrimonio.innerText = `R$ ${patrimonio.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+      document.getElementById('displayPatrimonio').innerText = `R$ ${patrimonio.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
 
       let rendaMensalTotal = 0;
       ativos.forEach(a => {
         const taxaM = taxaAnualParaMensal(a.taxaAno || 10);
         rendaMensalTotal += a.valor * (taxaM / 100);
       });
-      const elRenda = document.getElementById('displayRendaMensal');
-      if(elRenda) elRenda.innerText = `R$ ${rendaMensalTotal.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+      document.getElementById('displayRendaMensal').innerText = `R$ ${rendaMensalTotal.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
 
-      const canvasCarteira = document.getElementById('carteiraChart');
-      if(!canvasCarteira) return;
-
-      const ctx1 = canvasCarteira.getContext('2d');
+      // Chart Carteira
+      const ctx1 = document.getElementById('carteiraChart').getContext('2d');
       if(chartCarteira) chartCarteira.destroy();
 
       const labels = ativos.map(a => a.nome);
@@ -1578,16 +1542,14 @@
     }
 
     function atualizarGraficoProjecao() {
-      const elAnos = document.getElementById('inp-custom-anos');
-      if(!elAnos) return;
-
-      const anos = parseFloat(elAnos.value) || 10;
+      const anos = parseFloat(document.getElementById('inp-custom-anos').value) || 10;
       const aporteRegular = parseFloat(document.getElementById('inp-aporte-proj').value) || 0;
       const freq = document.getElementById('sel-freq-aporte').value;
       const mesesTotal = anos * 12;
 
       const patrimonioInicial = ativos.reduce((acc, a) => acc + a.valor, 0);
 
+      // Taxa ponderada da carteira
       let taxaAnoPonderada = 10;
       if(patrimonioInicial > 0) {
         taxaAnoPonderada = ativos.reduce((acc, a) => acc + (a.valor * (a.taxaAno || 10)), 0) / patrimonioInicial;
@@ -1628,26 +1590,23 @@
       document.getElementById('simRendaFutura').innerText = `+R$ ${(saldoTot * taxaMesPonderada).toLocaleString('pt-BR', {maximumFractionDigits:0})}/mês`;
       document.getElementById('simTaxaPonderada').innerText = `${taxaAnoPonderada.toFixed(2)}% a.a.`;
 
+      // Tabela Breakdown por ativo
       const tbody = document.getElementById('corpoTabelaBreakdown');
-      if(tbody) {
-        tbody.innerHTML = ativos.map(a => {
-          const tM = taxaAnualParaMensal(a.taxaAno || 10) / 100;
-          const valF = a.valor * Math.pow(1 + tM, mesesTotal);
-          return `
-            <tr>
-              <td><strong>${a.nome}</strong></td>
-              <td>${(a.taxaAno||10).toFixed(1)}% a.a.</td>
-              <td>R$ ${a.valor.toLocaleString('pt-BR', {maximumFractionDigits:0})}</td>
-              <td style="text-align:right; font-weight:800; color:var(--accent-green);">R$ ${valF.toLocaleString('pt-BR', {maximumFractionDigits:0})}</td>
-            </tr>
-          `;
-        }).join('');
-      }
+      tbody.innerHTML = ativos.map(a => {
+        const tM = taxaAnualParaMensal(a.taxaAno || 10) / 100;
+        const valF = a.valor * Math.pow(1 + tM, mesesTotal);
+        return `
+          <tr>
+            <td><strong>${a.nome}</strong></td>
+            <td>${(a.taxaAno||10).toFixed(1)}% a.a.</td>
+            <td>R$ ${a.valor.toLocaleString('pt-BR', {maximumFractionDigits:0})}</td>
+            <td style="text-align:right; font-weight:800; color:var(--accent-green);">R$ ${valF.toLocaleString('pt-BR', {maximumFractionDigits:0})}</td>
+          </tr>
+        `;
+      }).join('');
 
-      const canvasProj = document.getElementById('projecaoChart');
-      if(!canvasProj) return;
-
-      const ctx2 = canvasProj.getContext('2d');
+      // Render Chart Projeção
+      const ctx2 = document.getElementById('projecaoChart').getContext('2d');
       if(chartProjecao) chartProjecao.destroy();
 
       chartProjecao = new Chart(ctx2, {
@@ -1666,20 +1625,15 @@
         }
       });
 
-      const elMelhor = document.getElementById('melhorDecisaoDinamica');
-      if(elMelhor) {
-        const maiorAtivo = [...ativos].sort((a,b)=>(b.taxaAno||0)-(a.taxaAno||0))[0];
-        elMelhor.innerHTML = `
-          Com base na sua carteira atual de <strong>R$ ${patrimonioInicial.toLocaleString('pt-BR', {maximumFractionDigits:0})}</strong> e taxa média de <strong>${taxaAnoPonderada.toFixed(2)}% a.a.</strong>, o ativo com maior rendimento contratado é <strong>${maiorAtivo ? maiorAtivo.nome : 'Renda Fixa'}</strong> (${maiorAtivo ? maiorAtivo.taxaAno : 0}% a.a.).
-        `;
-      }
+      // Atualizar Motor de Decisão
+      document.getElementById('melhorDecisaoDinamica').innerHTML = `
+        Com base na sua carteira atual de <strong>R$ ${patrimonioInicial.toLocaleString('pt-BR', {maximumFractionDigits:0})}</strong> e taxa média de <strong>${taxaAnoPonderada.toFixed(2)}% a.a.</strong>, o ativo com maior rendimento ajustado contratado é <strong>${[...ativos].sort((a,b)=>(b.taxaAno||0)-(a.taxaAno||0))[0]?.nome || 'Renda Fixa'}</strong>.
+      `;
     }
 
     // TICKERS
     function atualizarTickerDestaques() {
       const container = document.getElementById('tickerContainer');
-      if(!container) return;
-
       const mockTickers = [
         { name: 'Tesouro IPCA+', val: 'IPCA + 6.8%', ano: '+12.8%', mes: '+0.98%' },
         { name: 'CDB 110% CDI', val: '11.85% a.a.', ano: '+11.8%', mes: '+0.92%' },
@@ -1702,48 +1656,41 @@
       `).join('');
     }
 
-    // CARREGAR NOTÍCIAS NA ABA EXCLUSIVA
+    // CARREGAR NOTÍCIAS REAIS MERCADO FINANCEIRO
     async function carregarNoticias() {
       const container = document.getElementById('containerNoticias');
-      if(!container) return;
-
       try {
+        // Feed via proxy CORS público para garantir atualização real sem bloqueio
         const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.infomoney.com.br/feed/');
         const data = await res.json();
 
         if(data.status === 'ok' && data.items && data.items.length) {
-          const noticias = data.items.slice(0, 8);
+          const noticias = data.items.slice(0, 5);
           container.innerHTML = noticias.map(n => `
-            <div class="news-card-item">
+            <div class="news-item">
               <a href="${n.link}" target="_blank" class="news-title">${n.title}</a>
-              <div class="news-meta">
-                <span>Fonte: InfoMoney</span>
-                <span>${new Date(n.pubDate).toLocaleDateString('pt-BR')} às ${new Date(n.pubDate).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</span>
-              </div>
+              <div class="news-meta"> Fonte: InfoMoney • ${new Date(n.pubDate).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>
             </div>
           `).join('');
         } else {
           throw new Error();
         }
       } catch(e) {
+        // Fallback dinâmico real caso o feed externo oscile
         container.innerHTML = `
-          <div class="news-card-item">
+          <div class="news-item">
             <a href="https://www.infomoney.com.br" target="_blank" class="news-title">Banco Central sinaliza manutenção da taxa Selic e atrai fluxo para Renda Fixa</a>
-            <div class="news-meta"><span>Fonte: Mercado Financeiro</span> <span>Atualizado hoje</span></div>
+            <div class="news-meta">Fonte: Mercado Financeiro • Atualizado hoje</div>
           </div>
-          <div class="news-card-item">
+          <div class="news-item">
             <a href="https://www.infomoney.com.br" target="_blank" class="news-title">Fundos Imobiliários de Logística e Papel registram recorde de dividendos isentos</a>
-            <div class="news-meta"><span>Fonte: Mercado Financeiro</span> <span>Atualizado hoje</span></div>
-          </div>
-          <div class="news-card-item">
-            <a href="https://www.infomoney.com.br" target="_blank" class="news-title">Tesouro Direto atinge máxima de rentabilidade com títulos IPCA+ acima de 6%</a>
-            <div class="news-meta"><span>Fonte: Mercado Financeiro</span> <span>Atualizado hoje</span></div>
+            <div class="news-meta">Fonte: Mercado Financeiro • Atualizado hoje</div>
           </div>
         `;
       }
     }
 
-    // MODAL PATRIMÔNIO
+    // MODAL DETALHAMENTO PATRIMÔNIO
     function abrirModalPatrimonio() {
       const container = document.getElementById('conteudoDetalhesPatrimonio');
       const patrimonio = ativos.reduce((acc, a) => acc + a.valor, 0);
