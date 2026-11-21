@@ -1069,7 +1069,7 @@
       cursor: not-allowed;
     }
 
-    /* Tela de Carregamento (2 segundos com Hambúrguer Girando) */
+    /* Tela de Carregamento (3 segundos girando e transformando: 🍔 -> 🧀 -> 🥓 -> 💳) */
     .loading-screen-overlay {
       position: fixed;
       inset: 0;
@@ -1107,7 +1107,8 @@
 
     .spinning-burger-icon {
       font-size: 3.6rem;
-      animation: spinBurger 1.2s ease-in-out infinite;
+      display: inline-block;
+      animation: spinMorphItem 0.75s ease-in-out infinite;
     }
 
     .loading-title {
@@ -1286,10 +1287,12 @@
       to { transform: rotate(360deg); }
     }
 
-    @keyframes spinBurger {
-      0% { transform: rotate(0deg) scale(0.95); }
-      50% { transform: rotate(-180deg) scale(1.12); }
-      100% { transform: rotate(-360deg) scale(0.95); }
+    @keyframes spinMorphItem {
+      0% { transform: rotate(0deg) scale(1); }
+      45% { transform: rotate(180deg) scale(0.25); opacity: 0.35; }
+      55% { transform: rotate(180deg) scale(0.25); opacity: 0.35; }
+      85% { transform: rotate(360deg) scale(1.16); opacity: 1; }
+      100% { transform: rotate(360deg) scale(1); opacity: 1; }
     }
 
     @keyframes popCheckin {
@@ -1311,10 +1314,10 @@
 
   <div id="toast" class="toast">⚡ Atualizado!</div>
 
-  <!-- TELA DE CARREGAMENTO (2 SEGUNDOS COM HAMBÚRGUER GIRANDO) -->
+  <!-- TELA DE CARREGAMENTO (3 SEGUNDOS GIRANDO E TRANSFORMANDO) -->
   <div id="loadingOverlay" class="loading-screen-overlay">
     <div class="spinning-burger-ring">
-      <span class="spinning-burger-icon">🍔</span>
+      <span id="loadingMorphIcon" class="spinning-burger-icon">🍔</span>
     </div>
     <div class="loading-title">Preparando seu pedido...</div>
     <div class="loading-sub">Gerando comprovante e enviando para O Rocha Burger</div>
@@ -2450,7 +2453,7 @@
       }
     }
 
-    // --- FINALIZAR PEDIDO: LOADING 2s + TELEGRAM DETALHADO + CHECK-IN ---
+    // --- FINALIZAR PEDIDO: LOADING 3s (🍔 -> 🧀 -> 🥓 -> 💳) + TELEGRAM + CHECK-IN ---
     async function finalizeOrderAndSendReceipt() {
       if (cart.length === 0) return;
 
@@ -2462,12 +2465,21 @@
       const btn = document.getElementById('btnFinishOrder');
       btn.disabled = true;
 
-      // Fecha resumo e mostra a tela de carregamento por 2 segundos com hambúrguer girando
+      // Fecha resumo e mostra a tela de carregamento por 3 segundos girando e transformando
       closeModal('checkoutModal');
       const loadingOverlay = document.getElementById('loadingOverlay');
+      const morphIconEl = document.getElementById('loadingMorphIcon');
+      morphIconEl.textContent = '🍔';
       loadingOverlay.classList.add('active');
 
-      const delay2Seconds = new Promise(resolve => setTimeout(resolve, 2000));
+      // Sequência de transformação no ponto médio de cada giro (750ms por símbolo = 3000ms)
+      const morphTimers = [
+        setTimeout(() => { morphIconEl.textContent = '🧀'; }, 375),
+        setTimeout(() => { morphIconEl.textContent = '🥓'; }, 1125),
+        setTimeout(() => { morphIconEl.textContent = '💳'; }, 1875)
+      ];
+
+      const delay3Seconds = new Promise(resolve => setTimeout(resolve, 3000));
 
       const generalNote = document.getElementById('generalNote').value.trim();
       const changeFor = selectedPayment === 'Dinheiro'
@@ -2543,14 +2555,16 @@
       lastWhatsAppOrderText = detailedTelegramText;
       lastReceiptFilename = `pedido-${dailyOrderNumber}-${customer.name.toLowerCase().replace(/\s+/g, '-')}.png`;
 
-      // Gera comprovante em imagem, envia ao Telegram e aguarda os 2 segundos de carregamento
+      // Gera comprovante em imagem, envia ao Telegram e aguarda os 3 segundos de animação
       const { dataUrl, blob } = await generateReceiptImage(orderRecord);
       lastReceiptDataUrl = dataUrl;
 
       await Promise.all([
-        delay2Seconds,
+        delay3Seconds,
         sendDetailedOrderToTelegram(blob, detailedTelegramText)
       ]);
+
+      morphTimers.forEach(t => clearTimeout(t));
 
       // Limpa carrinho atual e campos transitórios
       cart = [];
@@ -2561,7 +2575,7 @@
       renderMenu();
       updateCartUI();
 
-      // Esconde loading de 2s e mostra o Check-in de Sucesso perguntando se deseja baixar/salvar o comprovante
+      // Esconde loading de 3s e mostra o Check-in de Sucesso perguntando se deseja baixar/salvar o comprovante
       loadingOverlay.classList.remove('active');
       document.getElementById('checkinOrderLabel').textContent = `Pedido #${dailyOrderNumber} (${customer.name}) enviado com sucesso!`;
       document.getElementById('receiptPreviewImg').src = dataUrl;
