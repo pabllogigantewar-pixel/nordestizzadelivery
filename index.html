@@ -62,7 +62,7 @@
       transition: color 0.35s ease;
     }
 
-    /* Fundo Cyber Neon (Mesmo fundo escuro, refletindo apenas as cores neon do tema) */
+    /* Fundo Cyber Neon */
     .cyber-bg {
       position: fixed;
       inset: 0;
@@ -404,7 +404,7 @@
       border: 1px solid rgba(var(--neon-cyan-rgb), 0.25);
       border-radius: 14px;
       padding: 10px 14px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -449,6 +449,37 @@
 
     .btn-edit-user:active {
       transform: scale(0.94);
+    }
+
+    /* Barra de Ações do Cardápio (Voltar para Início + Limpar Pedido) */
+    .menu-action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn-clear-cart {
+      background: rgba(255, 59, 92, 0.14);
+      border: 1px solid var(--neon-red);
+      color: #ff8fa3;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 8px 13px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(255, 59, 92, 0.2);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .btn-clear-cart:active {
+      transform: scale(0.95);
     }
 
     /* Abas de Navegação do Cardápio (Hambúrgueres / Bebidas) */
@@ -1207,6 +1238,99 @@
       box-shadow: 0 0 12px rgba(var(--neon-cyan-rgb), 0.25);
     }
 
+    /* Confirmação ao clicar em PIX antes de gerar QR Code */
+    .pix-confirm-prompt-box {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      background: rgba(var(--neon-cyan-rgb), 0.07);
+      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.45);
+      border-radius: 14px;
+      text-align: center;
+      animation: slideUpFade 0.25s ease;
+    }
+
+    .pix-confirm-prompt-box.visible {
+      display: block;
+    }
+
+    .pix-confirm-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.82rem;
+      color: #fff;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .pix-confirm-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-pix-confirm {
+      background: linear-gradient(90deg, #00c853, #00ff88);
+      color: #05140a;
+      border: none;
+      border-radius: 11px;
+      padding: 11px 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(0, 255, 136, 0.35);
+    }
+
+    .btn-pix-change {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 11px;
+      padding: 11px 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    /* Suspense de 2 segundos girando o ícone do PIX antes de mostrar o QR Code */
+    .pix-generating-box {
+      display: none;
+      margin-top: 12px;
+      padding: 20px 14px;
+      background: rgba(var(--neon-cyan-rgb), 0.06);
+      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.4);
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .pix-generating-box.visible {
+      display: block;
+    }
+
+    .pix-spin-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2.5px solid var(--neon-cyan);
+      border-top-color: var(--neon-pink);
+      font-size: 1.9rem;
+      margin-bottom: 10px;
+      animation: spinRing 0.85s linear infinite;
+    }
+
+    .pix-spin-label {
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      color: var(--neon-cyan);
+    }
+
     /* Gaveta de Troco (Dinheiro) */
     .change-field-box {
       display: none;
@@ -1390,13 +1514,19 @@
       text-align: center;
     }
 
-    .pix-proof-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.72rem;
-      color: var(--neon-green);
-      text-transform: uppercase;
-      margin-bottom: 8px;
+    .pix-proof-highlight-cta {
       display: block;
+      background: rgba(var(--neon-amber-rgb), 0.16);
+      border: 1px solid var(--neon-amber);
+      color: var(--neon-amber);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 8px 10px;
+      border-radius: 9px;
+      margin-bottom: 10px;
+      line-height: 1.35;
     }
 
     .btn-attach-proof {
@@ -1856,6 +1986,12 @@
         <button class="btn-edit-user" onclick="goToCadastro()">✏️ Cadastro</button>
       </div>
 
+      <!-- Botões Voltar para Tela Inicial e Limpar Todo o Pedido -->
+      <div class="menu-action-bar">
+        <button class="btn-back-home" onclick="backToWelcomeScreen()">⬅️ Voltar</button>
+        <button class="btn-clear-cart" onclick="clearWholeCart()">🗑️ Limpar Pedido</button>
+      </div>
+
       <!-- Abas de Navegação do Cardápio -->
       <div class="category-tabs">
         <button class="cat-tab active" id="tabBurgers" onclick="switchMenuTab('burgers')">🍔 Hambúrgueres</button>
@@ -2001,8 +2137,23 @@
           <div class="pay-chip" data-pay="Dinheiro" onclick="selectPayment(this)">💵 Dinheiro</div>
         </div>
 
+        <!-- Confirmação ao clicar em PIX (antes de gerar QR Code) -->
+        <div id="pixConfirmPromptBox" class="pix-confirm-prompt-box">
+          <span class="pix-confirm-text">💠 Seu pagamento será via PIX.</span>
+          <div class="pix-confirm-actions">
+            <button type="button" class="btn-pix-confirm" onclick="confirmPixSelection()">✅ Confirmar</button>
+            <button type="button" class="btn-pix-change" onclick="promptSwitchPayment()">🔄 Trocar</button>
+          </div>
+        </div>
+
+        <!-- Suspense de 2 segundos girando o PIX antes de exibir o QR Code -->
+        <div id="pixGeneratingBox" class="pix-generating-box">
+          <div class="pix-spin-badge">💠</div>
+          <span class="pix-spin-label">Gerando seu QR Code PIX...</span>
+        </div>
+
         <!-- Gaveta PIX: QR Code + Valor em destaque + PIX Copia e Cola + Anexo Obrigatório do Comprovante -->
-        <div id="pixPaymentBox" class="pix-payment-box visible">
+        <div id="pixPaymentBox" class="pix-payment-box">
           <div class="pix-instruction-alert">
             Insira este valor:
             <span class="pix-highlight-value" id="pixExactValueDisplay">R$ 0,00</span>
@@ -2027,10 +2178,10 @@
           </button>
 
           <div class="pix-proof-upload-box">
-            <span class="pix-proof-title">📎 Anexar Comprovante PIX (Obrigatório) *</span>
-            <input type="file" id="pixProofInput" accept="image/*" style="display: none;" onchange="handlePixProofSelect(event)">
+            <span class="pix-proof-highlight-cta">📎 Anexe aqui o comprovante após o pagamento *</span>
+            <input type="file" id="pixProofInput" accept="image/*,application/pdf,.pdf" style="display: none;" onchange="handlePixProofSelect(event)">
             <button type="button" class="btn-attach-proof" onclick="document.getElementById('pixProofInput').click()">
-              📸 Selecionar Foto do Comprovante
+              📸 / 📄 Anexar Imagem ou PDF
             </button>
             <div id="pixProofPreview" class="pix-proof-preview">
               <img id="pixProofPreviewImg" alt="Comprovante PIX anexado" />
@@ -2222,6 +2373,9 @@
     let modalQty = 1;
     let deliveryType = 'Delivery';
     let selectedPayment = 'PIX';
+    let pixConfirmed = false;
+    let pixGenerating = false;
+    let pixSuspenseTimer = null;
     let selectedCardType = 'Crédito';
     let pixProofFile = null;
     let currentPixPayload = '';
@@ -2302,6 +2456,36 @@
       document.getElementById('pixQrImg').src = qrUrl;
     }
 
+    function confirmPixSelection() {
+      if (pixGenerating) return;
+      pixGenerating = true;
+      pixConfirmed = false;
+
+      document.getElementById('pixConfirmPromptBox').classList.remove('visible');
+      document.getElementById('pixPaymentBox').classList.remove('visible');
+      document.getElementById('pixGeneratingBox').classList.add('visible');
+
+      clearTimeout(pixSuspenseTimer);
+      pixSuspenseTimer = setTimeout(() => {
+        pixGenerating = false;
+        pixConfirmed = true;
+        document.getElementById('pixGeneratingBox').classList.remove('visible');
+        const totalPrice = cart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
+        updatePixSection(totalPrice);
+        document.getElementById('pixPaymentBox').classList.add('visible');
+      }, 2000);
+    }
+
+    function promptSwitchPayment() {
+      pixConfirmed = false;
+      pixGenerating = false;
+      clearTimeout(pixSuspenseTimer);
+      document.getElementById('pixConfirmPromptBox').classList.remove('visible');
+      document.getElementById('pixGeneratingBox').classList.remove('visible');
+      document.getElementById('pixPaymentBox').classList.remove('visible');
+      showToast('Escolha Cartão ou Dinheiro');
+    }
+
     async function copyTextHelper(text, toastMessage) {
       try {
         await navigator.clipboard.writeText(text);
@@ -2331,10 +2515,22 @@
       if (!file) return;
 
       pixProofFile = file;
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      const imgEl = document.getElementById('pixProofPreviewImg');
+
+      if (isPdf) {
+        imgEl.style.display = 'none';
+        document.getElementById('pixProofFilename').textContent = `✅ PDF anexado: ${file.name}`;
+        document.getElementById('pixProofPreview').classList.add('visible');
+        showToast('📄 Comprovante PDF anexado!');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        document.getElementById('pixProofPreviewImg').src = e.target.result;
-        document.getElementById('pixProofFilename').textContent = `✅ Comprovante anexado: ${file.name}`;
+        imgEl.style.display = 'inline-block';
+        imgEl.src = e.target.result;
+        document.getElementById('pixProofFilename').textContent = `✅ Imagem anexada: ${file.name}`;
         document.getElementById('pixProofPreview').classList.add('visible');
         showToast('📎 Comprovante PIX anexado!');
       };
@@ -2606,6 +2802,9 @@
 
       deliveryType = selectedOrder.deliveryType || 'Delivery';
       selectedPayment = selectedOrder.payment || 'PIX';
+      pixConfirmed = false;
+      pixGenerating = false;
+      clearTimeout(pixSuspenseTimer);
       selectedCardType = selectedOrder.cardType || 'Crédito';
       document.getElementById('generalNote').value = selectedOrder.generalNote || '';
       document.getElementById('changeInput').value = selectedOrder.changeFor || '';
@@ -2739,6 +2938,20 @@
       localStorage.setItem('rocha_burg_cart_v2', JSON.stringify(cart));
     }
 
+    function clearWholeCart() {
+      if (cart.length === 0) {
+        showToast('🛒 O pedido já está vazio!');
+        return;
+      }
+      cart = [];
+      isRepeatedOrder = false;
+      resetPixProof();
+      saveCart();
+      renderMenu();
+      updateCartUI();
+      showToast('🗑️ Pedido limpo!');
+    }
+
     function removeCartItem(uid) {
       cart = cart.filter(item => item.uid !== uid);
       saveCart();
@@ -2754,7 +2967,7 @@
       document.getElementById('cartTotalBar').textContent = formatBRL(totalPrice);
       document.getElementById('checkoutTotalValue').textContent = formatBRL(totalPrice);
 
-      if (selectedPayment === 'PIX') {
+      if (selectedPayment === 'PIX' && pixConfirmed) {
         updatePixSection(totalPrice);
       }
 
@@ -2838,11 +3051,14 @@
     }
 
     function updatePaymentSubfieldsVisibility() {
-      document.getElementById('pixPaymentBox').classList.toggle('visible', selectedPayment === 'PIX');
+      const isPix = selectedPayment === 'PIX';
+      document.getElementById('pixConfirmPromptBox').classList.toggle('visible', isPix && !pixConfirmed && !pixGenerating);
+      document.getElementById('pixGeneratingBox').classList.toggle('visible', isPix && pixGenerating);
+      document.getElementById('pixPaymentBox').classList.toggle('visible', isPix && pixConfirmed && !pixGenerating);
       document.getElementById('cardTypeBox').classList.toggle('visible', selectedPayment === 'Cartão');
       document.getElementById('changeFieldBox').classList.toggle('visible', selectedPayment === 'Dinheiro');
 
-      if (selectedPayment === 'PIX') {
+      if (isPix && pixConfirmed) {
         const totalPrice = cart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
         updatePixSection(totalPrice);
       }
@@ -2852,6 +3068,11 @@
       document.querySelectorAll('.pay-chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPayment = el.dataset.pay;
+      if (selectedPayment !== 'PIX') {
+        pixConfirmed = false;
+        pixGenerating = false;
+        clearTimeout(pixSuspenseTimer);
+      }
       updatePaymentSubfieldsVisibility();
     }
 
@@ -3129,7 +3350,7 @@
       window.open(url, '_blank');
     }
 
-    // --- ENVIO DETALHADO AO TELEGRAM (COMPROVANTE DO PEDIDO + COMPROVANTE PIX ANEXADO) ---
+    // --- ENVIO DETALHADO AO TELEGRAM (COMPROVANTE DO PEDIDO + COMPROVANTE PIX IMAGEM OU PDF) ---
     async function sendDetailedOrderToTelegram(receiptBlob, fullText, pixProofBlob, orderNumber, clientName) {
       try {
         if (receiptBlob) {
@@ -3156,17 +3377,32 @@
           });
         }
 
-        // Envia a foto do comprovante PIX anexada pelo cliente junto com o pedido
+        // Envia o comprovante PIX anexado pelo cliente (imagem ou PDF) junto com o pedido
         if (pixProofBlob) {
-          const pixFormData = new FormData();
-          pixFormData.append('chat_id', TELEGRAM_CHAT_ID);
-          pixFormData.append('photo', pixProofBlob, `comprovante-pix-${orderNumber}.jpg`);
-          pixFormData.append('caption', `💠 COMPROVANTE DE PAGAMENTO PIX — PEDIDO #${orderNumber} (${clientName.toUpperCase()})`);
+          const isPdf = pixProofBlob.type === 'application/pdf' || (pixProofBlob.name && pixProofBlob.name.toLowerCase().endsWith('.pdf'));
+          const captionPix = `💠 COMPROVANTE DE PAGAMENTO PIX — PEDIDO #${orderNumber} (${clientName.toUpperCase()})`;
 
-          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
-            method: 'POST',
-            body: pixFormData
-          });
+          if (isPdf) {
+            const pdfFormData = new FormData();
+            pdfFormData.append('chat_id', TELEGRAM_CHAT_ID);
+            pdfFormData.append('document', pixProofBlob, pixProofBlob.name || `comprovante-pix-${orderNumber}.pdf`);
+            pdfFormData.append('caption', captionPix);
+
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`, {
+              method: 'POST',
+              body: pdfFormData
+            });
+          } else {
+            const pixFormData = new FormData();
+            pixFormData.append('chat_id', TELEGRAM_CHAT_ID);
+            pixFormData.append('photo', pixProofBlob, pixProofBlob.name || `comprovante-pix-${orderNumber}.jpg`);
+            pixFormData.append('caption', captionPix);
+
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+              method: 'POST',
+              body: pixFormData
+            });
+          }
         }
       } catch (err) {
         // Mantém fluxo fluido no cliente mesmo em rede instável
@@ -3182,8 +3418,13 @@
         return;
       }
 
+      if (selectedPayment === 'PIX' && !pixConfirmed) {
+        showToast('⚠️ Confirme o pagamento via PIX para gerar o QR Code!');
+        return;
+      }
+
       if (selectedPayment === 'PIX' && !pixProofFile) {
-        showToast('⚠️ Anexe a foto do comprovante PIX para finalizar!');
+        showToast('⚠️ Anexe o comprovante PIX (imagem ou PDF) para finalizar!');
         return;
       }
 
@@ -3303,6 +3544,8 @@
       // Limpa carrinho atual e campos transitórios
       cart = [];
       isRepeatedOrder = false;
+      pixConfirmed = false;
+      pixGenerating = false;
       resetPixProof();
       document.getElementById('changeInput').value = '';
       document.getElementById('generalNote').value = '';
