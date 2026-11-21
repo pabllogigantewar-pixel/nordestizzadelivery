@@ -138,6 +138,56 @@
       display: block;
     }
 
+    /* Tela Inicial de Acesso Rápido (Quando os dados já estão salvos) */
+    .welcome-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .welcome-user-box {
+      background: rgba(0, 243, 255, 0.06);
+      border: 1px dashed rgba(0, 243, 255, 0.35);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: var(--text-main);
+    }
+
+    .btn-welcome-option {
+      width: 100%;
+      background: #141422;
+      color: #fff;
+      border: 1.5px solid rgba(0, 243, 255, 0.45);
+      border-radius: 14px;
+      padding: 15px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(0, 243, 255, 0.16);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-welcome-option:active {
+      transform: scale(0.97);
+    }
+
+    .btn-welcome-option.amber {
+      border-color: rgba(255, 190, 11, 0.5);
+      color: var(--neon-amber);
+      box-shadow: 0 0 14px rgba(255, 190, 11, 0.15);
+    }
+
     /* Tela 1: Cadastro */
     .register-card {
       background: var(--bg-card);
@@ -1280,6 +1330,28 @@
 
   <main class="container">
 
+    <!-- TELA INICIAL DE ACESSO RÁPIDO (EXIBIDA AUTOMATICAMENTE SE JÁ HOUVER CADASTRO SALVO) -->
+    <section id="screenWelcome" class="screen">
+      <div class="register-card">
+        <h2 class="register-title" id="welcomeUserTitle">👋 Bem-vindo de volta!</h2>
+        <p class="register-sub">Seus dados já estão salvos. Escolha para onde deseja ir:</p>
+
+        <div class="welcome-user-box" id="welcomeUserSummary"></div>
+
+        <div class="welcome-actions">
+          <button class="btn-primary-neon" onclick="enterSavedMenu('burgers')">
+            🍔 Ir para o Cardápio
+          </button>
+          <button class="btn-welcome-option" onclick="goToCadastro()">
+            👤 Meus Dados
+          </button>
+          <button class="btn-welcome-option amber" onclick="enterSavedMenu('history')">
+            📜 Histórico de Pedidos
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- TELA 1: CADASTRO DO CLIENTE -->
     <section id="screenCadastro" class="screen active">
       <div class="register-card">
@@ -1662,12 +1734,35 @@
       return String(stored.count).padStart(2, '0');
     }
 
-    // --- TELA 1: CADASTRO ---
+    // --- TELA 1: CADASTRO E BOAS-VINDAS ---
+    function hasSavedCustomer() {
+      return Boolean(customer && customer.name && customer.phone && customer.address);
+    }
+
     function loadCustomerForm() {
       document.getElementById('regName').value = customer.name || '';
       document.getElementById('regPhone').value = customer.phone || '';
       document.getElementById('regAddress').value = customer.address || '';
       document.getElementById('regRef').value = customer.ref || '';
+    }
+
+    function updateWelcomeScreen() {
+      document.getElementById('welcomeUserTitle').textContent = `👋 Olá, ${customer.name}!`;
+      document.getElementById('welcomeUserSummary').innerHTML = `
+        <strong>📱 Telefone:</strong> ${customer.phone}<br>
+        <strong>📍 Endereço:</strong> ${customer.address}<br>
+        ${customer.ref ? `<strong>📌 Referência:</strong> ${customer.ref}` : ''}
+      `;
+    }
+
+    function enterSavedMenu(initialTab = 'burgers') {
+      updateCustomerPill();
+      document.getElementById('screenWelcome').classList.remove('active');
+      document.getElementById('screenCadastro').classList.remove('active');
+      document.getElementById('screenMenu').classList.add('active');
+      switchMenuTab(initialTab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateCartUI();
     }
 
     function saveAndGoToMenu() {
@@ -1685,6 +1780,8 @@
       localStorage.setItem('rocha_burg_customer', JSON.stringify(customer));
 
       updateCustomerPill();
+      updateWelcomeScreen();
+      document.getElementById('screenWelcome').classList.remove('active');
       document.getElementById('screenCadastro').classList.remove('active');
       document.getElementById('screenMenu').classList.add('active');
       switchMenuTab('burgers');
@@ -1693,6 +1790,7 @@
     }
 
     function goToCadastro() {
+      document.getElementById('screenWelcome').classList.remove('active');
       document.getElementById('screenMenu').classList.remove('active');
       document.getElementById('screenCadastro').classList.add('active');
       document.getElementById('cartBar').classList.remove('visible');
@@ -2474,6 +2572,11 @@
 
     // Inicialização
     loadCustomerForm();
+    if (hasSavedCustomer()) {
+      updateWelcomeScreen();
+      document.getElementById('screenCadastro').classList.remove('active');
+      document.getElementById('screenWelcome').classList.add('active');
+    }
     renderMenu();
     renderHistory();
   </script>
