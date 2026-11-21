@@ -1074,40 +1074,53 @@
       color: var(--text-muted);
     }
 
-    /* Modal Check-in de Sucesso */
+    /* Modal Check-in de Sucesso + Pergunta de Salvar Comprovante */
     .checkin-box {
       text-align: center;
-      padding: 12px 6px 8px;
+      padding: 8px 6px 6px;
     }
 
     .checkin-circle {
-      width: 82px;
-      height: 82px;
-      margin: 0 auto 14px;
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 12px;
       border-radius: 50%;
       background: rgba(0, 255, 136, 0.14);
       border: 2.5px solid var(--neon-green);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       box-shadow: 0 0 28px rgba(0, 255, 136, 0.5);
       animation: popCheckin 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .checkin-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.12rem;
       font-weight: 900;
       color: var(--neon-green);
       text-shadow: 0 0 12px rgba(0, 255, 136, 0.45);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     .checkin-subtitle {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .save-receipt-prompt {
+      background: rgba(0, 243, 255, 0.08);
+      border: 1.5px solid var(--neon-cyan);
+      border-radius: 14px;
+      padding: 12px;
       margin-bottom: 14px;
+      text-align: center;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(0, 243, 255, 0.18);
     }
 
     .receipt-preview-wrap {
@@ -1132,11 +1145,26 @@
       gap: 10px;
     }
 
-    .btn-secondary-cyan {
+    .btn-save-receipt-cyan {
       width: 100%;
-      background: rgba(0, 243, 255, 0.14);
-      color: var(--neon-cyan);
-      border: 1.5px solid var(--neon-cyan);
+      background: linear-gradient(90deg, var(--neon-cyan), #00b8d4);
+      color: #07070c;
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(0, 243, 255, 0.45);
+    }
+
+    .btn-send-wa-green {
+      width: 100%;
+      background: rgba(0, 255, 136, 0.14);
+      color: var(--neon-green);
+      border: 1.5px solid var(--neon-green);
       border-radius: 14px;
       padding: 13px;
       font-family: 'Orbitron', sans-serif;
@@ -1148,17 +1176,16 @@
 
     .btn-close-return {
       width: 100%;
-      background: linear-gradient(90deg, var(--neon-pink), #ff3399);
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 14px;
-      padding: 15px;
+      padding: 13px;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 800;
+      font-size: 0.8rem;
+      font-weight: 700;
       text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 0 18px rgba(255, 0, 127, 0.45);
     }
 
     /* Toast */
@@ -1461,7 +1488,7 @@
     </div>
   </div>
 
-  <!-- MODAL CHECK-IN DE SUCESSO + COMPROVANTE -->
+  <!-- MODAL CHECK-IN DE SUCESSO + PERGUNTA DE SALVAR COMPROVANTE + WHATSAPP -->
   <div id="receiptModal" class="modal-overlay" onclick="closeReceiptAndReturnToMenuOutside(event)">
     <div class="drawer">
       <div class="drawer-header">
@@ -1475,13 +1502,20 @@
         <p class="checkin-subtitle" id="checkinOrderLabel">Pedido #01 registrado e enviado para O Rocha Burger.</p>
       </div>
 
+      <div class="save-receipt-prompt">
+        🧾 Deseja baixar ou salvar seu comprovante de pedido?
+      </div>
+
       <div class="receipt-preview-wrap">
         <img id="receiptPreviewImg" alt="Comprovante O Rocha Burger" />
       </div>
 
       <div class="receipt-actions">
-        <button class="btn-secondary-cyan" onclick="downloadLastReceipt()">
-          💾 Baixar Comprovante Novamente
+        <button class="btn-save-receipt-cyan" onclick="downloadLastReceipt()">
+          💾 Sim, Baixar / Salvar Comprovante
+        </button>
+        <button class="btn-send-wa-green" onclick="sendLastOrderViaWhatsApp()">
+          📲 Enviar pelo WhatsApp
         </button>
         <button class="btn-close-return" onclick="closeReceiptAndReturnToMenu()">
           🍔 Fechar e Voltar ao Cardápio
@@ -1585,9 +1619,17 @@
     // Dados do último comprovante gerado
     let lastReceiptDataUrl = '';
     let lastReceiptFilename = 'comprovante-o-rocha-burger.png';
+    let lastWhatsAppOrderText = '';
 
     function formatBRL(value) {
       return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function buildClientWhatsAppLink(phone) {
+      const digits = String(phone || '').replace(/\D/g, '');
+      if (!digits) return '';
+      const fullNumber = digits.startsWith('55') && digits.length >= 12 ? digits : `55${digits}`;
+      return `https://wa.me/${fullNumber}`;
     }
 
     function showToast(msg) {
@@ -2273,6 +2315,12 @@
       showToast('💾 Comprovante salvo!');
     }
 
+    function sendLastOrderViaWhatsApp() {
+      if (!lastWhatsAppOrderText) return;
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lastWhatsAppOrderText)}`;
+      window.open(url, '_blank');
+    }
+
     // --- ENVIO DETALHADO AO TELEGRAM ---
     async function sendDetailedOrderToTelegram(blob, fullText) {
       try {
@@ -2350,6 +2398,7 @@
       const now = new Date();
       const formattedDate = now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
       const orderId = Date.now();
+      const clientWaLink = buildClientWhatsAppLink(customer.phone);
 
       const orderRecord = {
         id: orderId,
@@ -2383,6 +2432,7 @@
         `👤 CLIENTE:\n` +
         `• Nome: ${customer.name}\n` +
         `• Telefone: ${customer.phone}\n` +
+        (clientWaLink ? `💬 WhatsApp do Cliente: ${clientWaLink}\n` : '') +
         `${deliveryInfo}` +
         `══════════════════════\n` +
         `📋 ITENS DO PEDIDO:\n` +
@@ -2392,6 +2442,7 @@
         (generalNote ? `🗒️ Observação Geral: ${generalNote}\n` : '') +
         `💰 TOTAL DO PEDIDO: ${formatBRL(total)}`;
 
+      lastWhatsAppOrderText = detailedTelegramText;
       lastReceiptFilename = `pedido-${dailyOrderNumber}-${customer.name.toLowerCase().replace(/\s+/g, '-')}.png`;
 
       // Gera comprovante em imagem, envia ao Telegram e aguarda os 2 segundos de carregamento
@@ -2403,9 +2454,6 @@
         sendDetailedOrderToTelegram(blob, detailedTelegramText)
       ]);
 
-      // Baixa automaticamente o comprovante
-      triggerDownload(dataUrl, lastReceiptFilename);
-
       // Limpa carrinho atual e campos transitórios
       cart = [];
       isRepeatedOrder = false;
@@ -2415,7 +2463,7 @@
       renderMenu();
       updateCartUI();
 
-      // Esconde loading de 2s e mostra o Check-in de Sucesso
+      // Esconde loading de 2s e mostra o Check-in de Sucesso perguntando se deseja baixar/salvar o comprovante
       loadingOverlay.classList.remove('active');
       document.getElementById('checkinOrderLabel').textContent = `Pedido #${dailyOrderNumber} (${customer.name}) enviado com sucesso!`;
       document.getElementById('receiptPreviewImg').src = dataUrl;
