@@ -63,7 +63,7 @@
     /* Cabeçalho */
     header {
       text-align: center;
-      padding: 24px 16px 14px;
+      padding: 22px 16px 14px;
     }
 
     .status-badge {
@@ -92,28 +92,47 @@
       animation: pulseDot 1.5s infinite;
     }
 
+    .brand-logo-wrap {
+      width: 132px;
+      height: 132px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-amber), var(--neon-cyan));
+      box-shadow: 0 0 24px rgba(255, 0, 127, 0.5), 0 0 36px rgba(0, 243, 255, 0.28);
+    }
+
+    .brand-logo-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      background: #0a0a12;
+    }
+
     .neon-sign {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.75rem, 7.5vw, 2.9rem);
+      font-size: clamp(2.25rem, 9.2vw, 3.65rem);
       font-weight: 900;
-      letter-spacing: 2px;
+      letter-spacing: 2.5px;
       text-transform: uppercase;
       color: #fff;
       text-shadow:
-        0 0 5px #fff,
-        0 0 15px var(--neon-pink),
-        0 0 30px var(--neon-pink),
-        0 0 55px var(--neon-pink);
+        0 0 6px #fff,
+        0 0 18px var(--neon-pink),
+        0 0 36px var(--neon-pink),
+        0 0 65px var(--neon-pink);
       animation: neonFlicker 4s infinite alternate;
-      line-height: 1.1;
+      line-height: 1.08;
     }
 
     .neon-sign span {
       color: var(--neon-cyan);
       text-shadow:
-        0 0 5px #fff,
-        0 0 15px var(--neon-cyan),
-        0 0 35px var(--neon-cyan);
+        0 0 6px #fff,
+        0 0 18px var(--neon-cyan),
+        0 0 42px var(--neon-cyan);
     }
 
     .subtitle {
@@ -136,6 +155,57 @@
 
     .screen.active {
       display: block;
+    }
+
+    /* Botão Voltar (Meus Dados e Histórico) */
+    .screen-top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn-back-home {
+      background: rgba(0, 243, 255, 0.12);
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(0, 243, 255, 0.2);
+    }
+
+    .btn-back-home:active {
+      transform: scale(0.96);
+    }
+
+    .btn-clear-history {
+      background: rgba(255, 59, 92, 0.14);
+      border: 1px solid var(--neon-red);
+      color: #ff8fa3;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 8px 13px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(255, 59, 92, 0.2);
+    }
+
+    .btn-clear-history:active {
+      transform: scale(0.96);
     }
 
     /* Tela Inicial de Acesso Rápido (Quando os dados já estão salvos) */
@@ -317,11 +387,11 @@
       white-space: nowrap;
     }
 
-    /* Abas de Navegação (Hambúrgueres / Bebidas / Histórico) */
+    /* Abas de Navegação do Cardápio (Hambúrgueres / Bebidas) */
     .category-tabs {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
       margin-bottom: 18px;
       position: sticky;
       top: 10px;
@@ -340,7 +410,7 @@
       padding: 10px 6px;
       border-radius: 12px;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.25s ease;
@@ -504,31 +574,35 @@
       border-radius: 999px;
     }
 
-    /* Cards do Histórico de Pedidos */
+    /* Cards do Histórico de Pedidos (Expansíveis ao Clicar) */
     .history-card {
       background: var(--bg-card);
-      border: 1px solid rgba(0, 243, 255, 0.25);
+      border: 1px solid rgba(0, 243, 255, 0.28);
       border-radius: 18px;
-      padding: 16px;
+      padding: 15px 16px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
       animation: slideUpFade 0.4s ease;
+      cursor: pointer;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
-    .history-header {
+    .history-card:hover {
+      border-color: var(--neon-pink);
+      box-shadow: 0 8px 24px rgba(255, 0, 127, 0.18);
+    }
+
+    .history-summary-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
       gap: 8px;
       flex-wrap: wrap;
     }
 
     .history-date {
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       color: var(--neon-cyan);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .history-badge {
@@ -540,6 +614,41 @@
       border: 1px solid rgba(0, 255, 136, 0.4);
       color: var(--neon-green);
       text-transform: uppercase;
+    }
+
+    .history-summary-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      gap: 10px;
+    }
+
+    .history-total-inline {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--neon-green);
+    }
+
+    .history-expand-hint {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .history-details-body {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.14);
+      animation: slideUpFade 0.25s ease;
+    }
+
+    .history-card.expanded .history-details-body {
+      display: block;
     }
 
     .history-items {
@@ -557,35 +666,33 @@
       border-radius: 10px;
     }
 
+    .history-customer-detail {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px solid rgba(0, 243, 255, 0.15);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
     .history-footer {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .history-total small {
-      display: block;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .history-total strong {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.05rem;
-      color: var(--neon-green);
     }
 
     .btn-repeat {
+      width: 100%;
       background: linear-gradient(90deg, var(--neon-cyan), #00b8d4);
       color: #07070c;
       border: none;
-      padding: 10px 14px;
+      padding: 11px 14px;
       border-radius: 12px;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.74rem;
+      font-size: 0.76rem;
       font-weight: 800;
       text-transform: uppercase;
       cursor: pointer;
@@ -1069,7 +1176,7 @@
       cursor: not-allowed;
     }
 
-    /* Tela de Carregamento (3 segundos girando e transformando: 🍔 -> 🧀 -> 🥓 -> 💳) */
+    /* Tela de Carregamento (4 segundos girando e transformando: 🍔 -> 🧀 -> 🥓 -> 🍳 -> 💳) */
     .loading-screen-overlay {
       position: fixed;
       inset: 0;
@@ -1108,7 +1215,7 @@
     .spinning-burger-icon {
       font-size: 3.6rem;
       display: inline-block;
-      animation: spinMorphItem 0.75s ease-in-out infinite;
+      animation: spinMorphItem 0.8s ease-in-out infinite;
     }
 
     .loading-title {
@@ -1314,7 +1421,7 @@
 
   <div id="toast" class="toast">⚡ Atualizado!</div>
 
-  <!-- TELA DE CARREGAMENTO (3 SEGUNDOS GIRANDO E TRANSFORMANDO) -->
+  <!-- TELA DE CARREGAMENTO (4 SEGUNDOS: 🍔 -> 🧀 -> 🥓 -> 🍳 -> 💳) -->
   <div id="loadingOverlay" class="loading-screen-overlay">
     <div class="spinning-burger-ring">
       <span id="loadingMorphIcon" class="spinning-burger-icon">🍔</span>
@@ -1326,6 +1433,9 @@
   <header>
     <div class="status-badge">
       <span class="status-dot"></span> Aberto para Pedidos
+    </div>
+    <div class="brand-logo-wrap" id="brandLogoWrap">
+      <img src="logo Burguer.jpg" alt="Logo O Rocha Burger" class="brand-logo-img" onerror="document.getElementById('brandLogoWrap').style.display='none'">
     </div>
     <h1 class="neon-sign">O ROCHA <span>BURGER</span></h1>
     <p class="subtitle">Artesanal na chapa • Pedido rápido</p>
@@ -1348,15 +1458,19 @@
           <button class="btn-welcome-option" onclick="goToCadastro()">
             👤 Meus Dados
           </button>
-          <button class="btn-welcome-option amber" onclick="enterSavedMenu('history')">
+          <button class="btn-welcome-option amber" onclick="openHistoryScreen()">
             📜 Histórico de Pedidos
           </button>
         </div>
       </div>
     </section>
 
-    <!-- TELA 1: CADASTRO DO CLIENTE -->
+    <!-- TELA 1: CADASTRO DO CLIENTE (MEUS DADOS) -->
     <section id="screenCadastro" class="screen active">
+      <div class="screen-top-nav" id="cadastroBackBar" style="display: none;">
+        <button class="btn-back-home" onclick="backToWelcomeScreen()">⬅️ Voltar</button>
+      </div>
+
       <div class="register-card">
         <h2 class="register-title">👤 Seus Dados</h2>
         <p class="register-sub">Preencha rapidinho antes de abrir o cardápio:</p>
@@ -1387,7 +1501,7 @@
       </div>
     </section>
 
-    <!-- TELA 2: CARDÁPIO SEPARADO E HISTÓRICO -->
+    <!-- TELA 2: CARDÁPIO SEPARADO -->
     <section id="screenMenu" class="screen">
       <!-- Resumo rápido do cliente com botão de voltar ao cadastro -->
       <div class="customer-pill">
@@ -1398,11 +1512,10 @@
         <button class="btn-edit-user" onclick="goToCadastro()">✏️ Cadastro</button>
       </div>
 
-      <!-- Abas de Navegação -->
+      <!-- Abas de Navegação do Cardápio -->
       <div class="category-tabs">
-        <button class="cat-tab active" id="tabBurgers" onclick="switchMenuTab('burgers')">🍔 Cardápio</button>
+        <button class="cat-tab active" id="tabBurgers" onclick="switchMenuTab('burgers')">🍔 Hambúrgueres</button>
         <button class="cat-tab" id="tabDrinks" onclick="switchMenuTab('drinks')">🥤 Bebidas</button>
-        <button class="cat-tab" id="tabHistory" onclick="switchMenuTab('history')">📜 Histórico</button>
       </div>
 
       <!-- Conteúdo do Cardápio (Hambúrgueres e Bebidas) -->
@@ -1419,12 +1532,17 @@
           <div id="drinksList" class="menu-list"></div>
         </div>
       </div>
+    </section>
 
-      <!-- Conteúdo do Histórico de Pedidos -->
-      <div id="historyCatalogView" style="display: none;">
-        <h2 class="section-title">📜 Histórico de Pedidos</h2>
-        <div id="historyList" class="menu-list"></div>
+    <!-- TELA 3: HISTÓRICO DE PEDIDOS (TELA SEPARADA COM VOLTAR E LIMPAR) -->
+    <section id="screenHistory" class="screen">
+      <div class="screen-top-nav">
+        <button class="btn-back-home" onclick="backToWelcomeScreen()">⬅️ Voltar</button>
+        <button class="btn-clear-history" id="btnClearHistory" onclick="clearAllHistory()">🗑️ Limpar Histórico</button>
       </div>
+
+      <h2 class="section-title">📜 Histórico de Pedidos</h2>
+      <div id="historyList" class="menu-list"></div>
     </section>
 
   </main>
@@ -1737,7 +1855,14 @@
       return String(stored.count).padStart(2, '0');
     }
 
-    // --- TELA 1: CADASTRO E BOAS-VINDAS ---
+    // --- CONTROLE DE TELAS (INÍCIO, CADASTRO, CARDÁPIO, HISTÓRICO) ---
+    function setActiveScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      updateCartUI();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function hasSavedCustomer() {
       return Boolean(customer && customer.name && customer.phone && customer.address);
     }
@@ -1758,14 +1883,24 @@
       `;
     }
 
+    function backToWelcomeScreen() {
+      if (hasSavedCustomer()) {
+        updateWelcomeScreen();
+        setActiveScreen('screenWelcome');
+      } else {
+        setActiveScreen('screenCadastro');
+      }
+    }
+
     function enterSavedMenu(initialTab = 'burgers') {
       updateCustomerPill();
-      document.getElementById('screenWelcome').classList.remove('active');
-      document.getElementById('screenCadastro').classList.remove('active');
-      document.getElementById('screenMenu').classList.add('active');
+      setActiveScreen('screenMenu');
       switchMenuTab(initialTab);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      updateCartUI();
+    }
+
+    function openHistoryScreen() {
+      renderHistory();
+      setActiveScreen('screenHistory');
     }
 
     function saveAndGoToMenu() {
@@ -1784,20 +1919,13 @@
 
       updateCustomerPill();
       updateWelcomeScreen();
-      document.getElementById('screenWelcome').classList.remove('active');
-      document.getElementById('screenCadastro').classList.remove('active');
-      document.getElementById('screenMenu').classList.add('active');
+      setActiveScreen('screenMenu');
       switchMenuTab('burgers');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      updateCartUI();
     }
 
     function goToCadastro() {
-      document.getElementById('screenWelcome').classList.remove('active');
-      document.getElementById('screenMenu').classList.remove('active');
-      document.getElementById('screenCadastro').classList.add('active');
-      document.getElementById('cartBar').classList.remove('visible');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById('cadastroBackBar').style.display = hasSavedCustomer() ? 'flex' : 'none';
+      setActiveScreen('screenCadastro');
     }
 
     function updateCustomerPill() {
@@ -1805,28 +1933,15 @@
       document.getElementById('pillUserAddress').textContent = `📍 ${customer.address}${customer.ref ? ' (' + customer.ref + ')' : ''}`;
     }
 
-    // --- TELA 2: NAVEGAÇÃO ENTRE ABAS DO CARDÁPIO E HISTÓRICO ---
+    // --- NAVEGAÇÃO ENTRE ABAS DO CARDÁPIO ---
     function switchMenuTab(tab) {
       document.getElementById('tabBurgers').classList.toggle('active', tab === 'burgers');
       document.getElementById('tabDrinks').classList.toggle('active', tab === 'drinks');
-      document.getElementById('tabHistory').classList.toggle('active', tab === 'history');
 
-      const catalogView = document.getElementById('menuCatalogView');
-      const historyView = document.getElementById('historyCatalogView');
-
-      if (tab === 'history') {
-        catalogView.style.display = 'none';
-        historyView.style.display = 'block';
-        renderHistory();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (tab === 'drinks') {
+        document.getElementById('sectionDrinks').scrollIntoView({ behavior: 'smooth' });
       } else {
-        catalogView.style.display = 'block';
-        historyView.style.display = 'none';
-        if (tab === 'drinks') {
-          document.getElementById('sectionDrinks').scrollIntoView({ behavior: 'smooth' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
 
@@ -1863,11 +1978,34 @@
       drinksEl.innerHTML = PRODUCTS.filter(p => p.category === 'drinks').map(renderCard).join('');
     }
 
-    // --- HISTÓRICO DE PEDIDOS (SEM EXCLUSÃO + REPETIR PEDIDO) ---
+    // --- HISTÓRICO DE PEDIDOS (EXPANSÍVEL AO CLICAR + LIMPAR HISTÓRICO + REPETIR) ---
+    function toggleHistoryDetails(cardEl) {
+      cardEl.classList.toggle('expanded');
+      const hint = cardEl.querySelector('.history-expand-hint');
+      if (hint) {
+        hint.textContent = cardEl.classList.contains('expanded') ? '▴ Ocultar detalhes' : '▾ Ver detalhes';
+      }
+    }
+
+    function clearAllHistory() {
+      if (!orderHistory || orderHistory.length === 0) {
+        showToast('📜 O histórico já está vazio!');
+        return;
+      }
+      if (confirm('Deseja realmente limpar todo o histórico de pedidos?')) {
+        orderHistory = [];
+        localStorage.removeItem('rocha_burger_history');
+        renderHistory();
+        showToast('🗑️ Histórico limpo com sucesso!');
+      }
+    }
+
     function renderHistory() {
       const listEl = document.getElementById('historyList');
+      const clearBtn = document.getElementById('btnClearHistory');
 
       if (!orderHistory || orderHistory.length === 0) {
+        if (clearBtn) clearBtn.style.display = 'none';
         listEl.innerHTML = `
           <div class="empty-history">
             📜 Você ainda não enviou nenhum pedido.<br>
@@ -1876,6 +2014,8 @@
         `;
         return;
       }
+
+      if (clearBtn) clearBtn.style.display = 'inline-flex';
 
       listEl.innerHTML = orderHistory.map((order, index) => {
         const itemsHtml = order.items.map(item => {
@@ -1897,25 +2037,38 @@
           `;
         }).join('');
 
-        const orderNumLabel = order.orderNumber ? `#${order.orderNumber} • ` : '';
+        const orderNumLabel = order.orderNumber ? `Pedido #${order.orderNumber} • ` : '';
+        const custInfo = order.customer || customer;
 
         return `
-          <div class="history-card">
-            <div class="history-header">
+          <div class="history-card" onclick="toggleHistoryDetails(this)">
+            <div class="history-summary-top">
               <span class="history-date">🧾 ${orderNumLabel}${order.date}</span>
               <span class="history-badge">${order.deliveryType} • ${order.payment}</span>
             </div>
-            <div class="history-items">
-              ${itemsHtml}
+
+            <div class="history-summary-bottom">
+              <span class="history-total-inline">${formatBRL(order.total)}</span>
+              <span class="history-expand-hint">▾ Ver detalhes</span>
             </div>
-            ${order.changeFor ? `<div class="cart-item-meta" style="margin-bottom: 6px;"><span class="tag-add">💵 Troco para: ${order.changeFor}</span></div>` : ''}
-            ${order.generalNote ? `<div class="cart-item-meta" style="margin-bottom: 10px;"><span class="tag-obs">🗒️ Obs Geral: ${order.generalNote}</span></div>` : ''}
-            <div class="history-footer">
-              <div class="history-total">
-                <small>Total do pedido</small>
-                <strong>${formatBRL(order.total)}</strong>
+
+            <div class="history-details-body" onclick="event.stopPropagation()">
+              <div class="history-items">
+                ${itemsHtml}
               </div>
-              <button class="btn-repeat" onclick="repeatOrder(${index})">🔄 Repetir Pedido</button>
+
+              <div class="history-customer-detail">
+                <strong>👤 Cliente:</strong> ${custInfo.name} (${custInfo.phone})<br>
+                ${order.deliveryType === 'Delivery'
+                  ? `<strong>📍 Endereço:</strong> ${custInfo.address}${custInfo.ref ? ' (' + custInfo.ref + ')' : ''}<br>`
+                  : `<strong>🏪 Retirada no Balcão</strong><br>`}
+                ${order.changeFor ? `<span class="tag-add">💵 Troco para: ${order.changeFor}</span><br>` : ''}
+                ${order.generalNote ? `<span class="tag-obs">🗒️ Obs Geral: ${order.generalNote}</span>` : ''}
+              </div>
+
+              <div class="history-footer">
+                <button class="btn-repeat" onclick="event.stopPropagation(); repeatOrder(${index})">🔄 Repetir Pedido</button>
+              </div>
             </div>
           </div>
         `;
@@ -1950,7 +2103,7 @@
       document.getElementById('repeatCheckedCheckbox').checked = false;
       saveCart();
 
-      switchMenuTab('burgers');
+      enterSavedMenu('burgers');
       renderMenu();
       updateCartUI();
       openCheckout();
@@ -2167,8 +2320,7 @@
 
     function closeReceiptAndReturnToMenu() {
       closeModal('receiptModal');
-      switchMenuTab('burgers');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      enterSavedMenu('burgers');
     }
 
     function closeReceiptAndReturnToMenuOutside(e) {
@@ -2453,7 +2605,7 @@
       }
     }
 
-    // --- FINALIZAR PEDIDO: LOADING 3s (🍔 -> 🧀 -> 🥓 -> 💳) + TELEGRAM + CHECK-IN ---
+    // --- FINALIZAR PEDIDO: LOADING 4s (🍔 -> 🧀 -> 🥓 -> 🍳 -> 💳) + TELEGRAM + CHECK-IN ---
     async function finalizeOrderAndSendReceipt() {
       if (cart.length === 0) return;
 
@@ -2465,21 +2617,22 @@
       const btn = document.getElementById('btnFinishOrder');
       btn.disabled = true;
 
-      // Fecha resumo e mostra a tela de carregamento por 3 segundos girando e transformando
+      // Fecha resumo e mostra a tela de carregamento por 4 segundos girando e transformando
       closeModal('checkoutModal');
       const loadingOverlay = document.getElementById('loadingOverlay');
       const morphIconEl = document.getElementById('loadingMorphIcon');
       morphIconEl.textContent = '🍔';
       loadingOverlay.classList.add('active');
 
-      // Sequência de transformação no ponto médio de cada giro (750ms por símbolo = 3000ms)
+      // Sequência de transformação no ponto médio de cada giro (800ms por símbolo = 4000ms)
       const morphTimers = [
-        setTimeout(() => { morphIconEl.textContent = '🧀'; }, 375),
-        setTimeout(() => { morphIconEl.textContent = '🥓'; }, 1125),
-        setTimeout(() => { morphIconEl.textContent = '💳'; }, 1875)
+        setTimeout(() => { morphIconEl.textContent = '🧀'; }, 400),
+        setTimeout(() => { morphIconEl.textContent = '🥓'; }, 1200),
+        setTimeout(() => { morphIconEl.textContent = '🍳'; }, 2000),
+        setTimeout(() => { morphIconEl.textContent = '💳'; }, 2800)
       ];
 
-      const delay3Seconds = new Promise(resolve => setTimeout(resolve, 3000));
+      const delay4Seconds = new Promise(resolve => setTimeout(resolve, 4000));
 
       const generalNote = document.getElementById('generalNote').value.trim();
       const changeFor = selectedPayment === 'Dinheiro'
@@ -2523,7 +2676,7 @@
         generalNote
       };
 
-      // Salva no histórico permanente (sem opção de excluir)
+      // Salva no histórico
       orderHistory.unshift(orderRecord);
       localStorage.setItem('rocha_burger_history', JSON.stringify(orderHistory));
 
@@ -2555,12 +2708,12 @@
       lastWhatsAppOrderText = detailedTelegramText;
       lastReceiptFilename = `pedido-${dailyOrderNumber}-${customer.name.toLowerCase().replace(/\s+/g, '-')}.png`;
 
-      // Gera comprovante em imagem, envia ao Telegram e aguarda os 3 segundos de animação
+      // Gera comprovante em imagem, envia ao Telegram e aguarda os 4 segundos de animação
       const { dataUrl, blob } = await generateReceiptImage(orderRecord);
       lastReceiptDataUrl = dataUrl;
 
       await Promise.all([
-        delay3Seconds,
+        delay4Seconds,
         sendDetailedOrderToTelegram(blob, detailedTelegramText)
       ]);
 
@@ -2575,7 +2728,7 @@
       renderMenu();
       updateCartUI();
 
-      // Esconde loading de 3s e mostra o Check-in de Sucesso perguntando se deseja baixar/salvar o comprovante
+      // Esconde loading de 4s e mostra o Check-in de Sucesso perguntando se deseja baixar/salvar o comprovante
       loadingOverlay.classList.remove('active');
       document.getElementById('checkinOrderLabel').textContent = `Pedido #${dailyOrderNumber} (${customer.name}) enviado com sucesso!`;
       document.getElementById('receiptPreviewImg').src = dataUrl;
@@ -2588,8 +2741,7 @@
     loadCustomerForm();
     if (hasSavedCustomer()) {
       updateWelcomeScreen();
-      document.getElementById('screenCadastro').classList.remove('active');
-      document.getElementById('screenWelcome').classList.add('active');
+      setActiveScreen('screenWelcome');
     }
     renderMenu();
     renderHistory();
