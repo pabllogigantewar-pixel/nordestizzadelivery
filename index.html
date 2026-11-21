@@ -472,6 +472,7 @@
       margin-bottom: 10px;
       border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .history-date {
@@ -556,23 +557,59 @@
       font-size: 0.86rem;
     }
 
-    /* Aviso de Pedido Repetido / Checado */
+    /* Pergunta de Confirmação ao Repetir Pedido */
     .repeat-check-banner {
       background: rgba(255, 190, 11, 0.12);
       border: 1.5px solid var(--neon-amber);
-      color: var(--neon-amber);
-      border-radius: 12px;
-      padding: 11px 13px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      color: var(--text-main);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 0.82rem;
       margin-bottom: 14px;
-      line-height: 1.4;
-      box-shadow: 0 0 15px rgba(255, 190, 11, 0.2);
+      line-height: 1.45;
+      box-shadow: 0 0 15px rgba(255, 190, 11, 0.22);
       display: none;
     }
 
     .repeat-check-banner.active {
       display: block;
+    }
+
+    .repeat-check-question {
+      color: var(--neon-amber);
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .repeat-check-sub {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .repeat-confirm-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 190, 11, 0.45);
+      padding: 9px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #fff;
+      user-select: none;
+    }
+
+    .repeat-confirm-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--neon-green);
+      cursor: pointer;
     }
 
     /* Barra Flutuante do Carrinho */
@@ -922,6 +959,24 @@
       box-shadow: 0 0 12px rgba(0, 243, 255, 0.25);
     }
 
+    .change-field-box {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(0, 255, 136, 0.06);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 12px;
+      animation: slideUpFade 0.25s ease;
+    }
+
+    .change-field-box.visible {
+      display: block;
+    }
+
+    .change-field-box label {
+      color: var(--neon-green) !important;
+    }
+
     .checkout-total {
       display: flex;
       justify-content: space-between;
@@ -964,29 +1019,95 @@
       cursor: not-allowed;
     }
 
-    /* Modal do Comprovante Gerado */
-    .receipt-status-box {
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 12px;
+    /* Tela de Carregamento (2 segundos com Hambúrguer Girando) */
+    .loading-screen-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 7, 12, 0.96);
+      backdrop-filter: blur(10px);
+      z-index: 300;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      background: rgba(0, 243, 255, 0.12);
-      border: 1px solid var(--neon-cyan);
-      color: var(--neon-cyan);
+      padding: 24px;
     }
 
-    .receipt-status-box.success {
-      background: rgba(0, 255, 136, 0.12);
-      border-color: var(--neon-green);
+    .loading-screen-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .spinning-burger-ring {
+      width: 124px;
+      height: 124px;
+      border-radius: 50%;
+      border: 3px solid rgba(0, 243, 255, 0.2);
+      border-top-color: var(--neon-pink);
+      border-bottom-color: var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(255, 0, 127, 0.4), inset 0 0 20px rgba(0, 243, 255, 0.25);
+      animation: spinRing 1.1s linear infinite;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .spinning-burger-icon {
+      font-size: 3.6rem;
+      animation: spinBurger 1.2s ease-in-out infinite;
+    }
+
+    .loading-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 0 12px var(--neon-cyan);
+      margin-bottom: 6px;
+    }
+
+    .loading-sub {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    /* Modal Check-in de Sucesso */
+    .checkin-box {
+      text-align: center;
+      padding: 12px 6px 8px;
+    }
+
+    .checkin-circle {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: rgba(0, 255, 136, 0.14);
+      border: 2.5px solid var(--neon-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 0 28px rgba(0, 255, 136, 0.5);
+      animation: popCheckin 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .checkin-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 900;
       color: var(--neon-green);
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.45);
+      margin-bottom: 6px;
     }
 
-    .receipt-status-box.error {
-      background: rgba(255, 190, 11, 0.12);
-      border-color: var(--neon-amber);
-      color: var(--neon-amber);
+    .checkin-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-main);
+      margin-bottom: 14px;
     }
 
     .receipt-preview-wrap {
@@ -1025,18 +1146,19 @@
       cursor: pointer;
     }
 
-    .btn-secondary-wa {
+    .btn-close-return {
       width: 100%;
-      background: rgba(0, 255, 136, 0.12);
-      color: var(--neon-green);
-      border: 1.5px solid var(--neon-green);
+      background: linear-gradient(90deg, var(--neon-pink), #ff3399);
+      color: #fff;
+      border: none;
       border-radius: 14px;
-      padding: 13px;
+      padding: 15px;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 700;
+      font-size: 0.88rem;
+      font-weight: 800;
       text-transform: uppercase;
       cursor: pointer;
+      box-shadow: 0 0 18px rgba(255, 0, 127, 0.45);
     }
 
     /* Toast */
@@ -1081,6 +1203,28 @@
       from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes spinRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spinBurger {
+      0% { transform: rotate(0deg) scale(0.95); }
+      50% { transform: rotate(-180deg) scale(1.12); }
+      100% { transform: rotate(-360deg) scale(0.95); }
+    }
+
+    @keyframes popCheckin {
+      0% { transform: scale(0.4); opacity: 0; }
+      70% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -1089,6 +1233,15 @@
   <div class="cyber-grid"></div>
 
   <div id="toast" class="toast">⚡ Atualizado!</div>
+
+  <!-- TELA DE CARREGAMENTO (2 SEGUNDOS COM HAMBÚRGUER GIRANDO) -->
+  <div id="loadingOverlay" class="loading-screen-overlay">
+    <div class="spinning-burger-ring">
+      <span class="spinning-burger-icon">🍔</span>
+    </div>
+    <div class="loading-title">Preparando seu pedido...</div>
+    <div class="loading-sub">Gerando comprovante e enviando para O Rocha Burger</div>
+  </div>
 
   <header>
     <div class="status-badge">
@@ -1108,7 +1261,7 @@
 
         <div class="form-group">
           <label>Seu Nome *</label>
-          <input type="text" id="regName" class="form-control" placeholder="Ex: Pablo Rocha">
+          <input type="text" id="regName" class="form-control" placeholder="Nome e sobrenome">
         </div>
 
         <div class="form-group">
@@ -1251,9 +1404,14 @@
         <button class="btn-close" onclick="closeModal('checkoutModal')">✕</button>
       </div>
 
-      <!-- Aviso exibido ao repetir pedido do histórico -->
+      <!-- Pergunta de checagem exibida ao refazer/repetir pedido do histórico -->
       <div id="repeatCheckBanner" class="repeat-check-banner">
-        ✅ Seu pedido foi checado. Após enviar, não poderá mais ser alterado por aqui.
+        <span class="repeat-check-question">⚠️ Você checou seu pedido?</span>
+        <span class="repeat-check-sub">Depois de confirmado e enviado, não poderá ser alterado por aqui.</span>
+        <label class="repeat-confirm-label">
+          <input type="checkbox" id="repeatCheckedCheckbox">
+          <span>Sim, chequei meu pedido e confirmo o envio</span>
+        </label>
       </div>
 
       <div id="cartItemsList" class="cart-items-list"></div>
@@ -1270,6 +1428,7 @@
       <!-- Dados cadastrados do cliente -->
       <div class="address-summary-box" id="checkoutCustomerBox"></div>
 
+      <!-- Forma de Pagamento + Aba Exclusiva de Troco quando Dinheiro -->
       <div class="form-group">
         <label>Forma de Pagamento</label>
         <div class="payment-options">
@@ -1277,11 +1436,18 @@
           <div class="pay-chip" data-pay="Cartão" onclick="selectPayment(this)">💳 Cartão</div>
           <div class="pay-chip" data-pay="Dinheiro" onclick="selectPayment(this)">💵 Dinheiro</div>
         </div>
+
+        <!-- Aba separada de Troco (aparece apenas quando Dinheiro está selecionado) -->
+        <div id="changeFieldBox" class="change-field-box">
+          <label>💵 Troco para quanto? (Opcional)</label>
+          <input type="text" id="changeInput" class="form-control" placeholder="Ex: Troco para R$ 50,00 (ou deixe vazio se não precisar)">
+        </div>
       </div>
 
+      <!-- Aba fixa de Observação Geral -->
       <div class="form-group">
-        <label>Troco ou Observação Geral (Opcional)</label>
-        <input type="text" id="generalNote" class="form-control" placeholder="Ex: Troco para R$ 50...">
+        <label>🗒️ Observação Geral (Opcional)</label>
+        <input type="text" id="generalNote" class="form-control" placeholder="Ex: Interfone quebrado, mandar guardanapos...">
       </div>
 
       <div class="checkout-total">
@@ -1295,16 +1461,18 @@
     </div>
   </div>
 
-  <!-- MODAL DO COMPROVANTE GERADO (IMAGEM SALVA + TELEGRAM + WHATSAPP) -->
-  <div id="receiptModal" class="modal-overlay" onclick="closeModalOutside(event, 'receiptModal')">
+  <!-- MODAL CHECK-IN DE SUCESSO + COMPROVANTE -->
+  <div id="receiptModal" class="modal-overlay" onclick="closeReceiptAndReturnToMenuOutside(event)">
     <div class="drawer">
       <div class="drawer-header">
-        <h3 class="drawer-title">🧾 Comprovante do Pedido</h3>
-        <button class="btn-close" onclick="closeModal('receiptModal')">✕</button>
+        <h3 class="drawer-title">✅ Check-in do Pedido</h3>
+        <button class="btn-close" onclick="closeReceiptAndReturnToMenu()">✕</button>
       </div>
 
-      <div id="telegramStatusBox" class="receipt-status-box">
-        ⏳ Gerando comprovante e enviando para o Telegram...
+      <div class="checkin-box">
+        <div class="checkin-circle">✅</div>
+        <h4 class="checkin-title">Seu pedido foi enviado com sucesso!</h4>
+        <p class="checkin-subtitle" id="checkinOrderLabel">Pedido #01 registrado e enviado para O Rocha Burger.</p>
       </div>
 
       <div class="receipt-preview-wrap">
@@ -1313,10 +1481,10 @@
 
       <div class="receipt-actions">
         <button class="btn-secondary-cyan" onclick="downloadLastReceipt()">
-          💾 Salvar Imagem do Comprovante
+          💾 Baixar Comprovante Novamente
         </button>
-        <button class="btn-secondary-wa" onclick="openLastOrderWhatsApp()">
-          📲 Também Enviar no WhatsApp
+        <button class="btn-close-return" onclick="closeReceiptAndReturnToMenu()">
+          🍔 Fechar e Voltar ao Cardápio
         </button>
       </div>
     </div>
@@ -1417,7 +1585,6 @@
     // Dados do último comprovante gerado
     let lastReceiptDataUrl = '';
     let lastReceiptFilename = 'comprovante-o-rocha-burger.png';
-    let lastWhatsAppText = '';
 
     function formatBRL(value) {
       return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -1429,6 +1596,28 @@
       toast.classList.add('show');
       clearTimeout(window.toastTimer);
       window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    // --- NUMERAÇÃO DIÁRIA DE PEDIDOS (ZERA À MEIA-NOITE: 01, 02, 03...) ---
+    function getTodayKey() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function getNextDailyOrderNumber() {
+      const todayKey = getTodayKey();
+      let stored = JSON.parse(localStorage.getItem('rocha_burger_daily_seq')) || { date: todayKey, count: 0 };
+
+      if (stored.date !== todayKey) {
+        stored = { date: todayKey, count: 0 };
+      }
+
+      stored.count += 1;
+      localStorage.setItem('rocha_burger_daily_seq', JSON.stringify(stored));
+      return String(stored.count).padStart(2, '0');
     }
 
     // --- TELA 1: CADASTRO ---
@@ -1565,15 +1754,18 @@
           `;
         }).join('');
 
+        const orderNumLabel = order.orderNumber ? `#${order.orderNumber} • ` : '';
+
         return `
           <div class="history-card">
             <div class="history-header">
-              <span class="history-date">🗓️ ${order.date}</span>
+              <span class="history-date">🧾 ${orderNumLabel}${order.date}</span>
               <span class="history-badge">${order.deliveryType} • ${order.payment}</span>
             </div>
             <div class="history-items">
               ${itemsHtml}
             </div>
+            ${order.changeFor ? `<div class="cart-item-meta" style="margin-bottom: 6px;"><span class="tag-add">💵 Troco para: ${order.changeFor}</span></div>` : ''}
             ${order.generalNote ? `<div class="cart-item-meta" style="margin-bottom: 10px;"><span class="tag-obs">🗒️ Obs Geral: ${order.generalNote}</span></div>` : ''}
             <div class="history-footer">
               <div class="history-total">
@@ -1601,6 +1793,7 @@
       deliveryType = selectedOrder.deliveryType || 'Delivery';
       selectedPayment = selectedOrder.payment || 'PIX';
       document.getElementById('generalNote').value = selectedOrder.generalNote || '';
+      document.getElementById('changeInput').value = selectedOrder.changeFor || '';
 
       document.querySelectorAll('.delivery-chip').forEach(c => {
         c.classList.toggle('active', c.dataset.type === deliveryType);
@@ -1608,15 +1801,16 @@
       document.querySelectorAll('.pay-chip').forEach(c => {
         c.classList.toggle('active', c.dataset.pay === selectedPayment);
       });
+      updateChangeFieldVisibility();
 
       isRepeatedOrder = true;
+      document.getElementById('repeatCheckedCheckbox').checked = false;
       saveCart();
 
       switchMenuTab('burgers');
       renderMenu();
       updateCartUI();
       openCheckout();
-      showToast('✅ Seu pedido foi checado. Após enviar, não poderá mais ser alterado por aqui.');
     }
 
     // --- MODAL DE PERSONALIZAÇÃO AO ADICIONAR ITEM ---
@@ -1780,6 +1974,7 @@
 
     function openCheckout() {
       updateCheckoutCustomerBox();
+      updateChangeFieldVisibility();
       document.getElementById('repeatCheckBanner').classList.toggle('active', isRepeatedOrder);
       document.getElementById('checkoutModal').classList.add('open');
     }
@@ -1807,10 +2002,16 @@
       }
     }
 
+    function updateChangeFieldVisibility() {
+      const changeBox = document.getElementById('changeFieldBox');
+      changeBox.classList.toggle('visible', selectedPayment === 'Dinheiro');
+    }
+
     function selectPayment(el) {
       document.querySelectorAll('.pay-chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPayment = el.dataset.pay;
+      updateChangeFieldVisibility();
     }
 
     function closeModal(id) {
@@ -1819,6 +2020,18 @@
 
     function closeModalOutside(e, id) {
       if (e.target.id === id) closeModal(id);
+    }
+
+    function closeReceiptAndReturnToMenu() {
+      closeModal('receiptModal');
+      switchMenuTab('burgers');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeReceiptAndReturnToMenuOutside(e) {
+      if (e.target.id === 'receiptModal') {
+        closeReceiptAndReturnToMenu();
+      }
     }
 
     // --- GERADOR DE COMPROVANTE EM IMAGEM (CANVAS) ---
@@ -1849,7 +2062,7 @@
 
       // Calcula altura dinâmica antes de desenhar
       ctx.font = '15px sans-serif';
-      let calcHeight = 250; // Cabeçalho + rodapé base
+      let calcHeight = 265;
 
       orderObj.items.forEach(item => {
         calcHeight += 32;
@@ -1872,10 +2085,13 @@
           calcHeight += wrapCanvasLines(ctx, `Ref: ${orderObj.customer.ref}`, contentWidth).length * 22;
         }
       }
+      if (orderObj.changeFor) {
+        calcHeight += wrapCanvasLines(ctx, `Troco para: ${orderObj.changeFor}`, contentWidth).length * 22;
+      }
       if (orderObj.generalNote) {
         calcHeight += wrapCanvasLines(ctx, `Obs Geral: ${orderObj.generalNote}`, contentWidth).length * 22;
       }
-      calcHeight += 150;
+      calcHeight += 155;
 
       canvas.width = width;
       canvas.height = calcHeight;
@@ -1893,7 +2109,7 @@
       ctx.lineWidth = 1.5;
       ctx.strokeRect(18, 18, width - 36, calcHeight - 36);
 
-      let y = 58;
+      let y = 56;
 
       // Título O ROCHA BURGER
       ctx.textAlign = 'center';
@@ -1904,12 +2120,12 @@
 
       ctx.font = 'bold 13px sans-serif';
       ctx.fillStyle = '#00f3ff';
-      ctx.fillText('COMPROVANTE OFICIAL DE PEDIDO', width / 2, y);
-      y += 22;
+      ctx.fillText(`PEDIDO #${orderObj.orderNumber} — ${orderObj.customer.name.toUpperCase()}`, width / 2, y);
+      y += 21;
 
       ctx.font = '13px sans-serif';
       ctx.fillStyle = '#a0a0b8';
-      ctx.fillText(`Pedido #${String(orderObj.id).slice(-5)}  •  ${orderObj.date}`, width / 2, y);
+      ctx.fillText(`${orderObj.date}`, width / 2, y);
       y += 20;
 
       // Linha tracejada
@@ -1976,6 +2192,15 @@
       ctx.fillStyle = '#ff007f';
       ctx.fillText(`MODALIDADE: ${orderObj.deliveryType.toUpperCase()}  |  PAGAMENTO: ${orderObj.payment.toUpperCase()}`, padX, y);
       y += 24;
+
+      if (orderObj.changeFor) {
+        ctx.font = 'bold 14px sans-serif';
+        ctx.fillStyle = '#00ff88';
+        wrapCanvasLines(ctx, `Troco para: ${orderObj.changeFor}`, contentWidth).forEach(line => {
+          ctx.fillText(line, padX, y);
+          y += 21;
+        });
+      }
 
       ctx.font = '14px sans-serif';
       ctx.fillStyle = '#f4f4f8';
@@ -2048,66 +2273,77 @@
       showToast('💾 Comprovante salvo!');
     }
 
-    function openLastOrderWhatsApp() {
-      if (!lastWhatsAppText) return;
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lastWhatsAppText)}`;
-      window.open(url, '_blank');
-    }
-
-    async function sendReceiptToTelegram(blob, captionText) {
-      const statusBox = document.getElementById('telegramStatusBox');
-      statusBox.className = 'receipt-status-box';
-      statusBox.textContent = '⏳ Enviando comprovante para o Telegram...';
-
+    // --- ENVIO DETALHADO AO TELEGRAM ---
+    async function sendDetailedOrderToTelegram(blob, fullText) {
       try {
-        const formData = new FormData();
-        formData.append('chat_id', TELEGRAM_CHAT_ID);
-        formData.append('photo', blob, lastReceiptFilename);
-        formData.append('caption', captionText.slice(0, 1020));
+        if (blob) {
+          const formData = new FormData();
+          formData.append('chat_id', TELEGRAM_CHAT_ID);
+          formData.append('photo', blob, lastReceiptFilename);
+          formData.append('caption', fullText.slice(0, 1020));
 
-        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
-          method: 'POST',
-          body: formData
-        });
+          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            body: formData
+          });
+        }
 
-        const result = await response.json();
-        if (result.ok) {
-          statusBox.className = 'receipt-status-box success';
-          statusBox.textContent = '✅ Comprovante salvo e enviado ao Telegram com sucesso!';
-        } else {
-          statusBox.className = 'receipt-status-box error';
-          statusBox.textContent = '⚠️ Comprovante salvo! Não foi possível confirmar o envio automático ao Telegram.';
+        // Se o texto detalhado ultrapassar o limite da legenda da foto, envia completo via sendMessage
+        if (fullText.length > 1020 || !blob) {
+          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: TELEGRAM_CHAT_ID,
+              text: fullText
+            })
+          });
         }
       } catch (err) {
-        statusBox.className = 'receipt-status-box error';
-        statusBox.textContent = '⚠️ Comprovante salvo no aparelho! Verifique sua conexão para o envio ao Telegram.';
+        // Mantém fluxo fluido no cliente mesmo em rede instável
       }
     }
 
-    // --- FINALIZAR PEDIDO: HISTÓRICO + IMAGEM + TELEGRAM ---
+    // --- FINALIZAR PEDIDO: LOADING 2s + TELEGRAM DETALHADO + CHECK-IN ---
     async function finalizeOrderAndSendReceipt() {
       if (cart.length === 0) return;
 
+      if (isRepeatedOrder && !document.getElementById('repeatCheckedCheckbox').checked) {
+        showToast('⚠️ Confirme se você checou seu pedido antes de enviar!');
+        return;
+      }
+
       const btn = document.getElementById('btnFinishOrder');
       btn.disabled = true;
-      btn.textContent = '⏳ Gerando Comprovante...';
+
+      // Fecha resumo e mostra a tela de carregamento por 2 segundos com hambúrguer girando
+      closeModal('checkoutModal');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.classList.add('active');
+
+      const delay2Seconds = new Promise(resolve => setTimeout(resolve, 2000));
 
       const generalNote = document.getElementById('generalNote').value.trim();
-      let total = 0;
-      let itemsText = '';
+      const changeFor = selectedPayment === 'Dinheiro'
+        ? document.getElementById('changeInput').value.trim()
+        : '';
 
-      cart.forEach(item => {
+      const dailyOrderNumber = getNextDailyOrderNumber();
+      let total = 0;
+      let itemsDetailedText = '';
+
+      cart.forEach((item, idx) => {
         const sub = item.unitPrice * item.qty;
         total += sub;
-        itemsText += `• ${item.qty}x ${item.name} — ${formatBRL(sub)}\n`;
+        itemsDetailedText += `${idx + 1}. ${item.qty}x ${item.name} (${formatBRL(item.unitPrice)} un.) = ${formatBRL(sub)}\n`;
         if (item.addons.length) {
-          itemsText += `   + Adicionais: ${item.addons.map(a => a.name).join(', ')}\n`;
+          itemsDetailedText += `   ➕ Adicionais: ${item.addons.map(a => `${a.name} (+${formatBRL(a.price)})`).join(', ')}\n`;
         }
         if (item.removals.length) {
-          itemsText += `   • Detalhes: ${item.removals.join(', ')}\n`;
+          itemsDetailedText += `   🚫 Retirar/Pref: ${item.removals.join(', ')}\n`;
         }
         if (item.obs) {
-          itemsText += `   Obs: ${item.obs}\n`;
+          itemsDetailedText += `   📝 Obs do item: ${item.obs}\n`;
         }
       });
 
@@ -2117,12 +2353,14 @@
 
       const orderRecord = {
         id: orderId,
+        orderNumber: dailyOrderNumber,
         date: formattedDate,
         customer: { ...customer },
         items: JSON.parse(JSON.stringify(cart)),
         total,
         deliveryType,
         payment: selectedPayment,
+        changeFor,
         generalNote
       };
 
@@ -2131,46 +2369,59 @@
       localStorage.setItem('rocha_burger_history', JSON.stringify(orderHistory));
 
       const deliveryInfo = deliveryType === 'Delivery'
-        ? `🛵 Modalidade: Delivery\n📍 Endereço: ${customer.address}\n` + (customer.ref ? `📌 Ref: ${customer.ref}\n` : '')
-        : `🏪 Modalidade: Retirada no Balcão\n`;
+        ? `🛵 Modalidade: DELIVERY\n📍 Endereço: ${customer.address}\n` + (customer.ref ? `📌 Ponto de Referência: ${customer.ref}\n` : '')
+        : `🏪 Modalidade: RETIRADA NO BALCÃO\n`;
 
-      const summaryCaption =
-        `🍔 NOVO PEDIDO #${String(orderId).slice(-5)} — O ROCHA BURGER\n` +
-        `────────────────────\n` +
-        `${itemsText}` +
-        `────────────────────\n` +
-        `💰 Total: ${formatBRL(total)}\n` +
-        `💳 Pagamento: ${selectedPayment}\n` +
-        `👤 Cliente: ${customer.name}\n` +
-        `📱 Telefone: ${customer.phone}\n` +
+      const paymentInfo = selectedPayment === 'Dinheiro'
+        ? `💳 Pagamento: DINHEIRO\n` + (changeFor ? `💵 Troco para: ${changeFor}\n` : `💵 Troco: Não precisa\n`)
+        : `💳 Pagamento: ${selectedPayment.toUpperCase()}\n`;
+
+      const detailedTelegramText =
+        `🍔 PEDIDO #${dailyOrderNumber} — ${customer.name.toUpperCase()}\n` +
+        `🏪 O ROCHA BURGER | ${formattedDate}\n` +
+        `══════════════════════\n` +
+        `👤 CLIENTE:\n` +
+        `• Nome: ${customer.name}\n` +
+        `• Telefone: ${customer.phone}\n` +
         `${deliveryInfo}` +
-        (generalNote ? `🗒️ Obs Geral: ${generalNote}\n` : '');
+        `══════════════════════\n` +
+        `📋 ITENS DO PEDIDO:\n` +
+        `${itemsDetailedText}` +
+        `══════════════════════\n` +
+        `${paymentInfo}` +
+        (generalNote ? `🗒️ Observação Geral: ${generalNote}\n` : '') +
+        `💰 TOTAL DO PEDIDO: ${formatBRL(total)}`;
 
-      lastWhatsAppText = summaryCaption;
-      lastReceiptFilename = `comprovante-rocha-burger-${String(orderId).slice(-5)}.png`;
+      lastReceiptFilename = `pedido-${dailyOrderNumber}-${customer.name.toLowerCase().replace(/\s+/g, '-')}.png`;
 
-      // Gera imagem do comprovante e baixa automaticamente
+      // Gera comprovante em imagem, envia ao Telegram e aguarda os 2 segundos de carregamento
       const { dataUrl, blob } = await generateReceiptImage(orderRecord);
       lastReceiptDataUrl = dataUrl;
-      document.getElementById('receiptPreviewImg').src = dataUrl;
+
+      await Promise.all([
+        delay2Seconds,
+        sendDetailedOrderToTelegram(blob, detailedTelegramText)
+      ]);
+
+      // Baixa automaticamente o comprovante
       triggerDownload(dataUrl, lastReceiptFilename);
 
-      // Fecha resumo, limpa carrinho atual e abre comprovante
+      // Limpa carrinho atual e campos transitórios
       cart = [];
       isRepeatedOrder = false;
+      document.getElementById('changeInput').value = '';
+      document.getElementById('generalNote').value = '';
       saveCart();
       renderMenu();
       updateCartUI();
-      closeModal('checkoutModal');
+
+      // Esconde loading de 2s e mostra o Check-in de Sucesso
+      loadingOverlay.classList.remove('active');
+      document.getElementById('checkinOrderLabel').textContent = `Pedido #${dailyOrderNumber} (${customer.name}) enviado com sucesso!`;
+      document.getElementById('receiptPreviewImg').src = dataUrl;
       document.getElementById('receiptModal').classList.add('open');
 
       btn.disabled = false;
-      btn.textContent = '🧾 Gerar Comprovante e Enviar Pedido';
-
-      // Envia a foto do comprovante para o Telegram
-      if (blob) {
-        await sendReceiptToTelegram(blob, summaryCaption);
-      }
     }
 
     // Inicialização
