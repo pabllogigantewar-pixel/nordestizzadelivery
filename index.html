@@ -202,7 +202,7 @@
       display: block;
     }
 
-    /* Botão Voltar (Meus Dados e Histórico) */
+    /* Botão Voltar (Meus Dados, Histórico e Informações da Loja) */
     .screen-top-nav {
       display: flex;
       align-items: center;
@@ -305,7 +305,136 @@
       box-shadow: 0 0 14px rgba(var(--neon-amber-rgb), 0.15);
     }
 
-    /* Tela 1: Cadastro */
+    .btn-welcome-option.pink {
+      border-color: rgba(var(--neon-pink-rgb), 0.55);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(var(--neon-pink-rgb), 0.22);
+    }
+
+    /* Aba Informações da Loja (com capa.jpg de fundo e logo) */
+    .store-info-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.4);
+      border-radius: 22px;
+      overflow: hidden;
+      margin-top: 8px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), 0 0 24px rgba(var(--neon-cyan-rgb), 0.15);
+    }
+
+    .store-cover-banner {
+      position: relative;
+      min-height: 220px;
+      padding: 26px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-image: url('capa.jpg');
+      background-size: cover;
+      background-position: center;
+      background-color: #10101a;
+    }
+
+    .store-cover-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(7, 7, 12, 0.58) 0%, rgba(7, 7, 12, 0.88) 100%);
+      z-index: 0;
+    }
+
+    .store-cover-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .store-info-logo-ring {
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-amber), var(--neon-cyan));
+      box-shadow: 0 0 22px rgba(var(--neon-pink-rgb), 0.55), 0 0 32px rgba(var(--neon-cyan-rgb), 0.35);
+      margin-bottom: 10px;
+    }
+
+    .store-info-logo-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      background: #0a0a12;
+    }
+
+    .store-info-heading {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 12px rgba(var(--neon-cyan-rgb), 0.55);
+      letter-spacing: 1px;
+    }
+
+    .store-details-list {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .store-detail-item {
+      background: #141422;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 14px;
+      padding: 13px 14px;
+    }
+
+    .store-detail-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      color: var(--neon-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .store-detail-value {
+      font-size: 0.88rem;
+      color: var(--text-main);
+      line-height: 1.45;
+    }
+
+    /* Botão Logoff dentro de Meus Dados */
+    .btn-logoff-neon {
+      width: 100%;
+      background: rgba(255, 59, 92, 0.14);
+      color: #ff8fa3;
+      border: 1.5px solid var(--neon-red);
+      border-radius: 14px;
+      padding: 13px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(255, 59, 92, 0.22);
+      transition: transform 0.2s ease, background 0.2s ease;
+      margin-top: 10px;
+    }
+
+    .btn-logoff-neon:active {
+      transform: scale(0.96);
+    }
+
+    /* Tela 1: Login / Cadastro */
     .register-card {
       background: var(--bg-card);
       border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.35);
@@ -1917,11 +2046,11 @@
 
   <main class="container">
 
-    <!-- TELA INICIAL DE ACESSO RÁPIDO (EXIBIDA AUTOMATICAMENTE SE JÁ HOUVER CADASTRO SALVO) -->
+    <!-- TELA INICIAL DE ACESSO RÁPIDO (EXIBIDA QUANDO HÁ LOGIN ATIVO NO DISPOSITIVO) -->
     <section id="screenWelcome" class="screen">
       <div class="register-card">
         <h2 class="register-title" id="welcomeUserTitle">👋 Bem-vindo de volta!</h2>
-        <p class="register-sub">Seus dados já estão salvos. Escolha para onde deseja ir:</p>
+        <p class="register-sub">Login ativo neste dispositivo. Escolha para onde deseja ir:</p>
 
         <div class="welcome-user-box" id="welcomeUserSummary"></div>
 
@@ -1935,19 +2064,22 @@
           <button class="btn-welcome-option amber" onclick="openHistoryScreen()">
             📜 Histórico de Pedidos
           </button>
+          <button class="btn-welcome-option pink" onclick="openStoreInfoScreen()">
+            🏪 Informações da Loja
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- TELA 1: CADASTRO DO CLIENTE (MEUS DADOS) -->
+    <!-- TELA 1: LOGIN / MEUS DADOS DO CLIENTE -->
     <section id="screenCadastro" class="screen active">
       <div class="screen-top-nav" id="cadastroBackBar" style="display: none;">
         <button class="btn-back-home" onclick="backToWelcomeScreen()">⬅️ Voltar</button>
       </div>
 
       <div class="register-card">
-        <h2 class="register-title">👤 Seus Dados</h2>
-        <p class="register-sub">Preencha rapidinho antes de abrir o cardápio:</p>
+        <h2 class="register-title" id="loginCardTitle">🔐 Login do Cliente</h2>
+        <p class="register-sub" id="loginCardSub">Faça seu login preenchendo seus dados para acessar o cardápio:</p>
 
         <div class="form-group">
           <label>Seu Nome *</label>
@@ -1969,21 +2101,25 @@
           <input type="text" id="regRef" class="form-control" placeholder="Ex: Próximo à praça / portão preto">
         </div>
 
-        <button class="btn-primary-neon" onclick="saveAndGoToMenu()">
-          Ir para o Cardápio 🍔
+        <button class="btn-primary-neon" id="btnLoginAction" onclick="saveAndGoToMenu()">
+          Entrar e Ir para o Cardápio 🍔
+        </button>
+
+        <button type="button" class="btn-logoff-neon" id="btnLogoffAction" style="display: none;" onclick="performLogoff()">
+          🚪 Fazer Logoff
         </button>
       </div>
     </section>
 
     <!-- TELA 2: CARDÁPIO SEPARADO -->
     <section id="screenMenu" class="screen">
-      <!-- Resumo rápido do cliente com botão de voltar ao cadastro -->
+      <!-- Resumo rápido do cliente com botão de voltar ao login/meus dados -->
       <div class="customer-pill">
         <div class="customer-pill-info">
           <strong id="pillUserName">Olá!</strong>
           <small id="pillUserAddress">Endereço cadastrado</small>
         </div>
-        <button class="btn-edit-user" onclick="goToCadastro()">✏️ Cadastro</button>
+        <button class="btn-edit-user" onclick="goToCadastro()">✏️ Meus Dados</button>
       </div>
 
       <!-- Botões Voltar para Tela Inicial e Limpar Todo o Pedido -->
@@ -2023,6 +2159,41 @@
 
       <h2 class="section-title">📜 Histórico de Pedidos</h2>
       <div id="historyList" class="menu-list"></div>
+    </section>
+
+    <!-- TELA 4: INFORMAÇÕES DA LOJA (CAPA.JPG AO FUNDO + LOGO + ENDEREÇO + DIAS + HORÁRIO) -->
+    <section id="screenStoreInfo" class="screen">
+      <div class="screen-top-nav">
+        <button class="btn-back-home" onclick="backFromStoreInfo()">⬅️ Voltar</button>
+      </div>
+
+      <div class="store-info-card">
+        <div class="store-cover-banner">
+          <div class="store-cover-content">
+            <div class="store-info-logo-ring" id="storeInfoLogoWrap">
+              <img src="logo Burguer.jpg" alt="Logo O Rocha Burger" class="store-info-logo-img" onerror="document.getElementById('storeInfoLogoWrap').style.display='none'">
+            </div>
+            <h2 class="store-info-heading">O ROCHA BURGER</h2>
+          </div>
+        </div>
+
+        <div class="store-details-list">
+          <div class="store-detail-item">
+            <span class="store-detail-label">📍 Endereço</span>
+            <p class="store-detail-value" id="storeAddressText"></p>
+          </div>
+
+          <div class="store-detail-item">
+            <span class="store-detail-label">📅 Dias de Funcionamento</span>
+            <p class="store-detail-value" id="storeDaysText"></p>
+          </div>
+
+          <div class="store-detail-item">
+            <span class="store-detail-label">🕒 Horário de Funcionamento</span>
+            <p class="store-detail-value" id="storeHoursText"></p>
+          </div>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -2263,11 +2434,17 @@
   <canvas id="receiptCanvas" style="display: none;"></canvas>
 
   <script>
-    // CONFIGURAÇÕES DA HAMBURGUERIA (WHATSAPP + TELEGRAM BOT + CHAVE PIX)
+    // CONFIGURAÇÕES DA HAMBURGUERIA (WHATSAPP + TELEGRAM BOT + CHAVE PIX + LOJA)
     const WHATSAPP_NUMBER = "5586988222969";
     const TELEGRAM_BOT_TOKEN = "9093112610:AAHYysMeH_OmOgDnPl8CFvnEsY6avwEXhDc";
     const TELEGRAM_CHAT_ID = "7080548404";
     const PIX_KEY = "86994477361";
+
+    const STORE_INFO = {
+      address: "Parnaíba - PI",
+      days: "Terça a Domingo",
+      hours: "18:00 às 23:30"
+    };
 
     // 3 MIXES DE CORES NEON (PINCEL NO CANTO SUPERIOR DIREITO)
     const NEON_THEMES = [
@@ -2359,13 +2536,13 @@
       }
     ];
 
-    // Estado da Aplicação
-    let customer = JSON.parse(localStorage.getItem('rocha_burg_customer')) || {
-      name: '',
-      phone: '',
-      address: '',
-      ref: ''
-    };
+    // Estado da Aplicação (Perfil salvo no dispositivo + Sessão de Login ativa)
+    let savedDeviceProfile = JSON.parse(localStorage.getItem('rocha_burg_device_profile')) || null;
+    let isLoggedIn = JSON.parse(localStorage.getItem('rocha_burg_logged_in')) || false;
+
+    let customer = (isLoggedIn && savedDeviceProfile)
+      ? { ...savedDeviceProfile }
+      : { name: '', phone: '', address: '', ref: '' };
 
     let cart = JSON.parse(localStorage.getItem('rocha_burg_cart_v2')) || [];
     let orderHistory = JSON.parse(localStorage.getItem('rocha_burger_history')) || [];
@@ -2380,6 +2557,7 @@
     let pixProofFile = null;
     let currentPixPayload = '';
     let isRepeatedOrder = false;
+    let previousScreenBeforeStoreInfo = 'screenCadastro';
 
     // Dados do último comprovante gerado
     let lastReceiptDataUrl = '';
@@ -2566,7 +2744,12 @@
       return String(stored.count).padStart(2, '0');
     }
 
-    // --- CONTROLE DE TELAS (INÍCIO, CADASTRO, CARDÁPIO, HISTÓRICO) ---
+    // --- CONTROLE DE TELAS (LOGIN, INÍCIO, CARDÁPIO, HISTÓRICO, LOJA) ---
+    function getCurrentActiveScreenId() {
+      const activeEl = document.querySelector('.screen.active');
+      return activeEl ? activeEl.id : 'screenCadastro';
+    }
+
     function setActiveScreen(screenId) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(screenId).classList.add('active');
@@ -2574,15 +2757,42 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function hasSavedCustomer() {
-      return Boolean(customer && customer.name && customer.phone && customer.address);
+    function hasActiveLoginSession() {
+      return Boolean(isLoggedIn && customer && customer.name && customer.phone && customer.address);
+    }
+
+    function renderStoreInfoScreen() {
+      document.getElementById('storeAddressText').textContent = STORE_INFO.address;
+      document.getElementById('storeDaysText').textContent = STORE_INFO.days;
+      document.getElementById('storeHoursText').textContent = STORE_INFO.hours;
+    }
+
+    function openStoreInfoScreen() {
+      previousScreenBeforeStoreInfo = getCurrentActiveScreenId();
+      renderStoreInfoScreen();
+      setActiveScreen('screenStoreInfo');
+    }
+
+    function backFromStoreInfo() {
+      setActiveScreen(previousScreenBeforeStoreInfo || (hasActiveLoginSession() ? 'screenWelcome' : 'screenCadastro'));
     }
 
     function loadCustomerForm() {
-      document.getElementById('regName').value = customer.name || '';
-      document.getElementById('regPhone').value = customer.phone || '';
-      document.getElementById('regAddress').value = customer.address || '';
-      document.getElementById('regRef').value = customer.ref || '';
+      const sourceData = hasActiveLoginSession() ? customer : { name: '', phone: '', address: '', ref: '' };
+      document.getElementById('regName').value = sourceData.name || '';
+      document.getElementById('regPhone').value = sourceData.phone || '';
+      document.getElementById('regAddress').value = sourceData.address || '';
+      document.getElementById('regRef').value = sourceData.ref || '';
+
+      const logged = hasActiveLoginSession();
+      document.getElementById('loginCardTitle').textContent = logged ? '👤 Meus Dados' : '🔐 Login do Cliente';
+      document.getElementById('loginCardSub').textContent = logged
+        ? 'Seus dados de login neste dispositivo:'
+        : 'Faça seu login preenchendo seus dados para acessar o cardápio:';
+      document.getElementById('btnLoginAction').textContent = logged
+        ? 'Salvar e Ir para o Cardápio 🍔'
+        : 'Fazer Login e Ir para o Cardápio 🍔';
+      document.getElementById('btnLogoffAction').style.display = logged ? 'block' : 'none';
     }
 
     function updateWelcomeScreen() {
@@ -2595,21 +2805,32 @@
     }
 
     function backToWelcomeScreen() {
-      if (hasSavedCustomer()) {
+      if (hasActiveLoginSession()) {
         updateWelcomeScreen();
         setActiveScreen('screenWelcome');
       } else {
+        loadCustomerForm();
         setActiveScreen('screenCadastro');
       }
     }
 
     function enterSavedMenu(initialTab = 'burgers') {
+      if (!hasActiveLoginSession()) {
+        loadCustomerForm();
+        setActiveScreen('screenCadastro');
+        return;
+      }
       updateCustomerPill();
       setActiveScreen('screenMenu');
       switchMenuTab(initialTab);
     }
 
     function openHistoryScreen() {
+      if (!hasActiveLoginSession()) {
+        loadCustomerForm();
+        setActiveScreen('screenCadastro');
+        return;
+      }
       renderHistory();
       setActiveScreen('screenHistory');
     }
@@ -2621,21 +2842,61 @@
       const ref = document.getElementById('regRef').value.trim();
 
       if (!name || !phone || !address) {
-        showToast('⚠️ Preencha Nome, Telefone e Endereço!');
+        showToast('⚠️ Preencha Nome, Telefone e Endereço para fazer login!');
         return;
       }
 
-      customer = { name, phone, address, ref };
-      localStorage.setItem('rocha_burg_customer', JSON.stringify(customer));
+      // Verifica se já existe perfil salvo neste dispositivo para restaurar dados se os campos estiverem vazios
+      const profileData = { name, phone, address, ref };
+      savedDeviceProfile = profileData;
+      isLoggedIn = true;
+      customer = { ...profileData };
+
+      localStorage.setItem('rocha_burg_device_profile', JSON.stringify(savedDeviceProfile));
+      localStorage.setItem('rocha_burg_logged_in', JSON.stringify(true));
 
       updateCustomerPill();
       updateWelcomeScreen();
       setActiveScreen('screenMenu');
       switchMenuTab('burgers');
+      showToast(`✅ Login realizado: ${name}`);
+    }
+
+    function performLogoff() {
+      isLoggedIn = false;
+      customer = { name: '', phone: '', address: '', ref: '' };
+      cart = [];
+      isRepeatedOrder = false;
+      pixConfirmed = false;
+      pixGenerating = false;
+      resetPixProof();
+      saveCart();
+      localStorage.setItem('rocha_burg_logged_in', JSON.stringify(false));
+
+      // Limpa os inputs visíveis para exibir a tela como se não tivesse feito login ainda,
+      // mas mantém o perfil salvo no dispositivo para o próximo login
+      document.getElementById('regName').value = '';
+      document.getElementById('regPhone').value = '';
+      document.getElementById('regAddress').value = '';
+      document.getElementById('regRef').value = '';
+      document.getElementById('cadastroBackBar').style.display = 'none';
+      document.getElementById('loginCardTitle').textContent = '🔐 Login do Cliente';
+      document.getElementById('loginCardSub').textContent = 'Faça seu login preenchendo seus dados para acessar o cardápio:';
+      document.getElementById('btnLoginAction').textContent = 'Fazer Login e Ir para o Cardápio 🍔';
+      document.getElementById('btnLogoffAction').style.display = 'none';
+
+      setActiveScreen('screenCadastro');
+      showToast('🚪 Logoff realizado!');
     }
 
     function goToCadastro() {
-      document.getElementById('cadastroBackBar').style.display = hasSavedCustomer() ? 'flex' : 'none';
+      if (savedDeviceProfile && !isLoggedIn) {
+        customer = { ...savedDeviceProfile };
+        isLoggedIn = true;
+        localStorage.setItem('rocha_burg_logged_in', JSON.stringify(true));
+      }
+      loadCustomerForm();
+      document.getElementById('cadastroBackBar').style.display = hasActiveLoginSession() ? 'flex' : 'none';
       setActiveScreen('screenCadastro');
     }
 
@@ -2714,6 +2975,16 @@
     function renderHistory() {
       const listEl = document.getElementById('historyList');
       const clearBtn = document.getElementById('btnClearHistory');
+
+      if (!hasActiveLoginSession()) {
+        if (clearBtn) clearBtn.style.display = 'none';
+        listEl.innerHTML = `
+          <div class="empty-history">
+            🔐 Faça login neste dispositivo para visualizar seu histórico de pedidos.
+          </div>
+        `;
+        return;
+      }
 
       if (!orderHistory || orderHistory.length === 0) {
         if (clearBtn) clearBtn.style.display = 'none';
@@ -3565,9 +3836,11 @@
     // Inicialização
     applySavedTheme();
     loadCustomerForm();
-    if (hasSavedCustomer()) {
+    if (hasActiveLoginSession()) {
       updateWelcomeScreen();
       setActiveScreen('screenWelcome');
+    } else {
+      setActiveScreen('screenCadastro');
     }
     renderMenu();
     renderHistory();
