@@ -46,42 +46,93 @@
       --neon-amber-rgb: 254, 228, 64;
     }
 
-    /* Modo Minimalista Escuro (sem neon, mantendo o mesmo fundo escuro) */
+    /* Modo Claro Moderno quando o modo neon é desativado */
     body.minimal-dark {
-      --bg-dark: #07070c;
-      --bg-card: #111218;
-      --bg-card-hover: #171821;
-      --neon-pink: #64748b;
-      --neon-cyan: #cbd5e1;
-      --neon-amber: #94a3b8;
-      --neon-green: #4ade80;
-      --neon-red: #f87171;
-      --neon-pink-rgb: 100, 116, 139;
-      --neon-cyan-rgb: 203, 213, 225;
-      --neon-amber-rgb: 148, 163, 184;
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
+      --bg-dark: #f4f6fb;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --neon-pink: #0f172a;
+      --neon-cyan: #2563eb;
+      --neon-amber: #d97706;
+      --neon-green: #059669;
+      --neon-red: #dc2626;
+      --neon-pink-rgb: 15, 23, 42;
+      --neon-cyan-rgb: 37, 99, 235;
+      --neon-amber-rgb: 217, 119, 6;
+      --text-main: #0f172a;
+      --text-muted: #475569;
       --font-display: 'Poppins', sans-serif;
       --font-body: 'Poppins', sans-serif;
     }
 
+    body.minimal-dark .cyber-bg {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.08), transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(15, 23, 42, 0.06), transparent 45%),
+        #f4f6fb;
+    }
+
     body.minimal-dark .cyber-grid {
-      opacity: 0.25;
+      opacity: 0.15;
     }
 
     body.minimal-dark .brand-logo-wrap,
     body.minimal-dark .brand-logo-wrap::before {
       animation: none;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
     }
 
     body.minimal-dark .status-badge {
+      background: rgba(5, 150, 105, 0.1);
+      border-color: #059669;
+      color: #047857;
       box-shadow: none;
     }
 
     body.minimal-dark .status-dot {
+      background: #059669;
       animation: none;
       box-shadow: none;
+    }
+
+    body.minimal-dark .form-control,
+    body.minimal-dark .option-chip,
+    body.minimal-dark .delivery-chip,
+    body.minimal-dark .pay-chip,
+    body.minimal-dark .card-sub-chip,
+    body.minimal-dark .cart-item-row,
+    body.minimal-dark .modal-qty-row,
+    body.minimal-dark .store-detail-item,
+    body.minimal-dark .btn-welcome-option {
+      background: #f8fafc;
+      color: #0f172a;
+      border-color: rgba(15, 23, 42, 0.14);
+      box-shadow: none;
+    }
+
+    body.minimal-dark .drawer,
+    body.minimal-dark .hours-popover-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-top-color: #2563eb;
+      border-color: rgba(15, 23, 42, 0.14);
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.16);
+    }
+
+    body.minimal-dark .cart-bar {
+      background: #ffffff;
+      color: #0f172a;
+      border-color: #2563eb;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
+    }
+
+    body.minimal-dark .theme-brush-btn,
+    body.minimal-dark .neon-toggle-btn,
+    body.minimal-dark .btn-close {
+      background: #ffffff;
+      color: #0f172a;
+      border-color: rgba(15, 23, 42, 0.18);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
     }
 
     body.minimal-dark .section-title,
@@ -89,8 +140,11 @@
     body.minimal-dark .drawer-title,
     body.minimal-dark .register-title,
     body.minimal-dark .loading-title,
-    body.minimal-dark .checkin-title {
+    body.minimal-dark .checkin-title,
+    body.minimal-dark .product-name,
+    body.minimal-dark .cart-item-info strong {
       text-shadow: none;
+      color: #0f172a;
     }
 
     * {
@@ -108,7 +162,7 @@
       overflow-x: hidden;
       padding-bottom: 105px;
       position: relative;
-      transition: color 0.35s ease;
+      transition: color 0.35s ease, background-color 0.35s ease;
     }
 
     /* Fundo Cyber Neon */
@@ -652,6 +706,11 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
+    body.minimal-dark .category-tabs {
+      background: rgba(244, 246, 251, 0.92);
+      border-color: rgba(15, 23, 42, 0.12);
+    }
+
     .cat-tab {
       background: transparent;
       border: 1px solid transparent;
@@ -672,6 +731,13 @@
       border-color: var(--neon-pink);
       color: #fff;
       box-shadow: 0 0 15px rgba(var(--neon-pink-rgb), 0.3);
+    }
+
+    body.minimal-dark .cat-tab.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+      box-shadow: none;
     }
 
     /* Títulos de Seção */
@@ -716,6 +782,14 @@
       animation: slideUpFade 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
     }
 
+    body.minimal-dark .product-card,
+    body.minimal-dark .register-card,
+    body.minimal-dark .customer-pill,
+    body.minimal-dark .history-card {
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+      border-color: rgba(15, 23, 42, 0.1);
+    }
+
     .product-card:hover, .product-card:active {
       transform: translateY(-2px);
       border-color: var(--neon-pink);
@@ -736,6 +810,12 @@
       font-size: 2.2rem;
       box-shadow: 0 0 15px rgba(var(--neon-cyan-rgb), 0.15);
       transition: transform 0.25s ease;
+    }
+
+    body.minimal-dark .product-icon-box {
+      background: #eff6ff;
+      border-color: rgba(37, 99, 235, 0.22);
+      box-shadow: none;
     }
 
     .product-card:hover .product-icon-box span {
@@ -822,6 +902,13 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+    }
+
+    body.minimal-dark .btn-add {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+      box-shadow: none;
     }
 
     .btn-add:hover {
@@ -1370,6 +1457,14 @@
       box-shadow: 0 0 14px rgba(var(--neon-pink-rgb), 0.3);
     }
 
+    body.minimal-dark .delivery-chip.active,
+    body.minimal-dark .pay-chip.active,
+    body.minimal-dark .card-sub-chip.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+    }
+
     .address-summary-box {
       background: rgba(var(--neon-cyan-rgb), 0.06);
       border: 1px dashed rgba(var(--neon-cyan-rgb), 0.35);
@@ -1404,6 +1499,320 @@
       background: rgba(var(--neon-cyan-rgb), 0.12);
       color: var(--neon-cyan);
       box-shadow: 0 0 12px rgba(var(--neon-cyan-rgb), 0.25);
+    }
+
+    /* Confirmação ao clicar em PIX antes de gerar QR Code */
+    .pix-confirm-prompt-box {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      background: rgba(var(--neon-cyan-rgb), 0.07);
+      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.45);
+      border-radius: 14px;
+      text-align: center;
+      animation: slideUpFade 0.25s ease;
+    }
+
+    .pix-confirm-prompt-box.visible {
+      display: block;
+    }
+
+    .pix-confirm-text {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .pix-confirm-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-pix-confirm {
+      background: linear-gradient(90deg, #00c853, #00ff88);
+      color: #05140a;
+      border: none;
+      border-radius: 11px;
+      padding: 11px 10px;
+      font-family: var(--font-display);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(0, 255, 136, 0.35);
+    }
+
+    .btn-pix-change {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 11px;
+      padding: 11px 10px;
+      font-family: var(--font-display);
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    /* Suspense de 2 segundos girando o ícone do PIX antes de mostrar o QR Code */
+    .pix-generating-box {
+      display: none;
+      margin-top: 12px;
+      padding: 20px 14px;
+      background: rgba(var(--neon-cyan-rgb), 0.06);
+      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.4);
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .pix-generating-box.visible {
+      display: block;
+    }
+
+    .pix-spin-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2.5px solid var(--neon-cyan);
+      border-top-color: var(--neon-pink);
+      font-size: 1.9rem;
+      margin-bottom: 10px;
+      animation: spinRing 0.85s linear infinite;
+    }
+
+    .pix-spin-label {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      color: var(--neon-cyan);
+    }
+
+    /* Gaveta de Pagamento PIX + QR Code + Copia e Cola + Anexo */
+    .pix-payment-box {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      background: rgba(var(--neon-cyan-rgb), 0.06);
+      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.45);
+      border-radius: 14px;
+      animation: slideUpFade 0.25s ease;
+    }
+
+    .pix-payment-box.visible {
+      display: block;
+    }
+
+    .pix-instruction-alert {
+      background: rgba(var(--neon-amber-rgb), 0.12);
+      border: 1px solid rgba(var(--neon-amber-rgb), 0.45);
+      border-radius: 11px;
+      padding: 10px 12px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+
+    .pix-highlight-value {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--neon-green);
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.45);
+      margin: 4px 0;
+    }
+
+    .pix-qr-wrap {
+      background: #ffffff;
+      width: 184px;
+      height: 184px;
+      margin: 0 auto 10px;
+      padding: 10px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(var(--neon-cyan-rgb), 0.35);
+    }
+
+    .pix-qr-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .pix-key-display {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 8px;
+      word-break: break-all;
+    }
+
+    .pix-key-display strong {
+      color: var(--neon-cyan);
+    }
+
+    .pix-copyable-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .pix-copyable-input {
+      flex: 1;
+      min-width: 0;
+      background: #0b0b14;
+      border: 1px solid rgba(var(--neon-cyan-rgb), 0.45);
+      border-radius: 10px;
+      padding: 9px 11px;
+      color: var(--neon-cyan);
+      font-family: var(--font-display);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      outline: none;
+    }
+
+    .btn-copy-pix {
+      width: 100%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+      color: #07070c;
+      border: none;
+      border-radius: 11px;
+      padding: 11px 12px;
+      font-family: var(--font-display);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(var(--neon-cyan-rgb), 0.38);
+      margin-bottom: 12px;
+      transition: transform 0.15s ease;
+    }
+
+    .btn-copy-pix:active {
+      transform: scale(0.96);
+    }
+
+    .pix-proof-upload-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1.5px dashed rgba(0, 255, 136, 0.5);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .pix-proof-highlight-cta {
+      display: block;
+      background: rgba(var(--neon-amber-rgb), 0.16);
+      border: 1px solid var(--neon-amber);
+      color: var(--neon-amber);
+      font-family: var(--font-display);
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 8px 10px;
+      border-radius: 9px;
+      margin-bottom: 10px;
+      line-height: 1.35;
+    }
+
+    .btn-attach-proof {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: rgba(0, 255, 136, 0.14);
+      border: 1px solid var(--neon-green);
+      color: var(--neon-green);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: var(--font-display);
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .pix-proof-preview {
+      display: none;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .pix-proof-preview.visible {
+      display: block;
+    }
+
+    .pix-proof-preview img {
+      max-height: 130px;
+      max-width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--neon-green);
+      margin-bottom: 6px;
+    }
+
+    .pix-proof-status {
+      font-size: 0.75rem;
+      color: var(--neon-green);
+      font-weight: 600;
+    }
+
+    /* Gaveta de Crédito / Débito (Cartão) */
+    .card-type-box {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(var(--neon-pink-rgb), 0.06);
+      border: 1px solid rgba(var(--neon-pink-rgb), 0.35);
+      border-radius: 12px;
+      animation: slideUpFade 0.25s ease;
+    }
+
+    .card-type-box.visible {
+      display: block;
+    }
+
+    .card-type-box label {
+      color: var(--neon-pink) !important;
+    }
+
+    .card-sub-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .card-sub-chip {
+      background: #141422;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .card-sub-chip.active {
+      border-color: var(--neon-pink);
+      background: rgba(var(--neon-pink-rgb), 0.16);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(var(--neon-pink-rgb), 0.3);
     }
 
     .change-field-box {
@@ -1464,6 +1873,40 @@
     .btn-finish-receipt:disabled {
       opacity: 0.65;
       cursor: not-allowed;
+    }
+
+    /* Pop-up de confirmação de dados do cliente e pagamento antes de enviar */
+    .confirm-data-box {
+      background: rgba(var(--neon-cyan-rgb), 0.06);
+      border: 1px solid rgba(var(--neon-cyan-rgb), 0.3);
+      border-radius: 14px;
+      padding: 13px 14px;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .confirm-data-section {
+      margin-bottom: 10px;
+    }
+
+    .confirm-data-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .confirm-data-label {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      color: var(--neon-cyan);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .confirm-data-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
     /* Tela de Carregamento (4 segundos girando e transformando: 🍔 -> 🧀 -> 🥓 -> 🍳 -> 💳) */
@@ -1571,6 +2014,13 @@
       box-shadow: 0 0 16px rgba(var(--neon-cyan-rgb), 0.18);
     }
 
+    body.minimal-dark .save-receipt-prompt {
+      color: #0f172a;
+      background: #eff6ff;
+      border-color: #2563eb;
+      box-shadow: none;
+    }
+
     .receipt-preview-wrap {
       background: #07070c;
       border: 1px solid rgba(255, 255, 255, 0.14);
@@ -1634,6 +2084,12 @@
       font-weight: 700;
       text-transform: uppercase;
       cursor: pointer;
+    }
+
+    body.minimal-dark .btn-close-return {
+      background: #e2e8f0;
+      color: #0f172a;
+      border-color: #cbd5e1;
     }
 
     /* Toast */
@@ -1747,8 +2203,8 @@
   <!-- BOTÃO DE PINCEL PARA ALTERAR OS 3 MIXES DE CORES NEON -->
   <button class="theme-brush-btn" onclick="cycleNeonTheme()" title="Alterar cores neon">🖌️</button>
 
-  <!-- BOTÃO ABAIXO DO TEMA PARA ALTERAR ENTRE MODO NEON E MINIMALISTA ESCURO -->
-  <button class="neon-toggle-btn" id="neonToggleBtn" onclick="toggleMinimalDarkMode()" title="Alternar modo neon / minimalista escuro">🌙</button>
+  <!-- BOTÃO ABAIXO DO TEMA PARA ALTERAR ENTRE MODO NEON E MODO CLARO -->
+  <button class="neon-toggle-btn" id="neonToggleBtn" onclick="toggleMinimalDarkMode()" title="Alternar modo neon / modo claro">☀️</button>
 
   <div id="toast" class="toast">⚡ Atualizado!</div>
 
@@ -2017,6 +2473,68 @@
           <div class="pay-chip" data-pay="Dinheiro" onclick="selectPayment(this)">💵 Dinheiro</div>
         </div>
 
+        <!-- Confirmação ao clicar em PIX antes de gerar QR Code -->
+        <div id="pixConfirmPromptBox" class="pix-confirm-prompt-box">
+          <span class="pix-confirm-text">💠 Seu pagamento será via PIX.</span>
+          <div class="pix-confirm-actions">
+            <button type="button" class="btn-pix-confirm" onclick="confirmPixSelection()">✅ Confirmar</button>
+            <button type="button" class="btn-pix-change" onclick="promptSwitchPayment()">🔄 Trocar</button>
+          </div>
+        </div>
+
+        <!-- Suspense de 2 segundos girando o PIX antes de mostrar o QR Code -->
+        <div id="pixGeneratingBox" class="pix-generating-box">
+          <div class="pix-spin-badge">💠</div>
+          <span class="pix-spin-label">Gerando seu QR Code PIX...</span>
+        </div>
+
+        <!-- Gaveta PIX: QR Code + Valor em destaque + PIX Copia e Cola + Anexo -->
+        <div id="pixPaymentBox" class="pix-payment-box">
+          <div class="pix-instruction-alert">
+            Insira este valor:
+            <span class="pix-highlight-value" id="pixExactValueDisplay">R$ 0,00</span>
+            e envie o comprovante para a loja assim que efetuado o pagamento.
+          </div>
+
+          <div class="pix-qr-wrap">
+            <img id="pixQrImg" alt="QR Code PIX O Rocha Burger" />
+          </div>
+
+          <div class="pix-key-display">
+            Chave PIX para pagamento no celular: <strong id="pixKeyTextDisplay"></strong>
+          </div>
+
+          <div class="pix-copyable-row">
+            <input type="text" id="pixCopyableKeyInput" class="pix-copyable-input" readonly onclick="this.select(); copyPixKeyOnly()">
+            <button type="button" class="btn-edit-user" onclick="copyPixKeyOnly()">📋 Chave</button>
+          </div>
+
+          <button type="button" class="btn-copy-pix" onclick="copyPixCode()">
+            📋 Copiar PIX Copia e Cola
+          </button>
+
+          <div class="pix-proof-upload-box">
+            <span class="pix-proof-highlight-cta">📎 Anexe aqui o comprovante após o pagamento *</span>
+            <input type="file" id="pixProofInput" accept="image/*,application/pdf,.pdf" style="display: none;" onchange="handlePixProofSelect(event)">
+            <button type="button" class="btn-attach-proof" onclick="document.getElementById('pixProofInput').click()">
+              📸 / 📄 Anexar Imagem ou PDF
+            </button>
+            <div id="pixProofPreview" class="pix-proof-preview">
+              <img id="pixProofPreviewImg" alt="Comprovante PIX anexado" />
+              <div class="pix-proof-status" id="pixProofFilename">✅ Comprovante anexado!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gaveta Cartão: Crédito ou Débito -->
+        <div id="cardTypeBox" class="card-type-box">
+          <label>💳 Qual modalidade do cartão? *</label>
+          <div class="card-sub-options">
+            <div class="card-sub-chip active" data-card="Crédito" onclick="selectCardSubtype(this)">💳 Crédito</div>
+            <div class="card-sub-chip" data-card="Débito" onclick="selectCardSubtype(this)">💳 Débito</div>
+          </div>
+        </div>
+
         <!-- Aba separada de Troco (aparece apenas quando Dinheiro está selecionado) -->
         <div id="changeFieldBox" class="change-field-box">
           <label>💵 Troco para quanto? (Opcional)</label>
@@ -2035,9 +2553,34 @@
         <span id="checkoutTotalValue">R$ 0,00</span>
       </div>
 
-      <button class="btn-finish-receipt" id="btnFinishOrder" onclick="finalizeOrderAndSendReceipt()">
+      <button class="btn-finish-receipt" id="btnFinishOrder" onclick="openDataConfirmationPopup()">
         🧾 Gerar Comprovante e Enviar Pedido
       </button>
+    </div>
+  </div>
+
+  <!-- POP-UP DE CONFIRMAÇÃO DOS DADOS DO CLIENTE E PAGAMENTO ANTES DE ENVIAR -->
+  <div id="confirmDataModal" class="modal-overlay" onclick="closeModalOutside(event, 'confirmDataModal')">
+    <div class="drawer">
+      <div class="drawer-header">
+        <h3 class="drawer-title">⚠️ Confirmar Dados</h3>
+        <button class="btn-close" onclick="closeModal('confirmDataModal')">✕</button>
+      </div>
+
+      <p style="font-size: 0.86rem; color: var(--text-main); margin-bottom: 12px; font-weight: 600;">
+        Ao clicar em confirmar, você confirma que todos os dados estão corretos?
+      </p>
+
+      <div class="confirm-data-box" id="confirmDataSummaryBox"></div>
+
+      <div class="confirm-data-actions">
+        <button type="button" class="btn-pix-change" onclick="closeModal('confirmDataModal')">
+          ⬅️ Revisar
+        </button>
+        <button type="button" class="btn-finish-receipt" id="btnConfirmSendFinal" onclick="executeFinalOrderSend()">
+          ✅ Confirmar
+        </button>
+      </div>
     </div>
   </div>
 
@@ -2081,10 +2624,11 @@
   <canvas id="receiptCanvas" style="display: none;"></canvas>
 
   <script>
-    // CONFIGURAÇÕES DA HAMBURGUERIA (WHATSAPP + TELEGRAM BOT)
+    // CONFIGURAÇÕES DA HAMBURGUERIA (WHATSAPP + TELEGRAM BOT + CHAVE PIX)
     const WHATSAPP_NUMBER = "5586988222969";
     const TELEGRAM_BOT_TOKEN = "9093112610:AAHYysMeH_OmOgDnPl8CFvnEsY6avwEXhDc";
     const TELEGRAM_CHAT_ID = "7080548404";
+    const PIX_KEY = "86994477361";
 
     // 3 MIXES DE CORES NEON (PINCEL NO CANTO SUPERIOR DIREITO)
     const NEON_THEMES = [
@@ -2114,8 +2658,8 @@
       document.body.classList.toggle('minimal-dark', isMinimal);
       const btn = document.getElementById('neonToggleBtn');
       if (btn) {
-        btn.textContent = isMinimal ? '⚡' : '🌙';
-        btn.title = isMinimal ? 'Ativar modo neon' : 'Desativar modo neon (minimalista escuro)';
+        btn.textContent = isMinimal ? '⚡' : '☀️';
+        btn.title = isMinimal ? 'Ativar modo neon' : 'Desativar modo neon (modo claro)';
       }
     }
 
@@ -2123,7 +2667,7 @@
       const nextState = !document.body.classList.contains('minimal-dark');
       localStorage.setItem('rocha_burger_minimal_dark', String(nextState));
       applySavedMinimalDarkMode();
-      showToast(nextState ? '🌙 Modo minimalista escuro ativado' : '⚡ Modo neon ativado');
+      showToast(nextState ? '☀️ Modo claro ativado' : '⚡ Modo neon ativado');
     }
 
     function openHoursPopover() {
@@ -2221,6 +2765,12 @@
     let modalQty = 1;
     let deliveryType = 'Delivery';
     let selectedPayment = 'PIX';
+    let pixConfirmed = false;
+    let pixGenerating = false;
+    let pixSuspenseTimer = null;
+    let selectedCardType = 'Crédito';
+    let pixProofFile = null;
+    let currentPixPayload = '';
     let isRepeatedOrder = false;
 
     // Dados do último comprovante gerado
@@ -2265,6 +2815,145 @@
       toast.classList.add('show');
       clearTimeout(window.toastTimer);
       window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    // --- GERADOR DE PAYLOAD PIX (BR CODE / COPIA E COLA) + QR CODE ---
+    function crc16CCITT(str) {
+      let crc = 0xFFFF;
+      for (let i = 0; i < str.length; i++) {
+        crc ^= str.charCodeAt(i) << 8;
+        for (let j = 0; j < 8; j++) {
+          crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
+          crc &= 0xFFFF;
+        }
+      }
+      return crc.toString(16).toUpperCase().padStart(4, '0');
+    }
+
+    function emvField(id, value) {
+      const len = String(value.length).padStart(2, '0');
+      return `${id}${len}${value}`;
+    }
+
+    function buildPixPayload(key, amount) {
+      const cleanKey = key.trim();
+      const amountStr = Number(amount || 0).toFixed(2);
+      const merchantAccount = emvField('00', 'br.gov.bcb.pix') + emvField('01', cleanKey);
+      const merchantName = 'O ROCHA BURGER';
+      const merchantCity = 'PARNAIBA';
+      const txid = emvField('05', 'ROCHABURGER');
+
+      const payloadWithoutCrc =
+        emvField('00', '01') +
+        emvField('26', merchantAccount) +
+        emvField('52', '0000') +
+        emvField('53', '986') +
+        (Number(amount) > 0 ? emvField('54', amountStr) : '') +
+        emvField('58', 'BR') +
+        emvField('59', merchantName) +
+        emvField('60', merchantCity) +
+        emvField('62', txid) +
+        '6304';
+
+      return payloadWithoutCrc + crc16CCITT(payloadWithoutCrc);
+    }
+
+    function updatePixSection(totalAmount) {
+      document.getElementById('pixExactValueDisplay').textContent = formatBRL(totalAmount);
+      document.getElementById('pixKeyTextDisplay').textContent = PIX_KEY;
+      document.getElementById('pixCopyableKeyInput').value = PIX_KEY;
+
+      currentPixPayload = buildPixPayload(PIX_KEY, totalAmount);
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=6&data=${encodeURIComponent(currentPixPayload)}`;
+      document.getElementById('pixQrImg').src = qrUrl;
+    }
+
+    function confirmPixSelection() {
+      if (pixGenerating) return;
+      pixGenerating = true;
+      pixConfirmed = false;
+
+      document.getElementById('pixConfirmPromptBox').classList.remove('visible');
+      document.getElementById('pixPaymentBox').classList.remove('visible');
+      document.getElementById('pixGeneratingBox').classList.add('visible');
+
+      clearTimeout(pixSuspenseTimer);
+      pixSuspenseTimer = setTimeout(() => {
+        pixGenerating = false;
+        pixConfirmed = true;
+        document.getElementById('pixGeneratingBox').classList.remove('visible');
+        const totalPrice = cart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
+        updatePixSection(totalPrice);
+        document.getElementById('pixPaymentBox').classList.add('visible');
+      }, 2000);
+    }
+
+    function promptSwitchPayment() {
+      pixConfirmed = false;
+      pixGenerating = false;
+      clearTimeout(pixSuspenseTimer);
+      document.getElementById('pixConfirmPromptBox').classList.remove('visible');
+      document.getElementById('pixGeneratingBox').classList.remove('visible');
+      document.getElementById('pixPaymentBox').classList.remove('visible');
+      showToast('Escolha Cartão ou Dinheiro');
+    }
+
+    async function copyTextHelper(text, toastMessage) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(toastMessage);
+      } catch (e) {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        showToast(toastMessage);
+      }
+    }
+
+    async function copyPixKeyOnly() {
+      await copyTextHelper(PIX_KEY, '📋 Chave PIX copiada!');
+    }
+
+    async function copyPixCode() {
+      if (!currentPixPayload) return;
+      await copyTextHelper(currentPixPayload, '📋 PIX Copia e Cola copiado!');
+    }
+
+    function handlePixProofSelect(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      pixProofFile = file;
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      const imgEl = document.getElementById('pixProofPreviewImg');
+
+      if (isPdf) {
+        imgEl.style.display = 'none';
+        document.getElementById('pixProofFilename').textContent = `✅ PDF anexado: ${file.name}`;
+        document.getElementById('pixProofPreview').classList.add('visible');
+        showToast('📄 Comprovante PDF anexado!');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imgEl.style.display = 'inline-block';
+        imgEl.src = e.target.result;
+        document.getElementById('pixProofFilename').textContent = `✅ Imagem anexada: ${file.name}`;
+        document.getElementById('pixProofPreview').classList.add('visible');
+        showToast('📎 Comprovante PIX anexado!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetPixProof() {
+      pixProofFile = null;
+      const input = document.getElementById('pixProofInput');
+      if (input) input.value = '';
+      document.getElementById('pixProofPreview').classList.remove('visible');
     }
 
     // --- NUMERAÇÃO DIÁRIA DE PEDIDOS (ZERA À MEIA-NOITE: 01, 02, 03...) ---
@@ -2491,12 +3180,15 @@
         const orderNumLabel = order.orderNumber ? `Pedido #${order.orderNumber} • ` : '';
         const custInfo = order.customer || customer;
         const custAddr = formatFullAddress(custInfo);
+        const payLabel = order.payment === 'Cartão' && order.cardType
+          ? `Cartão (${order.cardType})`
+          : order.payment;
 
         return `
           <div class="history-card" onclick="toggleHistoryDetails(this)">
             <div class="history-summary-top">
               <span class="history-date">🧾 ${orderNumLabel}${order.date}</span>
-              <span class="history-badge">${order.deliveryType} • ${order.payment}</span>
+              <span class="history-badge">${order.deliveryType} • ${payLabel}</span>
             </div>
 
             <div class="history-summary-bottom">
@@ -2540,6 +3232,10 @@
 
       deliveryType = selectedOrder.deliveryType || 'Delivery';
       selectedPayment = selectedOrder.payment || 'PIX';
+      pixConfirmed = false;
+      pixGenerating = false;
+      clearTimeout(pixSuspenseTimer);
+      selectedCardType = selectedOrder.cardType || 'Crédito';
       document.getElementById('generalNote').value = selectedOrder.generalNote || '';
       document.getElementById('changeInput').value = selectedOrder.changeFor || '';
 
@@ -2549,7 +3245,10 @@
       document.querySelectorAll('.pay-chip').forEach(c => {
         c.classList.toggle('active', c.dataset.pay === selectedPayment);
       });
-      updateChangeFieldVisibility();
+      document.querySelectorAll('.card-sub-chip').forEach(c => {
+        c.classList.toggle('active', c.dataset.card === selectedCardType);
+      });
+      updatePaymentSubfieldsVisibility();
 
       isRepeatedOrder = true;
       document.getElementById('repeatCheckedCheckbox').checked = false;
@@ -2676,6 +3375,7 @@
       }
       cart = [];
       isRepeatedOrder = false;
+      resetPixProof();
       saveCart();
       renderMenu();
       updateCartUI();
@@ -2696,6 +3396,10 @@
       document.getElementById('cartCount').textContent = totalItems;
       document.getElementById('cartTotalBar').textContent = formatBRL(totalPrice);
       document.getElementById('checkoutTotalValue').textContent = formatBRL(totalPrice);
+
+      if (selectedPayment === 'PIX' && pixConfirmed) {
+        updatePixSection(totalPrice);
+      }
 
       const isMenuActive = document.getElementById('screenMenu').classList.contains('active');
       const cartBar = document.getElementById('cartBar');
@@ -2748,7 +3452,7 @@
 
     function openCheckout() {
       updateCheckoutCustomerBox();
-      updateChangeFieldVisibility();
+      updatePaymentSubfieldsVisibility();
       document.getElementById('repeatCheckBanner').classList.toggle('active', isRepeatedOrder);
       document.getElementById('checkoutModal').classList.add('open');
     }
@@ -2777,16 +3481,36 @@
       }
     }
 
-    function updateChangeFieldVisibility() {
-      const changeBox = document.getElementById('changeFieldBox');
-      changeBox.classList.toggle('visible', selectedPayment === 'Dinheiro');
+    function updatePaymentSubfieldsVisibility() {
+      const isPix = selectedPayment === 'PIX';
+      document.getElementById('pixConfirmPromptBox').classList.toggle('visible', isPix && !pixConfirmed && !pixGenerating);
+      document.getElementById('pixGeneratingBox').classList.toggle('visible', isPix && pixGenerating);
+      document.getElementById('pixPaymentBox').classList.toggle('visible', isPix && pixConfirmed && !pixGenerating);
+      document.getElementById('cardTypeBox').classList.toggle('visible', selectedPayment === 'Cartão');
+      document.getElementById('changeFieldBox').classList.toggle('visible', selectedPayment === 'Dinheiro');
+
+      if (isPix && pixConfirmed) {
+        const totalPrice = cart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
+        updatePixSection(totalPrice);
+      }
     }
 
     function selectPayment(el) {
       document.querySelectorAll('.pay-chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPayment = el.dataset.pay;
-      updateChangeFieldVisibility();
+      if (selectedPayment !== 'PIX') {
+        pixConfirmed = false;
+        pixGenerating = false;
+        clearTimeout(pixSuspenseTimer);
+      }
+      updatePaymentSubfieldsVisibility();
+    }
+
+    function selectCardSubtype(el) {
+      document.querySelectorAll('.card-sub-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      selectedCardType = el.dataset.card;
     }
 
     function closeModal(id) {
@@ -2806,6 +3530,60 @@
       if (e.target.id === 'receiptModal') {
         closeReceiptAndReturnToMenu();
       }
+    }
+
+    // --- POP-UP DE CONFIRMAÇÃO DOS DADOS DO CLIENTE E PAGAMENTO ---
+    function openDataConfirmationPopup() {
+      if (cart.length === 0) return;
+
+      if (isRepeatedOrder && !document.getElementById('repeatCheckedCheckbox').checked) {
+        showToast('⚠️ Confirme se você checou seu pedido antes de enviar!');
+        return;
+      }
+
+      if (selectedPayment === 'PIX' && !pixConfirmed) {
+        showToast('⚠️ Confirme o pagamento via PIX para gerar o QR Code!');
+        return;
+      }
+
+      if (selectedPayment === 'PIX' && !pixProofFile) {
+        showToast('⚠️ Anexe o comprovante PIX (imagem ou PDF) para finalizar!');
+        return;
+      }
+
+      const fullAddr = formatFullAddress(customer);
+      const changeFor = selectedPayment === 'Dinheiro'
+        ? document.getElementById('changeInput').value.trim()
+        : '';
+
+      let paymentSummary = selectedPayment;
+      if (selectedPayment === 'Cartão') {
+        paymentSummary = `Cartão (${selectedCardType})`;
+      } else if (selectedPayment === 'Dinheiro') {
+        paymentSummary = changeFor ? `Dinheiro (Troco para: ${changeFor})` : 'Dinheiro (Sem troco)';
+      } else if (selectedPayment === 'PIX') {
+        paymentSummary = `PIX (Comprovante: ${pixProofFile ? pixProofFile.name : 'Anexado'})`;
+      }
+
+      const addressLine = deliveryType === 'Delivery'
+        ? `<div><strong>Endereço:</strong> ${fullAddr}</div>` + (customer.ref ? `<div><strong>Referência:</strong> ${customer.ref}</div>` : '')
+        : `<div><strong>Recebimento:</strong> Retirada no Balcão</div>`;
+
+      document.getElementById('confirmDataSummaryBox').innerHTML = `
+        <div class="confirm-data-section">
+          <span class="confirm-data-label">👤 Dados do Cliente</span>
+          <div><strong>Nome:</strong> ${customer.name}</div>
+          <div><strong>Telefone:</strong> ${customer.phone}</div>
+          <div><strong>Modalidade:</strong> ${deliveryType}</div>
+          ${addressLine}
+        </div>
+        <div class="confirm-data-section">
+          <span class="confirm-data-label">💳 Informações de Pagamento</span>
+          <div><strong>Pagamento:</strong> ${paymentSummary}</div>
+        </div>
+      `;
+
+      document.getElementById('confirmDataModal').classList.add('open');
     }
 
     // --- GERADOR DE COMPROVANTE EM IMAGEM (CANVAS) ---
@@ -2963,9 +3741,13 @@
       drawDivider();
 
       // Dados do cliente & entrega
+      const paymentLabel = orderObj.payment === 'Cartão' && orderObj.cardType
+        ? `CARTÃO (${orderObj.cardType.toUpperCase()})`
+        : orderObj.payment.toUpperCase();
+
       ctx.font = 'bold 14px sans-serif';
       ctx.fillStyle = '#ff007f';
-      ctx.fillText(`MODALIDADE: ${orderObj.deliveryType.toUpperCase()}  |  PAGAMENTO: ${orderObj.payment.toUpperCase()}`, padX, y);
+      ctx.fillText(`MODALIDADE: ${orderObj.deliveryType.toUpperCase()}  |  PAGAMENTO: ${paymentLabel}`, padX, y);
       y += 24;
 
       if (orderObj.changeFor) {
@@ -3054,13 +3836,13 @@
       window.open(url, '_blank');
     }
 
-    // --- ENVIO DETALHADO AO TELEGRAM ---
-    async function sendDetailedOrderToTelegram(blob, fullText) {
+    // --- ENVIO DETALHADO AO TELEGRAM (COMPROVANTE DO PEDIDO + COMPROVANTE PIX IMAGEM OU PDF) ---
+    async function sendDetailedOrderToTelegram(receiptBlob, fullText, pixProofBlob, orderNumber, clientName) {
       try {
-        if (blob) {
+        if (receiptBlob) {
           const formData = new FormData();
           formData.append('chat_id', TELEGRAM_CHAT_ID);
-          formData.append('photo', blob, lastReceiptFilename);
+          formData.append('photo', receiptBlob, lastReceiptFilename);
           formData.append('caption', fullText.slice(0, 1020));
 
           await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
@@ -3070,7 +3852,7 @@
         }
 
         // Se o texto detalhado ultrapassar o limite da legenda da foto, envia completo via sendMessage
-        if (fullText.length > 1020 || !blob) {
+        if (fullText.length > 1020 || !receiptBlob) {
           await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -3080,24 +3862,49 @@
             })
           });
         }
+
+        if (pixProofBlob) {
+          const isPdf = pixProofBlob.type === 'application/pdf' || (pixProofBlob.name && pixProofBlob.name.toLowerCase().endsWith('.pdf'));
+          const captionPix = `💠 COMPROVANTE PIX — PEDIDO #${orderNumber} (${clientName.toUpperCase()})`;
+
+          if (isPdf) {
+            const pdfFormData = new FormData();
+            pdfFormData.append('chat_id', TELEGRAM_CHAT_ID);
+            pdfFormData.append('document', pixProofBlob, pixProofBlob.name || `comprovante-pix-${orderNumber}.pdf`);
+            pdfFormData.append('caption', captionPix);
+
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`, {
+              method: 'POST',
+              body: pdfFormData
+            });
+          } else {
+            const pixFormData = new FormData();
+            pixFormData.append('chat_id', TELEGRAM_CHAT_ID);
+            pixFormData.append('photo', pixProofBlob, pixProofBlob.name || `comprovante-pix-${orderNumber}.jpg`);
+            pixFormData.append('caption', captionPix);
+
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+              method: 'POST',
+              body: pixFormData
+            });
+          }
+        }
       } catch (err) {
         // Mantém fluxo fluido no cliente mesmo em rede instável
       }
     }
 
     // --- FINALIZAR PEDIDO: LOADING 4s (🍔 -> 🧀 -> 🥓 -> 🍳 -> 💳) + TELEGRAM + CHECK-IN ---
-    async function finalizeOrderAndSendReceipt() {
+    async function executeFinalOrderSend() {
       if (cart.length === 0) return;
 
-      if (isRepeatedOrder && !document.getElementById('repeatCheckedCheckbox').checked) {
-        showToast('⚠️ Confirme se você checou seu pedido antes de enviar!');
-        return;
-      }
-
       const btn = document.getElementById('btnFinishOrder');
+      const confirmBtn = document.getElementById('btnConfirmSendFinal');
       btn.disabled = true;
+      confirmBtn.disabled = true;
 
-      // Fecha resumo e mostra a tela de carregamento por 4 segundos girando e transformando
+      // Fecha modais e mostra a tela de carregamento por 4 segundos girando e transformando
+      closeModal('confirmDataModal');
       closeModal('checkoutModal');
       const loadingOverlay = document.getElementById('loadingOverlay');
       const morphIconEl = document.getElementById('loadingMorphIcon');
@@ -3118,6 +3925,8 @@
       const changeFor = selectedPayment === 'Dinheiro'
         ? document.getElementById('changeInput').value.trim()
         : '';
+      const cardTypeUsed = selectedPayment === 'Cartão' ? selectedCardType : '';
+      const attachedPixFile = selectedPayment === 'PIX' ? pixProofFile : null;
 
       const dailyOrderNumber = getNextDailyOrderNumber();
       let total = 0;
@@ -3153,6 +3962,7 @@
         total,
         deliveryType,
         payment: selectedPayment,
+        cardType: cardTypeUsed,
         changeFor,
         generalNote
       };
@@ -3165,9 +3975,14 @@
         ? `🛵 Modalidade: DELIVERY\n📍 Endereço: ${fullAddr}\n` + (customer.ref ? `📌 Ponto de Referência: ${customer.ref}\n` : '')
         : `🏪 Modalidade: RETIRADA NO BALCÃO\n`;
 
-      const paymentInfo = selectedPayment === 'Dinheiro'
-        ? `💳 Pagamento: DINHEIRO\n` + (changeFor ? `💵 Troco para: ${changeFor}\n` : `💵 Troco: Não precisa\n`)
-        : `💳 Pagamento: ${selectedPayment.toUpperCase()}\n`;
+      let paymentInfo = `💳 Pagamento: ${selectedPayment.toUpperCase()}\n`;
+      if (selectedPayment === 'Dinheiro') {
+        paymentInfo = `💳 Pagamento: DINHEIRO\n` + (changeFor ? `💵 Troco para: ${changeFor}\n` : `💵 Troco: Não precisa\n`);
+      } else if (selectedPayment === 'Cartão') {
+        paymentInfo = `💳 Pagamento: CARTÃO (${cardTypeUsed.toUpperCase()})\n`;
+      } else if (selectedPayment === 'PIX') {
+        paymentInfo = `💠 Pagamento: PIX (Chave: ${PIX_KEY})\n`;
+      }
 
       const detailedTelegramText =
         `🍔 PEDIDO #${dailyOrderNumber} — ${customer.name.toUpperCase()}\n` +
@@ -3195,7 +4010,7 @@
 
       await Promise.all([
         delay4Seconds,
-        sendDetailedOrderToTelegram(blob, detailedTelegramText)
+        sendDetailedOrderToTelegram(blob, detailedTelegramText, attachedPixFile, dailyOrderNumber, customer.name)
       ]);
 
       morphTimers.forEach(t => clearTimeout(t));
@@ -3203,6 +4018,9 @@
       // Limpa carrinho atual e campos transitórios
       cart = [];
       isRepeatedOrder = false;
+      pixConfirmed = false;
+      pixGenerating = false;
+      resetPixProof();
       document.getElementById('changeInput').value = '';
       document.getElementById('generalNote').value = '';
       saveCart();
@@ -3216,6 +4034,7 @@
       document.getElementById('receiptModal').classList.add('open');
 
       btn.disabled = false;
+      confirmBtn.disabled = false;
     }
 
     // Inicialização
