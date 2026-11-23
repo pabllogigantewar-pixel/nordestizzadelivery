@@ -22,6 +22,8 @@
       --neon-amber-rgb: 255, 190, 11;
       --text-main: #f4f4f8;
       --text-muted: #9a9ab0;
+      --font-display: 'Orbitron', sans-serif;
+      --font-body: 'Poppins', sans-serif;
     }
 
     /* Mix 2: Ouro & Roxo Neon */
@@ -44,6 +46,53 @@
       --neon-amber-rgb: 254, 228, 64;
     }
 
+    /* Modo Minimalista Escuro (sem neon, mantendo o mesmo fundo escuro) */
+    body.minimal-dark {
+      --bg-dark: #07070c;
+      --bg-card: #111218;
+      --bg-card-hover: #171821;
+      --neon-pink: #64748b;
+      --neon-cyan: #cbd5e1;
+      --neon-amber: #94a3b8;
+      --neon-green: #4ade80;
+      --neon-red: #f87171;
+      --neon-pink-rgb: 100, 116, 139;
+      --neon-cyan-rgb: 203, 213, 225;
+      --neon-amber-rgb: 148, 163, 184;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --font-display: 'Poppins', sans-serif;
+      --font-body: 'Poppins', sans-serif;
+    }
+
+    body.minimal-dark .cyber-grid {
+      opacity: 0.25;
+    }
+
+    body.minimal-dark .brand-logo-wrap,
+    body.minimal-dark .brand-logo-wrap::before {
+      animation: none;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+    }
+
+    body.minimal-dark .status-badge {
+      box-shadow: none;
+    }
+
+    body.minimal-dark .status-dot {
+      animation: none;
+      box-shadow: none;
+    }
+
+    body.minimal-dark .section-title,
+    body.minimal-dark .product-price,
+    body.minimal-dark .drawer-title,
+    body.minimal-dark .register-title,
+    body.minimal-dark .loading-title,
+    body.minimal-dark .checkin-title {
+      text-shadow: none;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -52,7 +101,7 @@
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: var(--font-body);
       background-color: var(--bg-dark);
       color: var(--text-main);
       min-height: 100vh;
@@ -115,6 +164,32 @@
       transform: scale(0.88) rotate(-18deg);
     }
 
+    /* Botão logo abaixo do pincel para ativar/desativar o modo neon */
+    .neon-toggle-btn {
+      position: fixed;
+      top: 64px;
+      right: 14px;
+      z-index: 95;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: rgba(16, 16, 26, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid var(--neon-pink);
+      color: #fff;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(var(--neon-pink-rgb), 0.32);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .neon-toggle-btn:active {
+      transform: scale(0.9);
+    }
+
     /* Cabeçalho */
     header {
       text-align: center;
@@ -169,6 +244,12 @@
       text-transform: uppercase;
       box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
       margin-bottom: 4px;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .status-badge:active {
+      transform: scale(0.95);
     }
 
     .status-dot {
@@ -178,6 +259,73 @@
       border-radius: 50%;
       box-shadow: 0 0 8px var(--neon-green);
       animation: pulseDot 1.5s infinite;
+    }
+
+    /* Janela flutuante de horários e dias ao clicar em Aberto para Pedidos */
+    .hours-popover-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 3, 8, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 160;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .hours-popover-overlay.open {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .hours-popover-card {
+      width: 100%;
+      max-width: 340px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--neon-cyan);
+      border-radius: 20px;
+      padding: 20px 18px;
+      text-align: center;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 24px rgba(var(--neon-cyan-rgb), 0.32);
+      animation: popCheckin 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hours-popover-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--neon-cyan);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hours-popover-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 14px;
+      font-size: 0.84rem;
+      line-height: 1.6;
+    }
+
+    .hours-popover-box strong {
+      color: var(--neon-pink);
+    }
+
+    .btn-close-hours {
+      width: 100%;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+      color: #07070c;
+      border: none;
+      border-radius: 12px;
+      padding: 11px;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
     }
 
     .subtitle {
@@ -215,7 +363,7 @@
       background: rgba(var(--neon-cyan-rgb), 0.12);
       border: 1px solid var(--neon-cyan);
       color: var(--neon-cyan);
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.74rem;
       font-weight: 700;
       padding: 8px 14px;
@@ -237,7 +385,7 @@
       background: rgba(255, 59, 92, 0.14);
       border: 1px solid var(--neon-red);
       color: #ff8fa3;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.72rem;
       font-weight: 700;
       padding: 8px 13px;
@@ -281,7 +429,7 @@
       border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.45);
       border-radius: 14px;
       padding: 15px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.9rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -317,7 +465,7 @@
     }
 
     .register-title {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.1rem;
       color: var(--neon-cyan);
       text-shadow: 0 0 10px rgba(var(--neon-cyan-rgb), 0.5);
@@ -337,6 +485,12 @@
       margin-bottom: 13px;
     }
 
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
     .form-group label {
       display: block;
       font-size: 0.75rem;
@@ -354,7 +508,7 @@
       border-radius: 12px;
       padding: 12px 14px;
       color: #fff;
-      font-family: 'Poppins', sans-serif;
+      font-family: var(--font-body);
       font-size: 0.92rem;
       outline: none;
       transition: border-color 0.25s, box-shadow 0.25s;
@@ -372,7 +526,7 @@
       border: none;
       border-radius: 14px;
       padding: 15px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.95rem;
       font-weight: 900;
       text-transform: uppercase;
@@ -437,7 +591,7 @@
       background: rgba(var(--neon-cyan-rgb), 0.12);
       border: 1px solid var(--neon-cyan);
       color: var(--neon-cyan);
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.68rem;
       font-weight: 700;
       padding: 6px 10px;
@@ -464,7 +618,7 @@
       background: rgba(255, 59, 92, 0.14);
       border: 1px solid var(--neon-red);
       color: #ff8fa3;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.72rem;
       font-weight: 700;
       padding: 8px 13px;
@@ -504,7 +658,7 @@
       color: var(--text-muted);
       padding: 10px 6px;
       border-radius: 12px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
@@ -522,7 +676,7 @@
 
     /* Títulos de Seção */
     .section-title {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1rem;
       color: var(--neon-cyan);
       text-transform: uppercase;
@@ -602,13 +756,27 @@
       border: 1px solid rgba(var(--neon-amber-rgb), 0.4);
     }
 
+    .frequent-medal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(var(--neon-amber-rgb), 0.16);
+      border: 1px solid var(--neon-amber);
+      color: var(--neon-amber);
+      margin-bottom: 6px;
+    }
+
     .product-info {
       flex: 1;
       min-width: 0;
     }
 
     .product-name {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1rem;
       font-weight: 700;
       color: #fff;
@@ -631,7 +799,7 @@
     }
 
     .product-price {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.05rem;
       font-weight: 800;
       color: var(--neon-cyan);
@@ -644,7 +812,7 @@
       border: 1.5px solid var(--neon-pink);
       padding: 8px 14px;
       border-radius: 12px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.75rem;
       font-weight: 700;
       cursor: pointer;
@@ -709,7 +877,7 @@
     }
 
     .history-badge {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.65rem;
       padding: 3px 8px;
       border-radius: 6px;
@@ -728,7 +896,7 @@
     }
 
     .history-total-inline {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1rem;
       font-weight: 800;
       color: var(--neon-green);
@@ -794,7 +962,7 @@
       border: none;
       padding: 11px 14px;
       border-radius: 12px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.76rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -910,7 +1078,7 @@
     .cart-badge {
       background: var(--neon-pink);
       color: #07070c;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-weight: 900;
       font-size: 0.9rem;
       width: 34px;
@@ -930,13 +1098,13 @@
     }
 
     .cart-bar-text strong {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.05rem;
       color: var(--neon-cyan);
     }
 
     .cart-bar-cta {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.78rem;
       font-weight: 700;
       color: #07070c;
@@ -995,7 +1163,7 @@
     }
 
     .drawer-title {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.05rem;
       color: var(--neon-pink);
       text-shadow: 0 0 10px rgba(var(--neon-pink-rgb), 0.5);
@@ -1019,7 +1187,7 @@
 
     /* Chips de Personalização (Adicionais / Retiradas) */
     .custom-section-label {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.76rem;
       color: var(--neon-cyan);
       margin: 14px 0 8px;
@@ -1098,7 +1266,7 @@
     }
 
     .qty-value {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-weight: 700;
       font-size: 1rem;
       min-width: 20px;
@@ -1155,7 +1323,7 @@
     }
 
     .cart-item-price {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.85rem;
       color: var(--neon-cyan);
       font-weight: 700;
@@ -1188,7 +1356,7 @@
       border-radius: 12px;
       padding: 12px 8px;
       text-align: center;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
@@ -1238,100 +1406,6 @@
       box-shadow: 0 0 12px rgba(var(--neon-cyan-rgb), 0.25);
     }
 
-    /* Confirmação ao clicar em PIX antes de gerar QR Code */
-    .pix-confirm-prompt-box {
-      display: none;
-      margin-top: 12px;
-      padding: 14px;
-      background: rgba(var(--neon-cyan-rgb), 0.07);
-      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.45);
-      border-radius: 14px;
-      text-align: center;
-      animation: slideUpFade 0.25s ease;
-    }
-
-    .pix-confirm-prompt-box.visible {
-      display: block;
-    }
-
-    .pix-confirm-text {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.82rem;
-      color: #fff;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .pix-confirm-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .btn-pix-confirm {
-      background: linear-gradient(90deg, #00c853, #00ff88);
-      color: #05140a;
-      border: none;
-      border-radius: 11px;
-      padding: 11px 10px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.76rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 0 14px rgba(0, 255, 136, 0.35);
-    }
-
-    .btn-pix-change {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-main);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 11px;
-      padding: 11px 10px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.76rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    /* Suspense de 2 segundos girando o ícone do PIX antes de mostrar o QR Code */
-    .pix-generating-box {
-      display: none;
-      margin-top: 12px;
-      padding: 20px 14px;
-      background: rgba(var(--neon-cyan-rgb), 0.06);
-      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.4);
-      border-radius: 14px;
-      text-align: center;
-    }
-
-    .pix-generating-box.visible {
-      display: block;
-    }
-
-    .pix-spin-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 2.5px solid var(--neon-cyan);
-      border-top-color: var(--neon-pink);
-      font-size: 1.9rem;
-      margin-bottom: 10px;
-      animation: spinRing 0.85s linear infinite;
-    }
-
-    .pix-spin-label {
-      display: block;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.78rem;
-      color: var(--neon-cyan);
-    }
-
-    /* Gaveta de Troco (Dinheiro) */
     .change-field-box {
       display: none;
       margin-top: 12px;
@@ -1350,227 +1424,6 @@
       color: var(--neon-green) !important;
     }
 
-    /* Gaveta de Crédito / Débito (Cartão) */
-    .card-type-box {
-      display: none;
-      margin-top: 12px;
-      padding: 12px;
-      background: rgba(var(--neon-pink-rgb), 0.06);
-      border: 1px solid rgba(var(--neon-pink-rgb), 0.35);
-      border-radius: 12px;
-      animation: slideUpFade 0.25s ease;
-    }
-
-    .card-type-box.visible {
-      display: block;
-    }
-
-    .card-type-box label {
-      color: var(--neon-pink) !important;
-    }
-
-    .card-sub-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .card-sub-chip {
-      background: #141422;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 10px;
-      padding: 10px 8px;
-      text-align: center;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .card-sub-chip.active {
-      border-color: var(--neon-pink);
-      background: rgba(var(--neon-pink-rgb), 0.16);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(var(--neon-pink-rgb), 0.3);
-    }
-
-    /* Gaveta de Pagamento PIX + QR Code + Copia e Cola + Anexo Obrigatório */
-    .pix-payment-box {
-      display: none;
-      margin-top: 12px;
-      padding: 14px;
-      background: rgba(var(--neon-cyan-rgb), 0.06);
-      border: 1.5px solid rgba(var(--neon-cyan-rgb), 0.45);
-      border-radius: 14px;
-      animation: slideUpFade 0.25s ease;
-    }
-
-    .pix-payment-box.visible {
-      display: block;
-    }
-
-    .pix-instruction-alert {
-      background: rgba(var(--neon-amber-rgb), 0.12);
-      border: 1px solid rgba(var(--neon-amber-rgb), 0.45);
-      border-radius: 11px;
-      padding: 10px 12px;
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-main);
-      line-height: 1.45;
-      margin-bottom: 12px;
-    }
-
-    .pix-highlight-value {
-      display: block;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.25rem;
-      font-weight: 900;
-      color: var(--neon-green);
-      text-shadow: 0 0 12px rgba(0, 255, 136, 0.45);
-      margin: 4px 0;
-    }
-
-    .pix-qr-wrap {
-      background: #ffffff;
-      width: 184px;
-      height: 184px;
-      margin: 0 auto 10px;
-      padding: 10px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 20px rgba(var(--neon-cyan-rgb), 0.35);
-    }
-
-    .pix-qr-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .pix-key-display {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      text-align: center;
-      margin-bottom: 8px;
-      word-break: break-all;
-    }
-
-    .pix-key-display strong {
-      color: var(--neon-cyan);
-    }
-
-    .pix-copyable-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .pix-copyable-input {
-      flex: 1;
-      min-width: 0;
-      background: #0b0b14;
-      border: 1px solid rgba(var(--neon-cyan-rgb), 0.45);
-      border-radius: 10px;
-      padding: 9px 11px;
-      color: var(--neon-cyan);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.76rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      outline: none;
-    }
-
-    .btn-copy-pix {
-      width: 100%;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
-      color: #07070c;
-      border: none;
-      border-radius: 11px;
-      padding: 11px 12px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.76rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 0 14px rgba(var(--neon-cyan-rgb), 0.38);
-      margin-bottom: 12px;
-      transition: transform 0.15s ease;
-    }
-
-    .btn-copy-pix:active {
-      transform: scale(0.96);
-    }
-
-    .pix-proof-upload-box {
-      background: rgba(0, 0, 0, 0.35);
-      border: 1.5px dashed rgba(0, 255, 136, 0.5);
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-    }
-
-    .pix-proof-highlight-cta {
-      display: block;
-      background: rgba(var(--neon-amber-rgb), 0.16);
-      border: 1px solid var(--neon-amber);
-      color: var(--neon-amber);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.74rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      padding: 8px 10px;
-      border-radius: 9px;
-      margin-bottom: 10px;
-      line-height: 1.35;
-    }
-
-    .btn-attach-proof {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      background: rgba(0, 255, 136, 0.14);
-      border: 1px solid var(--neon-green);
-      color: var(--neon-green);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.74rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-
-    .pix-proof-preview {
-      display: none;
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .pix-proof-preview.visible {
-      display: block;
-    }
-
-    .pix-proof-preview img {
-      max-height: 130px;
-      max-width: 100%;
-      border-radius: 8px;
-      border: 1px solid var(--neon-green);
-      margin-bottom: 6px;
-    }
-
-    .pix-proof-status {
-      font-size: 0.75rem;
-      color: var(--neon-green);
-      font-weight: 600;
-    }
-
     .checkout-total {
       display: flex;
       justify-content: space-between;
@@ -1578,7 +1431,7 @@
       padding: 14px 0;
       margin-top: 12px;
       border-top: 1px dashed rgba(255, 255, 255, 0.15);
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
     }
 
     .checkout-total span:last-child {
@@ -1594,7 +1447,7 @@
       border: none;
       border-radius: 14px;
       padding: 15px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.9rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -1656,7 +1509,7 @@
     }
 
     .loading-title {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.15rem;
       font-weight: 800;
       color: #fff;
@@ -1691,7 +1544,7 @@
     }
 
     .checkin-title {
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.12rem;
       font-weight: 900;
       color: var(--neon-green);
@@ -1747,7 +1600,7 @@
       border: none;
       border-radius: 14px;
       padding: 14px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.85rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -1762,7 +1615,7 @@
       border: 1.5px solid var(--neon-green);
       border-radius: 14px;
       padding: 13px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.82rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -1776,7 +1629,7 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 14px;
       padding: 13px;
-      font-family: 'Orbitron', sans-serif;
+      font-family: var(--font-display);
       font-size: 0.8rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -1894,7 +1747,22 @@
   <!-- BOTÃO DE PINCEL PARA ALTERAR OS 3 MIXES DE CORES NEON -->
   <button class="theme-brush-btn" onclick="cycleNeonTheme()" title="Alterar cores neon">🖌️</button>
 
+  <!-- BOTÃO ABAIXO DO TEMA PARA ALTERAR ENTRE MODO NEON E MINIMALISTA ESCURO -->
+  <button class="neon-toggle-btn" id="neonToggleBtn" onclick="toggleMinimalDarkMode()" title="Alternar modo neon / minimalista escuro">🌙</button>
+
   <div id="toast" class="toast">⚡ Atualizado!</div>
+
+  <!-- JANELA FLUTUANTE DE HORÁRIOS E DIAS DE FUNCIONAMENTO -->
+  <div id="hoursPopover" class="hours-popover-overlay" onclick="closeHoursPopoverOutside(event)">
+    <div class="hours-popover-card">
+      <h3 class="hours-popover-title">🕒 Horário de Atendimento</h3>
+      <div class="hours-popover-box">
+        <div><strong>Dias:</strong> Terça a Domingo</div>
+        <div><strong>Horário:</strong> 18:00 às 23:30</div>
+      </div>
+      <button type="button" class="btn-close-hours" onclick="closeHoursPopover()">Fechar</button>
+    </div>
+  </div>
 
   <!-- TELA DE CARREGAMENTO (4 SEGUNDOS: 🍔 -> 🧀 -> 🥓 -> 🍳 -> 💳) -->
   <div id="loadingOverlay" class="loading-screen-overlay">
@@ -1909,7 +1777,7 @@
     <div class="brand-logo-wrap" id="brandLogoWrap">
       <img src="logo Burguer.jpg" alt="Logo O Rocha Burger" class="brand-logo-img" onerror="document.getElementById('brandLogoWrap').style.display='none'">
     </div>
-    <div class="status-badge">
+    <div class="status-badge" onclick="openHoursPopover()" title="Ver dias e horários de funcionamento">
       <span class="status-dot"></span> Aberto para Pedidos
     </div>
     <p class="subtitle">Artesanal na chapa • Pedido rápido</p>
@@ -1951,21 +1819,33 @@
 
         <div class="form-group">
           <label>Seu Nome *</label>
-          <input type="text" id="regName" class="form-control" placeholder="Nome e sobrenome">
+          <input type="text" id="regName" class="form-control" placeholder="Nome e sobrenome" required>
         </div>
 
         <div class="form-group">
           <label>Telefone / WhatsApp *</label>
-          <input type="tel" id="regPhone" class="form-control" placeholder="Ex: (86) 9 9999-9999">
+          <input type="tel" id="regPhone" class="form-control" placeholder="Ex: (86) 9 9999-9999" required>
         </div>
 
         <div class="form-group">
-          <label>Endereço Completo (Rua, Nº e Bairro) *</label>
-          <input type="text" id="regAddress" class="form-control" placeholder="Ex: Rua Projetada, 120 - Centro">
+          <label>Endereço Completo *</label>
+          <input type="text" id="regAddress" class="form-control" placeholder="Ex: Rua Projetada" required>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Nº da Residência *</label>
+            <input type="text" id="regNumber" class="form-control" placeholder="Ex: 120" required>
+          </div>
+
+          <div class="form-group">
+            <label>Bairro *</label>
+            <input type="text" id="regNeighborhood" class="form-control" placeholder="Ex: Centro" required>
+          </div>
         </div>
 
         <div class="form-group">
-          <label>Ponto de Referência *</label>
+          <label>Ponto de Referência (Opcional)</label>
           <input type="text" id="regRef" class="form-control" placeholder="Ex: Próximo à praça / portão preto">
         </div>
 
@@ -2137,68 +2017,6 @@
           <div class="pay-chip" data-pay="Dinheiro" onclick="selectPayment(this)">💵 Dinheiro</div>
         </div>
 
-        <!-- Confirmação ao clicar em PIX (antes de gerar QR Code) -->
-        <div id="pixConfirmPromptBox" class="pix-confirm-prompt-box">
-          <span class="pix-confirm-text">💠 Seu pagamento será via PIX.</span>
-          <div class="pix-confirm-actions">
-            <button type="button" class="btn-pix-confirm" onclick="confirmPixSelection()">✅ Confirmar</button>
-            <button type="button" class="btn-pix-change" onclick="promptSwitchPayment()">🔄 Trocar</button>
-          </div>
-        </div>
-
-        <!-- Suspense de 2 segundos girando o PIX antes de exibir o QR Code -->
-        <div id="pixGeneratingBox" class="pix-generating-box">
-          <div class="pix-spin-badge">💠</div>
-          <span class="pix-spin-label">Gerando seu QR Code PIX...</span>
-        </div>
-
-        <!-- Gaveta PIX: QR Code + Valor em destaque + PIX Copia e Cola + Anexo Obrigatório do Comprovante -->
-        <div id="pixPaymentBox" class="pix-payment-box">
-          <div class="pix-instruction-alert">
-            Insira este valor:
-            <span class="pix-highlight-value" id="pixExactValueDisplay">R$ 0,00</span>
-            e envie o comprovante para a loja assim que efetuado o pagamento.
-          </div>
-
-          <div class="pix-qr-wrap">
-            <img id="pixQrImg" alt="QR Code PIX O Rocha Burger" />
-          </div>
-
-          <div class="pix-key-display">
-            Chave PIX para pagamento no celular: <strong id="pixKeyTextDisplay"></strong>
-          </div>
-
-          <div class="pix-copyable-row">
-            <input type="text" id="pixCopyableKeyInput" class="pix-copyable-input" readonly onclick="this.select(); copyPixKeyOnly()">
-            <button type="button" class="btn-edit-user" onclick="copyPixKeyOnly()">📋 Chave</button>
-          </div>
-
-          <button type="button" class="btn-copy-pix" onclick="copyPixCode()">
-            📋 Copiar PIX Copia e Cola
-          </button>
-
-          <div class="pix-proof-upload-box">
-            <span class="pix-proof-highlight-cta">📎 Anexe aqui o comprovante após o pagamento *</span>
-            <input type="file" id="pixProofInput" accept="image/*,application/pdf,.pdf" style="display: none;" onchange="handlePixProofSelect(event)">
-            <button type="button" class="btn-attach-proof" onclick="document.getElementById('pixProofInput').click()">
-              📸 / 📄 Anexar Imagem ou PDF
-            </button>
-            <div id="pixProofPreview" class="pix-proof-preview">
-              <img id="pixProofPreviewImg" alt="Comprovante PIX anexado" />
-              <div class="pix-proof-status" id="pixProofFilename">✅ Comprovante anexado!</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Gaveta Cartão: Crédito ou Débito -->
-        <div id="cardTypeBox" class="card-type-box">
-          <label>💳 Qual modalidade do cartão? *</label>
-          <div class="card-sub-options">
-            <div class="card-sub-chip active" data-card="Crédito" onclick="selectCardSubtype(this)">💳 Crédito</div>
-            <div class="card-sub-chip" data-card="Débito" onclick="selectCardSubtype(this)">💳 Débito</div>
-          </div>
-        </div>
-
         <!-- Aba separada de Troco (aparece apenas quando Dinheiro está selecionado) -->
         <div id="changeFieldBox" class="change-field-box">
           <label>💵 Troco para quanto? (Opcional)</label>
@@ -2263,11 +2081,10 @@
   <canvas id="receiptCanvas" style="display: none;"></canvas>
 
   <script>
-    // CONFIGURAÇÕES DA HAMBURGUERIA (WHATSAPP + TELEGRAM BOT + CHAVE PIX)
+    // CONFIGURAÇÕES DA HAMBURGUERIA (WHATSAPP + TELEGRAM BOT)
     const WHATSAPP_NUMBER = "5586988222969";
     const TELEGRAM_BOT_TOKEN = "9093112610:AAHYysMeH_OmOgDnPl8CFvnEsY6avwEXhDc";
     const TELEGRAM_CHAT_ID = "7080548404";
-    const PIX_KEY = "86994477361";
 
     // 3 MIXES DE CORES NEON (PINCEL NO CANTO SUPERIOR DIREITO)
     const NEON_THEMES = [
@@ -2290,6 +2107,35 @@
       document.body.setAttribute('data-theme', chosen.id);
       localStorage.setItem('rocha_burger_neon_theme', chosen.id);
       showToast(chosen.label);
+    }
+
+    function applySavedMinimalDarkMode() {
+      const isMinimal = localStorage.getItem('rocha_burger_minimal_dark') === 'true';
+      document.body.classList.toggle('minimal-dark', isMinimal);
+      const btn = document.getElementById('neonToggleBtn');
+      if (btn) {
+        btn.textContent = isMinimal ? '⚡' : '🌙';
+        btn.title = isMinimal ? 'Ativar modo neon' : 'Desativar modo neon (minimalista escuro)';
+      }
+    }
+
+    function toggleMinimalDarkMode() {
+      const nextState = !document.body.classList.contains('minimal-dark');
+      localStorage.setItem('rocha_burger_minimal_dark', String(nextState));
+      applySavedMinimalDarkMode();
+      showToast(nextState ? '🌙 Modo minimalista escuro ativado' : '⚡ Modo neon ativado');
+    }
+
+    function openHoursPopover() {
+      document.getElementById('hoursPopover').classList.add('open');
+    }
+
+    function closeHoursPopover() {
+      document.getElementById('hoursPopover').classList.remove('open');
+    }
+
+    function closeHoursPopoverOutside(e) {
+      if (e.target.id === 'hoursPopover') closeHoursPopover();
     }
 
     // CATÁLOGO SEPARADO: 5 HAMBÚRGUERES BÁSICOS + 2 BEBIDAS
@@ -2364,6 +2210,8 @@
       name: '',
       phone: '',
       address: '',
+      number: '',
+      neighborhood: '',
       ref: ''
     };
 
@@ -2373,12 +2221,6 @@
     let modalQty = 1;
     let deliveryType = 'Delivery';
     let selectedPayment = 'PIX';
-    let pixConfirmed = false;
-    let pixGenerating = false;
-    let pixSuspenseTimer = null;
-    let selectedCardType = 'Crédito';
-    let pixProofFile = null;
-    let currentPixPayload = '';
     let isRepeatedOrder = false;
 
     // Dados do último comprovante gerado
@@ -2388,6 +2230,26 @@
 
     function formatBRL(value) {
       return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function formatFullAddress(c) {
+      const base = (c.address || '').trim();
+      const num = (c.number || '').trim();
+      const neigh = (c.neighborhood || '').trim();
+      const streetWithNum = num ? `${base}, Nº ${num}` : base;
+      return neigh ? `${streetWithNum} - ${neigh}` : streetWithNum;
+    }
+
+    function getProductOrderCount(productId) {
+      let total = 0;
+      (orderHistory || []).forEach(order => {
+        (order.items || []).forEach(item => {
+          if (item.productId === productId) {
+            total += Number(item.qty || 1);
+          }
+        });
+      });
+      return total;
     }
 
     function buildClientWhatsAppLink(phone) {
@@ -2403,145 +2265,6 @@
       toast.classList.add('show');
       clearTimeout(window.toastTimer);
       window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
-    }
-
-    // --- GERADOR DE PAYLOAD PIX (BR CODE / COPIA E COLA) + QR CODE ---
-    function crc16CCITT(str) {
-      let crc = 0xFFFF;
-      for (let i = 0; i < str.length; i++) {
-        crc ^= str.charCodeAt(i) << 8;
-        for (let j = 0; j < 8; j++) {
-          crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
-          crc &= 0xFFFF;
-        }
-      }
-      return crc.toString(16).toUpperCase().padStart(4, '0');
-    }
-
-    function emvField(id, value) {
-      const len = String(value.length).padStart(2, '0');
-      return `${id}${len}${value}`;
-    }
-
-    function buildPixPayload(key, amount) {
-      const cleanKey = key.trim();
-      const amountStr = Number(amount || 0).toFixed(2);
-      const merchantAccount = emvField('00', 'br.gov.bcb.pix') + emvField('01', cleanKey);
-      const merchantName = 'O ROCHA BURGER';
-      const merchantCity = 'PARNAIBA';
-      const txid = emvField('05', 'ROCHABURGER');
-
-      const payloadWithoutCrc =
-        emvField('00', '01') +
-        emvField('26', merchantAccount) +
-        emvField('52', '0000') +
-        emvField('53', '986') +
-        (Number(amount) > 0 ? emvField('54', amountStr) : '') +
-        emvField('58', 'BR') +
-        emvField('59', merchantName) +
-        emvField('60', merchantCity) +
-        emvField('62', txid) +
-        '6304';
-
-      return payloadWithoutCrc + crc16CCITT(payloadWithoutCrc);
-    }
-
-    function updatePixSection(totalAmount) {
-      document.getElementById('pixExactValueDisplay').textContent = formatBRL(totalAmount);
-      document.getElementById('pixKeyTextDisplay').textContent = PIX_KEY;
-      document.getElementById('pixCopyableKeyInput').value = PIX_KEY;
-
-      currentPixPayload = buildPixPayload(PIX_KEY, totalAmount);
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=6&data=${encodeURIComponent(currentPixPayload)}`;
-      document.getElementById('pixQrImg').src = qrUrl;
-    }
-
-    function confirmPixSelection() {
-      if (pixGenerating) return;
-      pixGenerating = true;
-      pixConfirmed = false;
-
-      document.getElementById('pixConfirmPromptBox').classList.remove('visible');
-      document.getElementById('pixPaymentBox').classList.remove('visible');
-      document.getElementById('pixGeneratingBox').classList.add('visible');
-
-      clearTimeout(pixSuspenseTimer);
-      pixSuspenseTimer = setTimeout(() => {
-        pixGenerating = false;
-        pixConfirmed = true;
-        document.getElementById('pixGeneratingBox').classList.remove('visible');
-        const totalPrice = cart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
-        updatePixSection(totalPrice);
-        document.getElementById('pixPaymentBox').classList.add('visible');
-      }, 2000);
-    }
-
-    function promptSwitchPayment() {
-      pixConfirmed = false;
-      pixGenerating = false;
-      clearTimeout(pixSuspenseTimer);
-      document.getElementById('pixConfirmPromptBox').classList.remove('visible');
-      document.getElementById('pixGeneratingBox').classList.remove('visible');
-      document.getElementById('pixPaymentBox').classList.remove('visible');
-      showToast('Escolha Cartão ou Dinheiro');
-    }
-
-    async function copyTextHelper(text, toastMessage) {
-      try {
-        await navigator.clipboard.writeText(text);
-        showToast(toastMessage);
-      } catch (e) {
-        const temp = document.createElement('textarea');
-        temp.value = text;
-        document.body.appendChild(temp);
-        temp.select();
-        document.execCommand('copy');
-        document.body.removeChild(temp);
-        showToast(toastMessage);
-      }
-    }
-
-    async function copyPixKeyOnly() {
-      await copyTextHelper(PIX_KEY, '📋 Chave PIX copiada!');
-    }
-
-    async function copyPixCode() {
-      if (!currentPixPayload) return;
-      await copyTextHelper(currentPixPayload, '📋 PIX Copia e Cola copiado!');
-    }
-
-    function handlePixProofSelect(event) {
-      const file = event.target.files && event.target.files[0];
-      if (!file) return;
-
-      pixProofFile = file;
-      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-      const imgEl = document.getElementById('pixProofPreviewImg');
-
-      if (isPdf) {
-        imgEl.style.display = 'none';
-        document.getElementById('pixProofFilename').textContent = `✅ PDF anexado: ${file.name}`;
-        document.getElementById('pixProofPreview').classList.add('visible');
-        showToast('📄 Comprovante PDF anexado!');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        imgEl.style.display = 'inline-block';
-        imgEl.src = e.target.result;
-        document.getElementById('pixProofFilename').textContent = `✅ Imagem anexada: ${file.name}`;
-        document.getElementById('pixProofPreview').classList.add('visible');
-        showToast('📎 Comprovante PIX anexado!');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function resetPixProof() {
-      pixProofFile = null;
-      const input = document.getElementById('pixProofInput');
-      if (input) input.value = '';
-      document.getElementById('pixProofPreview').classList.remove('visible');
     }
 
     // --- NUMERAÇÃO DIÁRIA DE PEDIDOS (ZERA À MEIA-NOITE: 01, 02, 03...) ---
@@ -2575,21 +2298,31 @@
     }
 
     function hasSavedCustomer() {
-      return Boolean(customer && customer.name && customer.phone && customer.address);
+      return Boolean(
+        customer &&
+        customer.name &&
+        customer.phone &&
+        customer.address &&
+        customer.number &&
+        customer.neighborhood
+      );
     }
 
     function loadCustomerForm() {
       document.getElementById('regName').value = customer.name || '';
       document.getElementById('regPhone').value = customer.phone || '';
       document.getElementById('regAddress').value = customer.address || '';
+      document.getElementById('regNumber').value = customer.number || '';
+      document.getElementById('regNeighborhood').value = customer.neighborhood || '';
       document.getElementById('regRef').value = customer.ref || '';
     }
 
     function updateWelcomeScreen() {
+      const fullAddr = formatFullAddress(customer);
       document.getElementById('welcomeUserTitle').textContent = `👋 Olá, ${customer.name}!`;
       document.getElementById('welcomeUserSummary').innerHTML = `
         <strong>📱 Telefone:</strong> ${customer.phone}<br>
-        <strong>📍 Endereço:</strong> ${customer.address}<br>
+        <strong>📍 Endereço:</strong> ${fullAddr}<br>
         ${customer.ref ? `<strong>📌 Referência:</strong> ${customer.ref}` : ''}
       `;
     }
@@ -2618,14 +2351,16 @@
       const name = document.getElementById('regName').value.trim();
       const phone = document.getElementById('regPhone').value.trim();
       const address = document.getElementById('regAddress').value.trim();
+      const number = document.getElementById('regNumber').value.trim();
+      const neighborhood = document.getElementById('regNeighborhood').value.trim();
       const ref = document.getElementById('regRef').value.trim();
 
-      if (!name || !phone || !address) {
-        showToast('⚠️ Preencha Nome, Telefone e Endereço!');
+      if (!name || !phone || !address || !number || !neighborhood) {
+        showToast('⚠️ Preencha todos os campos obrigatórios!');
         return;
       }
 
-      customer = { name, phone, address, ref };
+      customer = { name, phone, address, number, neighborhood, ref };
       localStorage.setItem('rocha_burg_customer', JSON.stringify(customer));
 
       updateCustomerPill();
@@ -2640,8 +2375,9 @@
     }
 
     function updateCustomerPill() {
+      const fullAddr = formatFullAddress(customer);
       document.getElementById('pillUserName').textContent = `👤 ${customer.name} • ${customer.phone}`;
-      document.getElementById('pillUserAddress').textContent = `📍 ${customer.address}${customer.ref ? ' (' + customer.ref + ')' : ''}`;
+      document.getElementById('pillUserAddress').textContent = `📍 ${fullAddr}${customer.ref ? ' (' + customer.ref + ')' : ''}`;
     }
 
     // --- NAVEGAÇÃO ENTRE ABAS DO CARDÁPIO ---
@@ -2665,6 +2401,8 @@
 
       const renderCard = (item) => {
         const count = getQtyInCart(item.id);
+        const freqCount = getProductOrderCount(item.id);
+        const isFrequent = freqCount >= 4;
         return `
           <div class="product-card">
             <span class="product-tag">${item.tag}</span>
@@ -2672,6 +2410,7 @@
               <span>${item.icon}</span>
             </div>
             <div class="product-info">
+              ${isFrequent ? `<span class="frequent-medal-badge">🏅 Pedido com frequência</span>` : ''}
               <h3 class="product-name">${item.name}</h3>
               <p class="product-desc">${item.desc}</p>
               <div class="product-bottom">
@@ -2707,6 +2446,7 @@
         orderHistory = [];
         localStorage.removeItem('rocha_burger_history');
         renderHistory();
+        renderMenu();
         showToast('🗑️ Histórico limpo com sucesso!');
       }
     }
@@ -2750,15 +2490,13 @@
 
         const orderNumLabel = order.orderNumber ? `Pedido #${order.orderNumber} • ` : '';
         const custInfo = order.customer || customer;
-        const payLabel = order.payment === 'Cartão' && order.cardType
-          ? `Cartão (${order.cardType})`
-          : order.payment;
+        const custAddr = formatFullAddress(custInfo);
 
         return `
           <div class="history-card" onclick="toggleHistoryDetails(this)">
             <div class="history-summary-top">
               <span class="history-date">🧾 ${orderNumLabel}${order.date}</span>
-              <span class="history-badge">${order.deliveryType} • ${payLabel}</span>
+              <span class="history-badge">${order.deliveryType} • ${order.payment}</span>
             </div>
 
             <div class="history-summary-bottom">
@@ -2774,7 +2512,7 @@
               <div class="history-customer-detail">
                 <strong>👤 Cliente:</strong> ${custInfo.name} (${custInfo.phone})<br>
                 ${order.deliveryType === 'Delivery'
-                  ? `<strong>📍 Endereço:</strong> ${custInfo.address}${custInfo.ref ? ' (' + custInfo.ref + ')' : ''}<br>`
+                  ? `<strong>📍 Endereço:</strong> ${custAddr}${custInfo.ref ? ' (' + custInfo.ref + ')' : ''}<br>`
                   : `<strong>🏪 Retirada no Balcão</strong><br>`}
                 ${order.changeFor ? `<span class="tag-add">💵 Troco para: ${order.changeFor}</span><br>` : ''}
                 ${order.generalNote ? `<span class="tag-obs">🗒️ Obs Geral: ${order.generalNote}</span>` : ''}
@@ -2802,10 +2540,6 @@
 
       deliveryType = selectedOrder.deliveryType || 'Delivery';
       selectedPayment = selectedOrder.payment || 'PIX';
-      pixConfirmed = false;
-      pixGenerating = false;
-      clearTimeout(pixSuspenseTimer);
-      selectedCardType = selectedOrder.cardType || 'Crédito';
       document.getElementById('generalNote').value = selectedOrder.generalNote || '';
       document.getElementById('changeInput').value = selectedOrder.changeFor || '';
 
@@ -2815,10 +2549,7 @@
       document.querySelectorAll('.pay-chip').forEach(c => {
         c.classList.toggle('active', c.dataset.pay === selectedPayment);
       });
-      document.querySelectorAll('.card-sub-chip').forEach(c => {
-        c.classList.toggle('active', c.dataset.card === selectedCardType);
-      });
-      updatePaymentSubfieldsVisibility();
+      updateChangeFieldVisibility();
 
       isRepeatedOrder = true;
       document.getElementById('repeatCheckedCheckbox').checked = false;
@@ -2945,7 +2676,6 @@
       }
       cart = [];
       isRepeatedOrder = false;
-      resetPixProof();
       saveCart();
       renderMenu();
       updateCartUI();
@@ -2966,10 +2696,6 @@
       document.getElementById('cartCount').textContent = totalItems;
       document.getElementById('cartTotalBar').textContent = formatBRL(totalPrice);
       document.getElementById('checkoutTotalValue').textContent = formatBRL(totalPrice);
-
-      if (selectedPayment === 'PIX' && pixConfirmed) {
-        updatePixSection(totalPrice);
-      }
 
       const isMenuActive = document.getElementById('screenMenu').classList.contains('active');
       const cartBar = document.getElementById('cartBar');
@@ -3022,7 +2748,7 @@
 
     function openCheckout() {
       updateCheckoutCustomerBox();
-      updatePaymentSubfieldsVisibility();
+      updateChangeFieldVisibility();
       document.getElementById('repeatCheckBanner').classList.toggle('active', isRepeatedOrder);
       document.getElementById('checkoutModal').classList.add('open');
     }
@@ -3036,10 +2762,11 @@
 
     function updateCheckoutCustomerBox() {
       const box = document.getElementById('checkoutCustomerBox');
+      const fullAddr = formatFullAddress(customer);
       if (deliveryType === 'Delivery') {
         box.innerHTML = `
           <strong>🛵 Entrega para:</strong> ${customer.name} (${customer.phone})<br>
-          <strong>📍 Endereço:</strong> ${customer.address}<br>
+          <strong>📍 Endereço:</strong> ${fullAddr}<br>
           ${customer.ref ? `<strong>📌 Referência:</strong> ${customer.ref}` : ''}
         `;
       } else {
@@ -3050,36 +2777,16 @@
       }
     }
 
-    function updatePaymentSubfieldsVisibility() {
-      const isPix = selectedPayment === 'PIX';
-      document.getElementById('pixConfirmPromptBox').classList.toggle('visible', isPix && !pixConfirmed && !pixGenerating);
-      document.getElementById('pixGeneratingBox').classList.toggle('visible', isPix && pixGenerating);
-      document.getElementById('pixPaymentBox').classList.toggle('visible', isPix && pixConfirmed && !pixGenerating);
-      document.getElementById('cardTypeBox').classList.toggle('visible', selectedPayment === 'Cartão');
-      document.getElementById('changeFieldBox').classList.toggle('visible', selectedPayment === 'Dinheiro');
-
-      if (isPix && pixConfirmed) {
-        const totalPrice = cart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
-        updatePixSection(totalPrice);
-      }
+    function updateChangeFieldVisibility() {
+      const changeBox = document.getElementById('changeFieldBox');
+      changeBox.classList.toggle('visible', selectedPayment === 'Dinheiro');
     }
 
     function selectPayment(el) {
       document.querySelectorAll('.pay-chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedPayment = el.dataset.pay;
-      if (selectedPayment !== 'PIX') {
-        pixConfirmed = false;
-        pixGenerating = false;
-        clearTimeout(pixSuspenseTimer);
-      }
-      updatePaymentSubfieldsVisibility();
-    }
-
-    function selectCardSubtype(el) {
-      document.querySelectorAll('.card-sub-chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      selectedCardType = el.dataset.card;
+      updateChangeFieldVisibility();
     }
 
     function closeModal(id) {
@@ -3126,6 +2833,7 @@
       const width = 560;
       const padX = 32;
       const contentWidth = width - padX * 2;
+      const fullAddr = formatFullAddress(orderObj.customer);
 
       // Calcula altura dinâmica antes de desenhar
       ctx.font = '15px sans-serif';
@@ -3147,7 +2855,7 @@
 
       calcHeight += wrapCanvasLines(ctx, `Cliente: ${orderObj.customer.name} (${orderObj.customer.phone})`, contentWidth).length * 22;
       if (orderObj.deliveryType === 'Delivery') {
-        calcHeight += wrapCanvasLines(ctx, `Endereco: ${orderObj.customer.address}`, contentWidth).length * 22;
+        calcHeight += wrapCanvasLines(ctx, `Endereco: ${fullAddr}`, contentWidth).length * 22;
         if (orderObj.customer.ref) {
           calcHeight += wrapCanvasLines(ctx, `Ref: ${orderObj.customer.ref}`, contentWidth).length * 22;
         }
@@ -3255,13 +2963,9 @@
       drawDivider();
 
       // Dados do cliente & entrega
-      const paymentLabel = orderObj.payment === 'Cartão' && orderObj.cardType
-        ? `CARTÃO (${orderObj.cardType.toUpperCase()})`
-        : orderObj.payment.toUpperCase();
-
       ctx.font = 'bold 14px sans-serif';
       ctx.fillStyle = '#ff007f';
-      ctx.fillText(`MODALIDADE: ${orderObj.deliveryType.toUpperCase()}  |  PAGAMENTO: ${paymentLabel}`, padX, y);
+      ctx.fillText(`MODALIDADE: ${orderObj.deliveryType.toUpperCase()}  |  PAGAMENTO: ${orderObj.payment.toUpperCase()}`, padX, y);
       y += 24;
 
       if (orderObj.changeFor) {
@@ -3281,7 +2985,7 @@
       });
 
       if (orderObj.deliveryType === 'Delivery') {
-        wrapCanvasLines(ctx, `Endereco: ${orderObj.customer.address}`, contentWidth).forEach(line => {
+        wrapCanvasLines(ctx, `Endereco: ${fullAddr}`, contentWidth).forEach(line => {
           ctx.fillText(line, padX, y);
           y += 21;
         });
@@ -3350,13 +3054,13 @@
       window.open(url, '_blank');
     }
 
-    // --- ENVIO DETALHADO AO TELEGRAM (COMPROVANTE DO PEDIDO + COMPROVANTE PIX IMAGEM OU PDF) ---
-    async function sendDetailedOrderToTelegram(receiptBlob, fullText, pixProofBlob, orderNumber, clientName) {
+    // --- ENVIO DETALHADO AO TELEGRAM ---
+    async function sendDetailedOrderToTelegram(blob, fullText) {
       try {
-        if (receiptBlob) {
+        if (blob) {
           const formData = new FormData();
           formData.append('chat_id', TELEGRAM_CHAT_ID);
-          formData.append('photo', receiptBlob, lastReceiptFilename);
+          formData.append('photo', blob, lastReceiptFilename);
           formData.append('caption', fullText.slice(0, 1020));
 
           await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
@@ -3366,7 +3070,7 @@
         }
 
         // Se o texto detalhado ultrapassar o limite da legenda da foto, envia completo via sendMessage
-        if (fullText.length > 1020 || !receiptBlob) {
+        if (fullText.length > 1020 || !blob) {
           await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -3375,34 +3079,6 @@
               text: fullText
             })
           });
-        }
-
-        // Envia o comprovante PIX anexado pelo cliente (imagem ou PDF) junto com o pedido
-        if (pixProofBlob) {
-          const isPdf = pixProofBlob.type === 'application/pdf' || (pixProofBlob.name && pixProofBlob.name.toLowerCase().endsWith('.pdf'));
-          const captionPix = `💠 COMPROVANTE DE PAGAMENTO PIX — PEDIDO #${orderNumber} (${clientName.toUpperCase()})`;
-
-          if (isPdf) {
-            const pdfFormData = new FormData();
-            pdfFormData.append('chat_id', TELEGRAM_CHAT_ID);
-            pdfFormData.append('document', pixProofBlob, pixProofBlob.name || `comprovante-pix-${orderNumber}.pdf`);
-            pdfFormData.append('caption', captionPix);
-
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`, {
-              method: 'POST',
-              body: pdfFormData
-            });
-          } else {
-            const pixFormData = new FormData();
-            pixFormData.append('chat_id', TELEGRAM_CHAT_ID);
-            pixFormData.append('photo', pixProofBlob, pixProofBlob.name || `comprovante-pix-${orderNumber}.jpg`);
-            pixFormData.append('caption', captionPix);
-
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
-              method: 'POST',
-              body: pixFormData
-            });
-          }
         }
       } catch (err) {
         // Mantém fluxo fluido no cliente mesmo em rede instável
@@ -3415,16 +3091,6 @@
 
       if (isRepeatedOrder && !document.getElementById('repeatCheckedCheckbox').checked) {
         showToast('⚠️ Confirme se você checou seu pedido antes de enviar!');
-        return;
-      }
-
-      if (selectedPayment === 'PIX' && !pixConfirmed) {
-        showToast('⚠️ Confirme o pagamento via PIX para gerar o QR Code!');
-        return;
-      }
-
-      if (selectedPayment === 'PIX' && !pixProofFile) {
-        showToast('⚠️ Anexe o comprovante PIX (imagem ou PDF) para finalizar!');
         return;
       }
 
@@ -3452,8 +3118,6 @@
       const changeFor = selectedPayment === 'Dinheiro'
         ? document.getElementById('changeInput').value.trim()
         : '';
-      const cardTypeUsed = selectedPayment === 'Cartão' ? selectedCardType : '';
-      const attachedPixFile = selectedPayment === 'PIX' ? pixProofFile : null;
 
       const dailyOrderNumber = getNextDailyOrderNumber();
       let total = 0;
@@ -3478,6 +3142,7 @@
       const formattedDate = now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
       const orderId = Date.now();
       const clientWaLink = buildClientWhatsAppLink(customer.phone);
+      const fullAddr = formatFullAddress(customer);
 
       const orderRecord = {
         id: orderId,
@@ -3488,7 +3153,6 @@
         total,
         deliveryType,
         payment: selectedPayment,
-        cardType: cardTypeUsed,
         changeFor,
         generalNote
       };
@@ -3498,17 +3162,12 @@
       localStorage.setItem('rocha_burger_history', JSON.stringify(orderHistory));
 
       const deliveryInfo = deliveryType === 'Delivery'
-        ? `🛵 Modalidade: DELIVERY\n📍 Endereço: ${customer.address}\n` + (customer.ref ? `📌 Ponto de Referência: ${customer.ref}\n` : '')
+        ? `🛵 Modalidade: DELIVERY\n📍 Endereço: ${fullAddr}\n` + (customer.ref ? `📌 Ponto de Referência: ${customer.ref}\n` : '')
         : `🏪 Modalidade: RETIRADA NO BALCÃO\n`;
 
-      let paymentInfo = `💳 Pagamento: ${selectedPayment.toUpperCase()}\n`;
-      if (selectedPayment === 'Dinheiro') {
-        paymentInfo = `💳 Pagamento: DINHEIRO\n` + (changeFor ? `💵 Troco para: ${changeFor}\n` : `💵 Troco: Não precisa\n`);
-      } else if (selectedPayment === 'Cartão') {
-        paymentInfo = `💳 Pagamento: CARTÃO (${cardTypeUsed.toUpperCase()})\n`;
-      } else if (selectedPayment === 'PIX') {
-        paymentInfo = `💠 Pagamento: PIX (Chave: ${PIX_KEY} • Comprovante anexado abaixo)\n`;
-      }
+      const paymentInfo = selectedPayment === 'Dinheiro'
+        ? `💳 Pagamento: DINHEIRO\n` + (changeFor ? `💵 Troco para: ${changeFor}\n` : `💵 Troco: Não precisa\n`)
+        : `💳 Pagamento: ${selectedPayment.toUpperCase()}\n`;
 
       const detailedTelegramText =
         `🍔 PEDIDO #${dailyOrderNumber} — ${customer.name.toUpperCase()}\n` +
@@ -3530,13 +3189,13 @@
       lastWhatsAppOrderText = detailedTelegramText;
       lastReceiptFilename = `pedido-${dailyOrderNumber}-${customer.name.toLowerCase().replace(/\s+/g, '-')}.png`;
 
-      // Gera comprovante em imagem, envia ao Telegram (pedido + comprovante PIX) e aguarda os 4 segundos
+      // Gera comprovante em imagem, envia ao Telegram e aguarda os 4 segundos de animação
       const { dataUrl, blob } = await generateReceiptImage(orderRecord);
       lastReceiptDataUrl = dataUrl;
 
       await Promise.all([
         delay4Seconds,
-        sendDetailedOrderToTelegram(blob, detailedTelegramText, attachedPixFile, dailyOrderNumber, customer.name)
+        sendDetailedOrderToTelegram(blob, detailedTelegramText)
       ]);
 
       morphTimers.forEach(t => clearTimeout(t));
@@ -3544,9 +3203,6 @@
       // Limpa carrinho atual e campos transitórios
       cart = [];
       isRepeatedOrder = false;
-      pixConfirmed = false;
-      pixGenerating = false;
-      resetPixProof();
       document.getElementById('changeInput').value = '';
       document.getElementById('generalNote').value = '';
       saveCart();
@@ -3564,6 +3220,7 @@
 
     // Inicialização
     applySavedTheme();
+    applySavedMinimalDarkMode();
     loadCustomerForm();
     if (hasSavedCustomer()) {
       updateWelcomeScreen();
